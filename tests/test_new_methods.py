@@ -59,15 +59,18 @@ def test_refuses_pair_counts_that_cannot_reach_alpha():
 # ---------- interleaved runs on real timings ----------
 
 def test_interleaved_same_build_not_flagged():
-    r = run_interleaved(PyMicroAdapter(), "json_loads", "A", "A", pairs=20, iters=300, warmup=30, seed=0)
+    ad = PyMicroAdapter()
+    ad.run("json_loads", 300, 30)
+    r = run_interleaved(ad, "json_loads", "A", "A", pairs=20, iters=300, warmup=30, seed=0)
     assert r["verdict"] == "ok"
     assert sorted(set(r["order"])) <= ["AB", "BA"]
 
 
 def test_interleaved_detects_real_extra_work_between_builds():
-    # 600 ns busy-wait per iteration in build "slow". 20 pairs: on a laptop, power-state
-    # jumps (~50%) occasionally land between A and B, and 10 pairs was not enough.
-    ad = PyMicroAdapter({"slow": 600})
+    # 2000 ns busy-wait per iteration in build "slow" (~9 ms extra wall time across 20 pairs):
+    # clears Python 3.11 sys.settrace coverage overhead and shared-runner vCPU jitter in CI.
+    ad = PyMicroAdapter({"slow": 2000})
+    ad.run("json_loads", 300, 30)
     r = run_interleaved(ad, "json_loads", "fast", "slow", pairs=20, iters=300, warmup=30, seed=0)
     assert r["verdict"] == "flag" and r["shift_pct"] > 5
 
@@ -76,7 +79,8 @@ def test_interleaved_detects_real_extra_work_between_builds():
 
 def test_bisect_finds_culprit_with_real_timings():
     commits = [f"c{i:02d}" for i in range(12)]
-    ad = PyMicroAdapter({c: (600 if i >= 7 else 0) for i, c in enumerate(commits)})
+    ad = PyMicroAdapter({c: (2000 if i >= 7 else 0) for i, c in enumerate(commits)})
+    ad.run("json_loads", 300, 30)
     res = bisect_builds(ad, commits, "json_loads", pairs=20, iters=300, warmup=30, log=lambda s: None)
     assert res["reproduced"] and res["culprit"] == "c07" and res["last_good"] == "c06"
     assert res["builds"] <= 6  # good + bad + ~log2(12) probes
