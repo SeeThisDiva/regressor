@@ -1,0 +1,11 @@
+.git
+.venv
+regex/
+.regressor-builds/
+noise-bench/target/
+regressor.db
+**/__pycache__
+.pytest_cache
+.ruff_cache
+_archive/
+files/

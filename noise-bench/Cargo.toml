@@ -1,0 +1,12 @@
+[package]
+name = "noise-bench"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+regex = { path = "../regex" }
+
+[profile.release]
+debug = true
+lto = true
+codegen-units = 1

@@ -1,0 +1,61 @@
+name: "regressor: interleaved perf check"
+description: "Build base and PR commits, benchmark them in alternation, and write a markdown report (step summary + output path for a PR comment step)."
+
+inputs:
+  repo-path:
+    description: "Path to the checked-out project being benchmarked (needs full history)"
+    required: true
+  adapter:
+    description: "regressor adapter (RegexAdapter or PyMicroAdapter)"
+    default: "RegexAdapter"
+  base:
+    description: "Base commit"
+    required: true
+  head:
+    description: "Head commit"
+    required: true
+  pairs:
+    description: "Interleaved pairs per benchmark (>= 8)"
+    default: "20"
+  min-effect:
+    description: "Practical threshold in percent"
+    default: "1.0"
+  fail-on-regression:
+    description: "Fail the job on a flagged slowdown"
+    default: "false"
+
+outputs:
+  report:
+    description: "Path to the markdown report"
+    value: ${{ steps.run.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: pip install -e "$ACTION_PATH"
+    - id: run
+      shell: bash
+      env:
+        # Inputs go through the environment, not ${{ }} interpolation inside the script:
+        # a crafted input value would otherwise be executed as shell.
+        IN_ADAPTER: ${{ inputs.adapter }}
+        IN_REPO: ${{ inputs.repo-path }}
+        IN_BASE: ${{ inputs.base }}
+        IN_HEAD: ${{ inputs.head }}
+        IN_PAIRS: ${{ inputs.pairs }}
+        IN_MIN_EFFECT: ${{ inputs.min-effect }}
+        IN_FAIL: ${{ inputs.fail-on-regression }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        FAIL=()
+        if [ "$IN_FAIL" = "true" ]; then FAIL=(--fail-on-regression); fi
+        python "$ACTION_PATH/regressor.py" compare-interleaved \
+          --adapter "$IN_ADAPTER" --repo "$IN_REPO" \
+          --base "$IN_BASE" --cand "$IN_HEAD" \
+          --pairs "$IN_PAIRS" --min-effect "$IN_MIN_EFFECT" \
+          --json regressor.json --markdown regressor.md "${FAIL[@]}"
+        echo "report=regressor.md" >> "$GITHUB_OUTPUT"
+        cat regressor.md >> "$GITHUB_STEP_SUMMARY"

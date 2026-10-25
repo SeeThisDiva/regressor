@@ -1,0 +1,19 @@
+# projects/regex.toml
+name = "regex"
+repo_url = "https://github.com/rust-lang/regex.git"
+adapter = "RegexAdapter"
+build_cmd = "cargo build --release"
+noise_floor_multiplier = 3.0
+canary_threshold_pct = 2.5
+
+benchmarks = [
+    "compile_moderate",
+    "find_iter_userid",
+    "is_match_status"
+]
+
+source_paths = [
+    "src/**",
+    "regex-automata/src/**",
+    "regex-syntax/src/**"
+]

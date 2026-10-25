@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PY=python3
+for cand in python3 python; do
+  p="$(command -v "$cand" 2>/dev/null || true)"
+  case "$p" in
+    ""|*WindowsApps*) continue ;;
+    *) PY="$cand"; break ;;
+  esac
+done
+exec "$PY" "$DIR/regressor.py" "$@"

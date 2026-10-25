@@ -1,0 +1,8 @@
+main;bench_compile;Regex::new;Builder::build;Nfa::compile 12500
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;thompson::Compiler::compile_ast 18200
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;thompson::Compiler::compile_hir 14300
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;determinize::determinize 6400
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;sparse_set::SparseSet::insert 4100
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;prefilter::Prefilter::new 3200
+main;bench_compile;Regex::new;Builder::build;Compiler::compile;utf8::compile_utf8_range 2400
+main;bench_compile;Regex::new;Builder::build;alloc::vec::Vec::push 800

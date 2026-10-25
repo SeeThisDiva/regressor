@@ -1,0 +1,74 @@
+[1/27] 00:14:21 starting cf00423
+[1/27] 00:20:04 starting cf00423
+OK cf00423af1: 'lint: fixes for new lifetime lint' (build 66.4s, bench 74.6s)
+[2/27] 00:22:28 starting c1fdc83
+OK c1fdc83f5e: 'automata: make `Input::haystack` return with original lifetime' (build 52.0s, bench 73.6s)
+[3/27] 00:24:34 starting 6e1638d
+[3/27] 00:25:31 starting 6e1638d
+OK 6e1638dbf3: 'style: use `{name}` syntax in string formatting macros' (build 30.8s, bench 73.9s)
+[4/27] 00:27:16 starting 16d47c5
+OK 16d47c5239: 'doc: suggest `std::sync::LazyLock` instead of `once_cell::sync::Lazy`' (build 32.2s, bench 74.7s)
+chunk 3-4 done
+[5/27] 00:29:05 starting 0a446ec
+OK 0a446ecfa9: 'lint: fix a selection of Clippy lints' (build 49.5s, bench 81.6s)
+[6/27] 00:31:17 starting 4c8a5e3
+OK 4c8a5e3082: 'spelling: fix a variety of typos and misspellings' (build 59.3s, bench 81.4s)
+chunk 5-6 done
+[7/27] 00:33:41 starting b9ba5cf
+OK b9ba5cfef2: 'doc: remove some repeated words' (build 50.0s, bench 79.1s)
+[8/27] 00:35:51 starting 9f0a372
+OK 9f0a3724d5: "doc: fix `Its` -> `It's`" (build 47.5s, bench 74.2s)
+chunk 7-8 done
+[9/27] 00:37:54 starting 1873e96
+OK 1873e96a7b: 'automata: add `DFA::set_prefilter` method to the DFA types' (build 0.1s, bench 74.4s)
+[10/27] 00:39:09 starting a66fde6
+OK a66fde6e80: 'doc: remove references to non-existent parameters' (build 49.4s, bench 74.3s)
+chunk 9-10 done
+[11/27] 00:43:28 starting dd96592
+OK dd96592be2: 'doc: clarify CRLF mode effect' (build 46.3s, bench 53.6s)
+[12/27] 00:45:16 starting 63a26c1
+OK 63a26c1a7f: "cargo: ensure that 'perf' doesn't enable 'std' implicitly (#1150)" (build 34.2s, bench 54.5s)
+chunk 11-12 done
+[11/27] 04:02:13 starting dd96592
+OK dd96592be2: 'doc: clarify CRLF mode effect' (build 51.6s, bench 58.4s)
+[12/27] 04:04:12 starting 63a26c1
+OK 63a26c1a7f: "cargo: ensure that 'perf' doesn't enable 'std' implicitly (#1150)" (build 41.1s, bench 58.5s)
+chunk 11-12 done
+[13/27] 04:05:56 starting 19172cc
+OK 19172cc2de: 'style: inline formatting arguments' (build 47.4s, bench 58.0s)
+[14/27] 04:07:41 starting 02a62ba
+OK 02a62baf2a: 'automata: call `Vec::shrink_to_fit` in a few strategic places' (build 40.9s, bench 59.0s)
+chunk 13-14 done
+[15/27] 04:09:23 starting d6b3546
+OK d6b3546140: 'automata: fix ID rollover bug in lazy DFA' (build 41.3s, bench 58.2s)
+[16/27] 04:11:03 starting 977feeb
+OK 977feeb931: 'automata: make PikeVM cache initialization lazy' (build 40.8s, bench 58.4s)
+chunk 15-16 done
+[17/27] 04:12:45 starting 8f5d947
+OK 8f5d9479d0: 'automata: make behavior more consistent when `WhichCaptures::None` is used' (build 41.7s, bench 58.3s)
+[18/27] 04:14:25 starting ba68c11
+OK ba68c119d9: 'doc: backticks for inline code' (build 46.3s, bench 57.8s)
+chunk 17-18 done
+[19/27] 04:16:13 starting 4085a67
+OK 4085a675c7: 'automata: add regression test for dense::DFA::from_bytes validation panic' (build 0.0s, bench 57.8s)
+[20/27] 04:17:11 starting 23ad2c3
+OK 23ad2c30b1: 'automata: fix validation order in `dense::DFA::from_bytes`' (build 0.0s, bench 58.4s)
+chunk 19-20 done
+[21/27] 04:18:11 starting 5070f75
+OK 5070f75834: 'syntax: inline format arguments' (build 47.2s, bench 58.5s)
+[22/27] 04:19:57 starting 821a8ea
+OK 821a8ea21e: 'regex[-lite]: inline format arguments' (build 27.9s, bench 58.7s)
+chunk 21-22 done
+[23/27] 04:21:26 starting 72618c6
+OK 72618c64c8: 'regex: add `Captures::as_match` method' (build 28.4s, bench 58.3s)
+[24/27] 04:22:53 starting bd345d7
+OK bd345d74a1: 'automata: fix broken universal start states with sparse DFA' (build 0.0s, bench 58.2s)
+chunk 23-24 done
+[25/27] 04:24:02 starting 764efbd
+OK 764efbd305: 'api: tweak the lifetime of `Captures::get_match`' (build 45.9s, bench 58.1s)
+[26/27] 04:25:46 starting 1dd9077
+OK 1dd9077779: 'docs: swap `doc_auto_cfg` with `doc_cfg`' (build 46.1s, bench 58.4s)
+chunk 25-26 done
+[27/27] 04:27:33 starting 4733e28
+OK 4733e28ba4: 'automata: fix `onepass::DFA::try_search_slots` panic when too many slots are given' (build 45.9s, bench 58.0s)
+chunk 27-27 done

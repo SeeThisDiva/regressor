@@ -1,0 +1,32 @@
+[
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "16d47c5",
+    "status": "false_positive",
+    "note": "Doc-only commit (no source change). +1.45% shift, just above a 0.93% floor. Judged noise; not re-measured."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "0a446ec",
+    "status": "false_positive",
+    "note": "Clippy lint cleanup. Confirmed false positive via 30-pair compare-interleaved (shift +0.36%, CI95 [-0.64%, +1.12%], p=0.440; software cpu-clock profile delta +0.3%)."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "dd96592",
+    "status": "false_positive",
+    "note": "Doc-only commit. Found by manual timestamp check: 3h21m gap before this run; all 3 benches shifted together. Attributed to host drift."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "dd96592",
+    "status": "false_positive",
+    "note": "Same 3h21m gap as compile_moderate on this commit; all 3 benches shifted together."
+  },
+  {
+    "benchmark": "is_match_status",
+    "commit": "dd96592",
+    "status": "false_positive",
+    "note": "Same 3h21m gap as compile_moderate on this commit; all 3 benches shifted together."
+  }
+]

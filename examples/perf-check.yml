@@ -1,0 +1,46 @@
+# Example: use regressor on a Rust crate's pull requests.
+# Copy into the *target* repository (e.g. a fork of rust-lang/regex).
+# Not yet run on GitHub; treat as a starting point.
+# Fork PRs get a read-only GITHUB_TOKEN, so the comment step fails there (the step summary still
+# works). Do NOT switch to `pull_request_target` to fix that: it would build untrusted PR code
+# (including build.rs) with a write-scoped token.
+name: perf-check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  perf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: regex
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: SeeThisDiva/regressor   # <- this repo
+          path: regressor
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: perf
+        uses: ./regressor
+        with:
+          repo-path: regex
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = require('fs').readFileSync('regressor.md', 'utf8');
+            const { data: comments } = await github.rest.issues.listComments({
+              ...context.repo, issue_number: context.issue.number });
+            const old = comments.find(c => c.body.includes('<!-- regressor-report -->'));
+            if (old) await github.rest.issues.updateComment({ ...context.repo, comment_id: old.id, body });
+            else await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });

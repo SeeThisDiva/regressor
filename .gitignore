@@ -1,0 +1,13 @@
+# Local state
+regressor.db
+.regressor-builds/
+_archive/
+files/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.coverage
+noise-bench/target/
+regex/
+*.egg-info/

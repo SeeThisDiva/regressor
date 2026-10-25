@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "regressor"
+version = "0.2.0"
+description = "Generalized Continuous Performance Regression Framework"
+readme = "README.md"
+requires-python = ">=3.11"   # regressor.py imports tomllib (3.11+)
+license = { text = "MIT" }
+authors = [
+    { name = "SeeThisDiva" }
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.5.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "httpx>=0.24.0",
+]
+
+[project.scripts]
+regressor = "regressor:main"
+
+# Flat layout with several top-level packages: list them explicitly, otherwise setuptools'
+# auto-discovery refuses to build. The CLI resolves projects/, data/, noise-bench/ and ui/
+# relative to the checkout, so install editable (`pip install -e .`) and run from the repo.
+[tool.setuptools]
+py-modules = ["regressor"]
+packages = ["core", "adapters", "server"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 130
+extend-exclude = ["_archive", "files", "noise-bench", ".regressor-builds", "regex"]
+
+[tool.ruff.lint]
+select = ["E9", "F", "B006", "B008", "S102", "S307"]   # real errors, mutable defaults, exec/eval
