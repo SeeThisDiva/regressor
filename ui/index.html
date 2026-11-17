@@ -6,7 +6,8 @@
 <title>regressor: laboratory performance ledger</title>
 <script src="/static/vendor/chart.umd.js"></script>
 <style>
-  :root{
+  /* === Design Tokens & Base Reset === */
+  :root {
     --bg: #14120F;
     --bg-panel: #1A1712;
     --hairline: #332E26;
@@ -15,141 +16,190 @@
     --text-dim: #94897A;
     --text-faint: #635B4C;
     --moss: #7A9471;
-    --moss-dim: rgba(122,148,113,0.14);
+    --moss-dim: rgba(122, 148, 113, 0.14);
     --amber: #C99A3E;
-    --amber-dim: rgba(201,154,62,0.16);
+    --amber-dim: rgba(201, 154, 62, 0.16);
     --crimson: #C25D4E;
-    --crimson-dim: rgba(194,93,78,0.16);
+    --crimson-dim: rgba(194, 93, 78, 0.16);
     --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
     --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
   }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--mono);}
-  body{padding:0 0 100px 0;}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--mono); }
+  body { padding-bottom: 100px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-  header.masthead{border-bottom:1px solid var(--hairline);padding:48px 0 32px 0;}
-  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
-  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-dim);}
-  .eyebrow .repo{color:var(--moss);font-weight:600;}
-  .proj-select{background:var(--bg-panel);color:var(--text);border:1px solid var(--hairline);padding:4px 10px;font-family:var(--mono);font-size:11px;border-radius:2px;outline:none;cursor:pointer;}
-  .proj-select:focus{border-color:var(--amber);}
+  /* === Masthead & Summary Statline === */
+  header.masthead { border-bottom: 1px solid var(--hairline); padding: 48px 0 32px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
+  .eyebrow .repo { color: var(--moss); font-weight: 600; }
+  .proj-select {
+    background: var(--bg-panel); color: var(--text); border: 1px solid var(--hairline);
+    padding: 4px 10px; font-family: var(--mono); font-size: 11px; border-radius: 2px;
+    outline: none; cursor: pointer;
+  }
+  .proj-select:focus { border-color: var(--amber); }
 
-  h1.hero{font-family:var(--serif);font-weight:400;font-size:58px;line-height:1.05;margin:0 0 8px 0;color:var(--text);letter-spacing:-0.01em;}
-  .hero-sub{font-family:var(--mono);font-size:14px;color:var(--text-dim);margin-bottom:28px;}
-  .statline{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--hairline);}
-  .stat{flex:1;min-width:130px;padding:16px 20px 0 0;border-right:1px solid var(--hairline);}
-  .stat:last-child{border-right:none;}
-  .stat .n{font-family:var(--serif);font-size:28px;color:var(--text);}
-  .stat .n.amber{color:var(--amber);}
-  .stat .n.moss{color:var(--moss);}
-  .stat .l{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-top:4px;}
+  h1.hero {
+    font-family: var(--serif); font-weight: 400; font-size: 58px; line-height: 1.05;
+    margin: 0 0 8px; color: var(--text); letter-spacing: -0.01em;
+  }
+  .hero-sub { font-family: var(--mono); font-size: 14px; color: var(--text-dim); margin-bottom: 28px; }
+  .statline { display: flex; flex-wrap: wrap; border-top: 1px solid var(--hairline); }
+  .stat { flex: 1; min-width: 130px; padding: 16px 20px 0 0; border-right: 1px solid var(--hairline); }
+  .stat:last-child { border-right: none; }
+  .stat .n { font-family: var(--serif); font-size: 28px; color: var(--text); }
+  .stat .n.amber { color: var(--amber); }
+  .stat .n.moss { color: var(--moss); }
+  .stat .l { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 4px; }
 
-  section.panel{margin-top:44px;}
-  .panel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
-  .panel-title{font-family:var(--serif);font-size:21px;color:var(--text);}
-  .panel-desc{font-size:11px;color:var(--text-faint);margin-bottom:14px;}
-  .chart-box{background:var(--bg-panel);border:1px solid var(--hairline);border-radius:2px;padding:18px 18px 10px 18px;position:relative;height:260px;}
+  /* === Benchmark Time-Series Panels === */
+  section.panel { margin-top: 44px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .panel-title { font-family: var(--serif); font-size: 21px; color: var(--text); }
+  .panel-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 14px; }
+  .chart-box {
+    background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px;
+    padding: 18px 18px 10px; position: relative; height: 260px;
+  }
+  .legend-row { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 10px; font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.02em; }
+  .legend-row .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .sw.moss { background: var(--moss); }
+  .sw.amber { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+  .sw.band { background: var(--moss-dim); border: 1px solid var(--moss); border-radius: 2px; width: 12px; height: 8px; }
+  .sw.brk { background: var(--moss); border: 1.5px solid #E8DFC8; border-radius: 1px; width: 7px; height: 7px; transform: rotate(45deg); }
 
-  .legend-row{display:flex;gap:22px;margin-top:10px;font-size:10.5px;color:var(--text-dim);letter-spacing:0.02em;}
-  .legend-row .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle;}
-  .sw.moss{background:var(--moss);}
-  .sw.amber{background:var(--amber);box-shadow:0 0 0 3px var(--amber-dim);}
-  .sw.band{background:var(--moss-dim);border:1px solid var(--moss);border-radius:2px;width:12px;height:8px;}
-  .sw.brk{background:var(--moss);border:1.5px solid #E8DFC8;border-radius:1px;width:7px;height:7px;transform:rotate(45deg);}
-  .session-banner{display:none;margin:-8px 0 20px;padding:10px 12px;font-size:11.5px;line-height:1.5;color:var(--text-dim);border:1px solid rgba(201,154,62,0.45);border-radius:2px;background:var(--amber-dim);}
-  .session-banner b{color:var(--amber);}
-  .session-banner code{font-family:var(--mono);color:var(--text);}
+  /* === Banners & Badges === */
+  .session-banner {
+    display: none; margin: -8px 0 20px; padding: 10px 12px; font-size: 11.5px; line-height: 1.5;
+    color: var(--text-dim); border: 1px solid rgba(201, 154, 62, 0.45); border-radius: 2px; background: var(--amber-dim);
+  }
+  .session-banner b { color: var(--amber); }
+  .session-banner code { font-family: var(--mono); color: var(--text); }
+  .error-banner {
+    display: none; margin-top: 14px; padding: 10px 12px; font-size: 11.5px; line-height: 1.4;
+    color: var(--crimson); border: 1px solid rgba(194, 93, 78, 0.45); border-radius: 2px; background: var(--crimson-dim);
+  }
+  .badge {
+    display: inline-block; font-size: 9.5px; letter-spacing: 0.04em; padding: 2px 7px;
+    border-radius: 2px; border: 1px solid var(--hairline); text-transform: uppercase;
+  }
+  .badge.fp { color: var(--moss); border-color: rgba(122, 148, 113, 0.3); background: var(--moss-dim); }
+  .badge.flag { color: var(--amber); border-color: rgba(201, 154, 62, 0.3); background: var(--amber-dim); }
+  .badge.ok { color: var(--text-dim); }
 
-  /* Ad-Hoc Compare Tool */
-  section.compare-tool{margin-top:56px;background:var(--bg-panel);border:1px solid var(--hairline);border-radius:2px;padding:24px;}
-  .tool-title{font-family:var(--serif);font-size:20px;color:var(--text);margin-bottom:6px;}
-  .tool-desc{font-size:11px;color:var(--text-faint);margin-bottom:18px;}
-  .compare-controls{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;}
-  .control-group{display:flex;flex-direction:column;gap:6px;}
-  .control-group label{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-faint);}
-  .control-group select{background:var(--bg);color:var(--text);border:1px solid var(--hairline);padding:7px 12px;font-family:var(--mono);font-size:12px;border-radius:2px;min-width:220px;}
-  .btn{background:var(--hairline);color:var(--text);border:1px solid var(--hairline-light);padding:7px 18px;font-family:var(--mono);font-size:12px;cursor:pointer;border-radius:2px;transition:all 0.15s;}
-  .btn:hover{background:var(--moss);color:var(--bg);border-color:var(--moss);}
-  .compare-results{margin-top:20px;border-top:1px solid var(--hairline);padding-top:16px;display:none;}
-  .compare-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:16px;margin-top:12px;}
-  .cmp-card{background:var(--bg);border:1px solid var(--hairline);padding:14px;border-radius:2px;}
-  .cmp-card-bench{font-size:12px;color:var(--text);font-weight:600;margin-bottom:8px;}
-  .cmp-card-shift{font-family:var(--serif);font-size:24px;margin-bottom:4px;}
-  .cmp-card-shift.flag{color:var(--amber);}
-  .cmp-card-shift.ok{color:var(--moss);}
-  .cmp-card-meta{font-size:10.5px;color:var(--text-faint);line-height:1.6;}
+  /* === Ad-Hoc Pairwise Comparison === */
+  section.compare-tool { margin-top: 56px; background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px; padding: 24px; }
+  .tool-title { font-family: var(--serif); font-size: 20px; color: var(--text); margin-bottom: 6px; }
+  .tool-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 18px; }
+  .compare-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  .control-group { display: flex; flex-direction: column; gap: 6px; }
+  .control-group label { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); }
+  .control-group select {
+    background: var(--bg); color: var(--text); border: 1px solid var(--hairline);
+    padding: 7px 12px; font-family: var(--mono); font-size: 12px; border-radius: 2px; min-width: 220px;
+  }
+  .btn {
+    background: var(--hairline); color: var(--text); border: 1px solid var(--hairline-light);
+    padding: 7px 18px; font-family: var(--mono); font-size: 12px; cursor: pointer;
+    border-radius: 2px; transition: all 0.15s;
+  }
+  .btn:hover { background: var(--moss); color: var(--bg); border-color: var(--moss); }
+  .compare-results { margin-top: 20px; border-top: 1px solid var(--hairline); padding-top: 16px; display: none; }
+  .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 12px; }
+  .cmp-card { background: var(--bg); border: 1px solid var(--hairline); padding: 14px; border-radius: 2px; }
+  .cmp-card-bench { font-size: 12px; color: var(--text); font-weight: 600; margin-bottom: 8px; }
+  .cmp-card-shift { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; }
+  .cmp-card-shift.flag { color: var(--amber); }
+  .cmp-card-shift.ok { color: var(--moss); }
+  .cmp-card-meta { font-size: 10.5px; color: var(--text-faint); line-height: 1.6; }
 
-  /* Flamegraph section */
-  section.flamegraphs{margin-top:56px;}
-  .flame-tabs{display:flex;gap:4px;border-bottom:1px solid var(--hairline);margin-bottom:16px;}
-  .flame-tab{padding:8px 16px;background:none;border:none;color:var(--text-dim);font-family:var(--mono);font-size:11px;cursor:pointer;border-bottom:2px solid transparent;}
-  .flame-tab.active{color:var(--text);border-bottom:2px solid var(--amber);font-weight:600;}
-  .flame-container{background:var(--bg-panel);border:1px solid var(--hairline);border-radius:2px;padding:12px;text-align:center;}
-  .flame-frame{width:100%;height:580px;border:none;background:#14120F;}
-  .flame-caption{font-size:11px;color:var(--text-faint);margin-top:10px;text-align:left;line-height:1.6;}
+  /* === Differential Flamegraphs === */
+  section.flamegraphs { margin-top: 56px; }
+  .flame-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--hairline); margin-bottom: 16px; }
+  .flame-tab {
+    padding: 8px 16px; background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--text-dim); font-family: var(--mono); font-size: 11px; cursor: pointer;
+  }
+  .flame-tab.active { color: var(--text); border-bottom: 2px solid var(--amber); font-weight: 600; }
+  .flame-container { background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px; padding: 12px; text-align: center; }
+  .flame-frame { width: 100%; height: 580px; border: none; background: var(--bg); }
+  .flame-caption { font-size: 11px; color: var(--text-faint); margin-top: 10px; text-align: left; line-height: 1.6; }
 
-  /* Investigation Table */
-  section.log{margin-top:56px;}
-  .log-title{font-family:var(--serif);font-size:20px;margin-bottom:4px;}
-  .log-desc{font-size:11px;color:var(--text-faint);margin-bottom:18px;}
-  table.log-table{width:100%;border-collapse:collapse;font-size:12px;}
-  table.log-table th{text-align:left;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-faint);font-weight:400;padding:0 12px 8px 0;border-bottom:1px solid var(--hairline);}
-  table.log-table td{padding:12px 12px 12px 0;border-bottom:1px solid var(--hairline);vertical-align:top;color:var(--text-dim);}
-  table.log-table td.sha{color:var(--amber);white-space:nowrap;cursor:pointer;}
-  table.log-table td.sha:hover{text-decoration:underline;}
-  table.log-table td.bench{color:var(--text);white-space:nowrap;}
-  table.log-table td.shift{font-family:var(--mono);font-weight:600;}
-  table.log-table td.shift.pos{color:var(--crimson);}
-  table.log-table td.shift.neg{color:var(--moss);}
-  .badge{display:inline-block;font-size:9.5px;letter-spacing:0.04em;padding:2px 7px;border-radius:2px;border:1px solid var(--hairline);text-transform:uppercase;}
-  .badge.fp{color:var(--moss);border-color:rgba(122,148,113,0.3);background:var(--moss-dim);}
-  .badge.flag{color:var(--amber);border-color:rgba(201,154,62,0.3);background:var(--amber-dim);}
-  .badge.ok{color:var(--text-dim);}
+  /* === Investigation Triage Log === */
+  section.log { margin-top: 56px; }
+  .log-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
+  .log-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 18px; }
+  table.log-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.log-table th {
+    text-align: left; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--text-faint); font-weight: 400; padding: 0 12px 8px 0; border-bottom: 1px solid var(--hairline);
+  }
+  table.log-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hairline); vertical-align: top; color: var(--text-dim); }
+  table.log-table td.sha { color: var(--amber); white-space: nowrap; cursor: pointer; }
+  table.log-table td.sha:hover { text-decoration: underline; }
+  table.log-table td.bench { color: var(--text); white-space: nowrap; }
+  table.log-table td.shift { font-family: var(--mono); font-weight: 600; }
+  table.log-table td.shift.pos { color: var(--crimson); }
+  table.log-table td.shift.neg { color: var(--moss); }
+  .triage-note { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+  .empty-state { text-align: center; color: var(--text-faint); padding: 24px; font-size: 12px; }
 
-  /* Modal Drill-Down */
-  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,9,7,0.85);display:none;justify-content:center;align-items:center;z-index:999;}
-  .modal-card{background:var(--bg-panel);border:1px solid var(--hairline-light);border-radius:3px;max-width:760px;width:90%;max-height:88vh;overflow-y:auto;padding:28px;box-shadow:0 10px 40px rgba(0,0,0,0.6);}
-  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--hairline);padding-bottom:16px;margin-bottom:20px;}
-  .modal-title{font-family:var(--serif);font-size:22px;color:var(--text);}
-  .modal-close{background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;line-height:1;}
-  .modal-close:hover{color:var(--text);}
-  .meta-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:12px;margin-bottom:24px;font-size:11.5px;}
-  .meta-item .lbl{font-size:9.5px;text-transform:uppercase;color:var(--text-faint);letter-spacing:0.05em;margin-bottom:2px;}
-  .meta-item .val{color:var(--text);font-family:var(--mono);}
-  .modal-bench-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .modal-chart-box{height:200px;margin-bottom:20px;}
-  .rep-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(75px, 1fr));gap:6px;font-size:10px;margin-top:8px;}
-  .rep-cell{background:var(--bg);border:1px solid var(--hairline);padding:4px 6px;text-align:right;color:var(--text-dim);}
+  /* === Commit Drill-Down Modal & Footer === */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(10, 9, 7, 0.85);
+    display: none; justify-content: center; align-items: center; z-index: 999;
+  }
+  .modal-card {
+    background: var(--bg-panel); border: 1px solid var(--hairline-light); border-radius: 3px;
+    max-width: 760px; width: 90%; max-height: 88vh; overflow-y: auto; padding: 28px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  }
+  .modal-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    border-bottom: 1px solid var(--hairline); padding-bottom: 16px; margin-bottom: 20px;
+  }
+  .modal-eyebrow { margin-bottom: 4px; }
+  .modal-title { font-family: var(--serif); font-size: 22px; color: var(--text); }
+  .modal-close { background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; font-size: 11.5px; }
+  .meta-item .lbl { font-size: 9.5px; text-transform: uppercase; color: var(--text-faint); letter-spacing: 0.05em; margin-bottom: 2px; }
+  .meta-item .val { color: var(--text); font-family: var(--mono); }
+  .modal-bench-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .modal-chart-box { height: 200px; margin-bottom: 20px; }
+  .rep-header { margin-bottom: 4px; }
+  .rep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; font-size: 10px; margin-top: 8px; }
+  .rep-cell { background: var(--bg); border: 1px solid var(--hairline); padding: 4px 6px; text-align: right; color: var(--text-dim); }
 
-  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--hairline);font-size:11px;color:var(--text-faint);line-height:1.7;}
-  footer b{color:var(--text-dim);}
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--hairline); font-size: 11px; color: var(--text-faint); line-height: 1.7; }
+  footer b { color: var(--text-dim); }
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- Masthead -->
   <header class="masthead">
     <div class="top-bar">
-      <div class="eyebrow">performance ledger &nbsp;·&nbsp; <span class="repo" id="active-repo">rust-lang/regex</span> &nbsp;·&nbsp; continuous detection</div>
+      <div class="eyebrow">performance ledger &nbsp;·&nbsp; <span class="repo" id="active-repo">–</span> &nbsp;·&nbsp; continuous detection</div>
       <div>
-        <select class="proj-select" id="project-selector" onchange="switchProject(this.value)">
-          <option value="regex" selected>regex (rust-lang/regex)</option>
-        </select>
+        <select class="proj-select" id="project-selector" aria-label="Select project"></select>
       </div>
     </div>
-    <h1 class="hero" id="hero-headline">0 confirmed regressions</h1>
-    <div class="hero-sub" id="hero-subline">out of 78 statistical comparisons across 27 source-touching commits</div>
+    <h1 class="hero" id="hero-headline">Loading…</h1>
+    <div class="hero-sub" id="hero-subline">Fetching project telemetry from SQLite</div>
     <div class="statline">
-      <div class="stat"><div class="n" id="stat-commits">27</div><div class="l">commits analyzed</div></div>
-      <div class="stat"><div class="n" id="stat-comparisons">78</div><div class="l">pairwise comparisons</div></div>
-      <div class="stat"><div class="n amber" id="stat-flags">5</div><div class="l">flagged (pre &amp; post FDR)</div></div>
-      <div class="stat"><div class="n moss" id="stat-confirmed">0</div><div class="l">confirmed real</div></div>
-      <div class="stat"><div class="n" id="stat-triage">5/5</div><div class="l">investigated &amp; explained</div></div>
+      <div class="stat"><div class="n" id="stat-commits">–</div><div class="l">commits analyzed</div></div>
+      <div class="stat"><div class="n" id="stat-comparisons">–</div><div class="l">pairwise comparisons</div></div>
+      <div class="stat"><div class="n amber" id="stat-flags">–</div><div class="l">flagged (pre &amp; post FDR)</div></div>
+      <div class="stat"><div class="n moss" id="stat-confirmed">–</div><div class="l">confirmed real</div></div>
+      <div class="stat"><div class="n" id="stat-triage">–</div><div class="l">investigated &amp; explained</div></div>
     </div>
   </header>
 
-  <!-- Benchmark Time-Series Charts Container -->
+  <!-- Benchmark Time-Series Charts -->
   <div id="panels-container"></div>
 
   <!-- Ad-Hoc Pairwise Comparison Tool -->
@@ -158,36 +208,37 @@
     <div class="tool-desc">Select any arbitrary baseline and candidate commit to evaluate Hodges-Lehmann shift and Mann-Whitney U on independent runs</div>
     <div class="compare-controls">
       <div class="control-group">
-        <label>Baseline Commit</label>
+        <label for="cmp-base">Baseline Commit</label>
         <select id="cmp-base"></select>
       </div>
       <div class="control-group">
-        <label>Candidate Commit</label>
+        <label for="cmp-cand">Candidate Commit</label>
         <select id="cmp-cand"></select>
       </div>
       <div>
-        <button class="btn" onclick="runAdHocCompare()">Run Comparison</button>
+        <button class="btn" id="cmp-run-btn" type="button">Run Comparison</button>
       </div>
     </div>
+    <div class="error-banner" id="cmp-error"></div>
     <div class="compare-results" id="cmp-results">
       <div class="eyebrow" id="cmp-summary-header">Comparison Output</div>
       <div class="compare-grid" id="cmp-grid"></div>
     </div>
   </section>
 
-  <!-- Interactive Flamegraphs Section -->
+  <!-- Differential Flamegraphs (shown for the regex baseline study) -->
   <section class="flamegraphs" id="flamegraph-section">
     <div class="panel-head">
       <div class="panel-title">differential profile inspection</div>
     </div>
-    <div class="panel-desc">Software cpu-clock sampling profiles (perf record -e cpu-clock; no hardware counters) from a re-measurement of 16d47c5 -> 0a446ec. The original +12.13% wall-clock flag did not reproduce: total sampled CPU time differed by +0.3%.</div>
+    <div class="panel-desc">Software cpu-clock sampling profiles (perf record -e cpu-clock; no hardware counters) from a re-measurement of 16d47c5 -&gt; 0a446ec. The original +12.13% wall-clock flag did not reproduce: total sampled CPU time differed by +0.3%.</div>
     <div class="flame-tabs">
-      <button class="flame-tab active" onclick="showFlame('diff', this)">Differential Flamegraph (Δ)</button>
-      <button class="flame-tab" onclick="showFlame('candidate', this)">Candidate Commit (0a446ec)</button>
-      <button class="flame-tab" onclick="showFlame('parent', this)">Parent Commit (16d47c5)</button>
+      <button class="flame-tab active" type="button" data-flame="diff">Differential Flamegraph (Δ)</button>
+      <button class="flame-tab" type="button" data-flame="candidate">Candidate Commit (0a446ec)</button>
+      <button class="flame-tab" type="button" data-flame="parent">Parent Commit (16d47c5)</button>
     </div>
     <div class="flame-container">
-      <iframe class="flame-frame" id="flame-iframe" src="/flamegraphs/flamegraph_diff.svg"></iframe>
+      <iframe class="flame-frame" id="flame-iframe" src="/flamegraphs/flamegraph_diff.svg" title="Differential flamegraph"></iframe>
       <div class="flame-caption" id="flame-caption-text">
         <b>Differential profile:</b> red = more sampled time in the candidate, blue = less. No function shows a large change. This shows the slowdown did not reproduce on a second measurement; it does not establish what caused the original shift.
       </div>
@@ -218,20 +269,20 @@
     <b>Method:</b> Non-parametric Mann-Whitney U test per benchmark per adjacent commit pair on independent per-run medians.
     Effect size estimated via Hodges-Lehmann difference estimator. Flagged only if statistically significant (p &lt; α) and
     the shift exceeds 3× the benchmark's own measured noise floor (CV), followed by Benjamini-Hochberg False Discovery Rate correction across the entire batch (α=0.05).<br>
-    <b>Limits:</b> All 5 flags in this dataset were judged false positives by a human. Comparisons that span a long gap between runs are confounded by host drift; interleaved A/B re-measurement is the fix.
+    <b>Limits:</b> All 5 flags in the bundled regex dataset were judged false positives by a human. Comparisons that span a long gap between runs are confounded by host drift; interleaved A/B re-measurement is the fix.
   </footer>
 
 </div>
 
-<!-- Modal Drill-Down -->
-<div class="modal-overlay" id="drill-modal" onclick="closeModalOnBg(event)">
+<!-- Commit Distribution Drill-Down Modal -->
+<div class="modal-overlay" id="drill-modal">
   <div class="modal-card">
     <div class="modal-head">
       <div>
-        <div class="eyebrow" style="margin-bottom:4px;">commit distribution analysis</div>
-        <div class="modal-title" id="m-sha">16d47c52</div>
+        <div class="eyebrow modal-eyebrow">commit distribution analysis</div>
+        <div class="modal-title" id="m-sha">–</div>
       </div>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <button class="modal-close" id="m-close-btn" type="button" aria-label="Close modal">&times;</button>
     </div>
     <div class="meta-grid">
       <div class="meta-item"><div class="lbl">Subject</div><div class="val" id="m-subject">-</div></div>
@@ -244,17 +295,49 @@
     <div class="session-banner" id="m-session-banner"></div>
     <div class="modal-bench-bar">
       <div class="eyebrow">Per-Run Median Histogram (Sampling Distribution)</div>
-      <select class="proj-select" id="m-bench-select" onchange="renderModalBenchmark(this.value)"></select>
+      <select class="proj-select" id="m-bench-select"></select>
     </div>
     <div class="modal-chart-box">
       <canvas id="modal-hist-canvas"></canvas>
     </div>
-    <div class="eyebrow" id="m-rep-header" style="margin-bottom:4px;">Independent Process Invocations (ns)</div>
+    <div class="eyebrow rep-header" id="m-rep-header">Independent Process Invocations (ns)</div>
     <div class="rep-grid" id="m-rep-grid"></div>
   </div>
 </div>
 
 <script>
+// === Section 1: Constants & Application State ===
+const THEME = {
+  bg: "#14120F",
+  panel: "#1A1712",
+  hairline: "#332E26",
+  grid: "#221E18",
+  faint: "#635B4C",
+  moss: "#7A9471",
+  mossFill: "rgba(122, 148, 113, 0.12)",
+  mossHistFill: "rgba(122, 148, 113, 0.4)",
+  amber: "#C99A3E",
+  diamondBorder: "#E8DFC8",
+};
+
+const FLAMEGRAPHS = {
+  diff: {
+    src: "/flamegraphs/flamegraph_diff.svg",
+    lead: "Differential profile:",
+    body: " red = more sampled time in the candidate, blue = less. No function shows a large change. This shows the slowdown did not reproduce on a second measurement; it does not establish what caused the original shift.",
+  },
+  candidate: {
+    src: "/flamegraphs/flamegraph_candidate_0a446ec.svg",
+    lead: "Candidate profile (0a446ec):",
+    body: " software cpu-clock samples during the re-measurement run.",
+  },
+  parent: {
+    src: "/flamegraphs/flamegraph_parent_16d47c5.svg",
+    lead: "Parent profile (16d47c5):",
+    body: " software cpu-clock samples during the re-measurement run.",
+  },
+};
+
 let currentProject = "regex";
 let projectMeta = {};
 let seriesData = null;
@@ -262,6 +345,9 @@ let projectComparisons = [];
 let charts = {};
 let modalChart = null;
 let modalDistributionData = null;
+
+// === Section 2: Formatting, Escaping & Safe DOM Utilities ===
+const $ = (id) => document.getElementById(id);
 
 function esc(val) {
   if (val == null) return "";
@@ -273,149 +359,296 @@ function esc(val) {
     .replace(/'/g, "&#39;");
 }
 
+function el(tag, opts = {}, ...children) {
+  const node = document.createElement(tag);
+  if (opts.className) node.className = opts.className;
+  if (opts.text !== undefined) node.textContent = String(opts.text);
+  if (opts.attrs) {
+    Object.entries(opts.attrs).forEach(([k, v]) => {
+      if (v !== undefined && v !== null) node.setAttribute(k, String(v));
+    });
+  }
+  if (opts.on) {
+    Object.entries(opts.on).forEach(([evt, handler]) => node.addEventListener(evt, handler));
+  }
+  children.forEach((child) => {
+    if (child == null || child === false) return;
+    node.appendChild(typeof child === "string" || typeof child === "number"
+      ? document.createTextNode(String(child))
+      : child);
+  });
+  return node;
+}
+
+function populateSelect(selectEl, items, selectedValue) {
+  selectEl.replaceChildren();
+  items.forEach(({ value, label }) => {
+    const opt = el("option", { text: label, attrs: { value } });
+    if (selectedValue !== undefined && value === selectedValue) opt.selected = true;
+    selectEl.appendChild(opt);
+  });
+}
+
+function createBadge(label, variant, title) {
+  return el("span", {
+    className: `badge ${variant}`,
+    text: label,
+    attrs: title ? { title } : undefined,
+  });
+}
+
 // 201.3 -> "3h 21m", 4.2 -> "4 min"
 function formatGap(min) {
   if (min == null) return "–";
   const m = Math.round(min);
   if (Math.abs(m) < 60) return `${m} min`;
-  const h = Math.trunc(m / 60), r = Math.abs(m % 60);
+  const h = Math.trunc(m / 60);
+  const r = Math.abs(m % 60);
   return `${h}h ${String(r).padStart(2, "0")}m`;
 }
 
+function formatUs(ns, digits = 1) {
+  return `${(Number(ns) / 1000).toFixed(digits)}µs`;
+}
+
+function formatAxisDuration(ns) {
+  return Math.abs(ns) >= 1000 ? `${(ns / 1000).toFixed(0)}µs` : `${Math.round(ns)}ns`;
+}
+
+function formatShiftPct(pct) {
+  const n = Number(pct);
+  return `${n > 0 ? "+" : ""}${n.toFixed(2)}%`;
+}
+
+function formatUtc(iso) {
+  if (!iso) return "not recorded";
+  return `${iso.replace("T", " ").replace(/\+00:00$|Z$/, "").substring(0, 19)} UTC`;
+}
+
+function formatRepoSlug(meta, fallbackName) {
+  const url = meta && meta.repo_url ? meta.repo_url.trim() : "";
+  if (!url) return fallbackName;
+  return url.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "").split("/").slice(-2).join("/") || fallbackName;
+}
+
+function getFlaggedComparisons(comparisons) {
+  return comparisons.filter((c) => c.verdict === "flag" && c.fdr_significant);
+}
+
+// === Section 3: Network & Data Loading ===
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, options);
+  const payload = await res.json().catch(() => null);
+  if (!res.ok) {
+    const detail = payload && payload.detail ? payload.detail : `Request failed (${res.status})`;
+    throw new Error(detail);
+  }
+  return payload;
+}
+
+function wireEventListeners() {
+  $("project-selector").addEventListener("change", (e) => switchProject(e.target.value));
+  $("cmp-run-btn").addEventListener("click", runAdHocCompare);
+  $("m-bench-select").addEventListener("change", (e) => renderModalBenchmark(e.target.value));
+  $("m-close-btn").addEventListener("click", closeModal);
+  $("drill-modal").addEventListener("click", (e) => {
+    if (e.target.id === "drill-modal") closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && $("drill-modal").style.display === "flex") closeModal();
+  });
+  document.querySelectorAll(".flame-tab").forEach((btn) => {
+    btn.addEventListener("click", () => showFlame(btn.dataset.flame, btn));
+  });
+}
+
 async function init() {
+  wireEventListeners();
   await loadProjects();
-  await loadProjectData(currentProject);
+  const names = Object.keys(projectMeta);
+  if (names.length === 0) {
+    $("hero-headline").textContent = "No projects recorded";
+    $("hero-subline").textContent = "Run `regressor init` and `regressor import-data` to populate the database.";
+    updateFlameSectionVisibility("");
+    return;
+  }
+  if (!projectMeta[currentProject]) {
+    currentProject = names[0];
+  }
+  $("project-selector").value = currentProject;
+  await switchProject(currentProject);
 }
 
 async function loadProjects() {
   try {
-    const res = await fetch("/api/projects");
-    const projects = await res.json();
-    const sel = document.getElementById("project-selector");
-    sel.innerHTML = "";
+    const projects = await fetchJson("/api/projects");
     projectMeta = {};
-    projects.forEach(p => {
+    const items = projects.map((p) => {
       projectMeta[p.name] = p;
-      const opt = document.createElement("option");
-      opt.value = p.name;
-      const slug = (p.repo_url || p.name).replace(/\.git$/, "").split("/").slice(-2).join("/");
-      opt.textContent = `${p.name} (${slug})`;
-      if (p.name === currentProject) opt.selected = true;
-      sel.appendChild(opt);
+      return { value: p.name, label: `${p.name} (${formatRepoSlug(p, p.name)})` };
     });
-  } catch (e) {
-    console.error("Failed to load projects:", e);
+    populateSelect($("project-selector"), items, currentProject);
+  } catch (err) {
+    console.error("Failed to load projects:", err);
+  }
+}
+
+function updateFlameSectionVisibility(projectName) {
+  const flameSection = $("flamegraph-section");
+  if (flameSection) {
+    flameSection.style.display = projectName === "regex" ? "block" : "none";
   }
 }
 
 async function switchProject(name) {
   currentProject = name;
-  const meta = projectMeta[name];
-  const slug = meta && meta.repo_url
-    ? meta.repo_url.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "")
-    : name;
-  document.getElementById("active-repo").textContent = slug;
-  const flameSection = document.getElementById("flamegraph-section");
-  if (flameSection) {
-    flameSection.style.display = name === "regex" ? "block" : "none";
-  }
+  $("active-repo").textContent = formatRepoSlug(projectMeta[name], name);
+  updateFlameSectionVisibility(name);
+  $("cmp-results").style.display = "none";
+  $("cmp-error").style.display = "none";
   await loadProjectData(name);
 }
 
 async function loadProjectData(proj) {
+  const encoded = encodeURIComponent(proj);
   try {
-    // 1. Fetch series
-    const sRes = await fetch(`/api/projects/${encodeURIComponent(proj)}/series`);
-    seriesData = await sRes.json();
-
-    // 2. Fetch comparisons
-    const cRes = await fetch(`/api/projects/${encodeURIComponent(proj)}/comparisons`);
-    projectComparisons = await cRes.json();
+    const [series, comparisons] = await Promise.all([
+      fetchJson(`/api/projects/${encoded}/series`),
+      fetchJson(`/api/projects/${encoded}/comparisons`),
+    ]);
+    seriesData = series;
+    projectComparisons = comparisons;
 
     updateMasthead();
     renderCharts();
     renderComparisonsLog();
     populateCompareDropdowns();
-  } catch (e) {
-    console.error("Error loading project data:", e);
+  } catch (err) {
+    console.error("Error loading project data:", err);
+    $("panels-container").replaceChildren(
+      el("div", { className: "empty-state", text: `Failed to load telemetry for '${proj}': ${err.message}` })
+    );
   }
 }
 
+// === Section 4: Masthead & Chart Rendering ===
 function updateMasthead() {
-  const flags = projectComparisons.filter(c => c.verdict === 'flag' && c.fdr_significant);
-  const confirmed = projectComparisons.filter(c => c.resolution_status === 'confirmed');
+  const flags = getFlaggedComparisons(projectComparisons);
+  const confirmed = projectComparisons.filter((c) => c.resolution_status === "confirmed");
+  const reviewed = flags.filter((c) => c.resolution_status && c.resolution_status !== "unreviewed");
 
-  document.getElementById("stat-commits").textContent = seriesData.total_commits;
-  document.getElementById("stat-comparisons").textContent = projectComparisons.length;
-  document.getElementById("stat-flags").textContent = flags.length;
-  document.getElementById("stat-confirmed").textContent = confirmed.length;
-  document.getElementById("stat-triage").textContent = `${flags.length}/${flags.length}`;
+  $("stat-commits").textContent = seriesData.total_commits;
+  $("stat-comparisons").textContent = projectComparisons.length;
+  $("stat-flags").textContent = flags.length;
+  $("stat-confirmed").textContent = confirmed.length;
+  $("stat-triage").textContent = `${reviewed.length}/${flags.length}`;
 
-  document.getElementById("hero-headline").textContent = `${confirmed.length} confirmed regressions`;
-  document.getElementById("hero-subline").textContent = `out of ${projectComparisons.length} statistical comparisons across ${seriesData.total_commits} source-touching commits`;
+  $("hero-headline").textContent = `${confirmed.length} confirmed regressions`;
+  $("hero-subline").textContent = `out of ${projectComparisons.length} statistical comparisons across ${seriesData.total_commits} source-touching commits`;
+}
+
+function baseChartOptions(yTickCallback, tooltipCallbacks) {
+  const tickFont = { family: "monospace", size: 10 };
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: THEME.panel,
+        borderColor: THEME.hairline,
+        borderWidth: 1,
+        titleFont: { family: "monospace", size: 12 },
+        bodyFont: { family: "monospace", size: 11 },
+        callbacks: tooltipCallbacks,
+      },
+    },
+    scales: {
+      x: {
+        grid: { color: THEME.grid },
+        ticks: { color: THEME.faint, font: tickFont },
+      },
+      y: {
+        grid: { color: THEME.grid },
+        ticks: { color: THEME.faint, font: tickFont, callback: yTickCallback },
+      },
+    },
+  };
+}
+
+function buildLegendRow(breakThresholdMin) {
+  return el("div", { className: "legend-row" },
+    el("span", {}, el("span", { className: "sw moss" }), "median"),
+    el("span", {}, el("span", { className: "sw band" }), "p10–p90 band (noise floor)"),
+    el("span", {}, el("span", { className: "sw amber" }), "flagged by detector"),
+    el("span", {}, el("span", { className: "sw brk" }), `session break (>${breakThresholdMin} min gap before run)`),
+  );
 }
 
 function renderCharts() {
-  const container = document.getElementById("panels-container");
-  container.innerHTML = "";
+  const container = $("panels-container");
+  container.replaceChildren();
 
-  // Destroy previous charts
-  Object.values(charts).forEach(c => c.destroy());
+  Object.values(charts).forEach((c) => c.destroy());
   charts = {};
 
-  const benches = seriesData.benchmarks;
-  benches.forEach((bench, benchIdx) => {
+  const breakMin = seriesData.session_break_min ?? 15;
+  seriesData.benchmarks.forEach((bench, benchIdx) => {
     const pts = seriesData.series[bench] || [];
     if (pts.length === 0) return;
 
-    const canvasId = `chart-idx-${benchIdx}`;
-    const panel = document.createElement("section");
-    panel.className = "panel";
-    panel.innerHTML = `
-      <div class="panel-head">
-        <div class="panel-title">${esc(bench)}</div>
-      </div>
-      <div class="panel-desc">Median and p10–p90 dispersion across independent runs · Click any point to inspect distribution</div>
-      <div class="chart-box"><canvas id="${canvasId}"></canvas></div>
-      <div class="legend-row">
-        <span><span class="sw moss"></span>median</span>
-        <span><span class="sw band"></span>p10–p90 band (noise floor)</span>
-        <span><span class="sw amber"></span>flagged by detector</span>
-        <span><span class="sw brk"></span>session break (&gt;${esc(seriesData.session_break_min ?? 15)} min gap before run)</span>
-      </div>
-    `;
+    const canvas = el("canvas", { attrs: { id: `chart-idx-${benchIdx}` } });
+    const panel = el("section", { className: "panel" },
+      el("div", { className: "panel-head" }, el("div", { className: "panel-title", text: bench })),
+      el("div", { className: "panel-desc", text: "Median and p10–p90 dispersion across independent runs · Click any point to inspect distribution" }),
+      el("div", { className: "chart-box" }, canvas),
+      buildLegendRow(breakMin),
+    );
     container.appendChild(panel);
 
-    const ctx = document.getElementById(canvasId).getContext("2d");
-    const labels = pts.map(p => p.sha);
-    const medians = pts.map(p => p.median_ns);
-    const p10s = pts.map(p => p.p10_ns);
-    const p90s = pts.map(p => p.p90_ns);
+    const options = baseChartOptions(formatAxisDuration, {
+      title: (items) => {
+        const p = pts[items[0].dataIndex];
+        return `${p.sha} · ${p.date}`;
+      },
+      label: (item) => {
+        const p = pts[item.dataIndex];
+        const flagStr = p.flagged ? " [FLAGGED REGRESSION]" : "";
+        const lines = [
+          `Median: ${p.median_ns.toLocaleString()} ns${flagStr}`,
+          `Noise Band: ${p.p10_ns.toLocaleString()} - ${p.p90_ns.toLocaleString()} ns`,
+        ];
+        if (p.session_gap_min != null) {
+          const brkTag = p.session_break ? " [SESSION BREAK — environment-confounded]" : "";
+          lines.push(`Gap before run: ${formatGap(p.session_gap_min)}${brkTag}`);
+        }
+        lines.push(`Subject: ${(p.subject || "").substring(0, 45)}...`);
+        return lines;
+      },
+    });
+    options.onClick = (_evt, elements) => {
+      if (elements.length > 0) {
+        openDrillModal(pts[elements[0].index].sha, bench);
+      }
+    };
 
-    // Custom point colors and sizes for flags; session-break points are drawn as diamonds
-    const pointBg = pts.map(p => p.flagged ? "#C99A3E" : "#7A9471");
-    const pointRadius = pts.map(p => p.flagged ? 6 : (p.session_break ? 5 : 3.5));
-    const pointHoverRadius = pts.map(p => p.flagged ? 8 : 6);
-    const pointStyle = pts.map(p => p.session_break ? "rectRot" : "circle");
-    const pointBorder = pts.map(p => p.session_break ? "#E8DFC8" : "#14120F");
-
-    charts[bench] = new Chart(ctx, {
+    charts[bench] = new Chart(canvas.getContext("2d"), {
       type: "line",
       data: {
-        labels: labels,
+        labels: pts.map((p) => p.sha),
         datasets: [
           {
             label: "p90",
-            data: p90s,
+            data: pts.map((p) => p.p90_ns),
             borderColor: "transparent",
-            backgroundColor: "rgba(122, 148, 113, 0.12)",
+            backgroundColor: THEME.mossFill,
             pointRadius: 0,
             fill: "+1",
             tension: 0.1,
           },
           {
             label: "p10",
-            data: p10s,
+            data: pts.map((p) => p.p10_ns),
             borderColor: "transparent",
             pointRadius: 0,
             fill: false,
@@ -423,136 +656,41 @@ function renderCharts() {
           },
           {
             label: "Median",
-            data: medians,
-            borderColor: "#7A9471",
+            data: pts.map((p) => p.median_ns),
+            borderColor: THEME.moss,
             borderWidth: 1.5,
-            pointBackgroundColor: pointBg,
-            pointBorderColor: pointBorder,
+            pointBackgroundColor: pts.map((p) => (p.flagged ? THEME.amber : THEME.moss)),
+            pointBorderColor: pts.map((p) => (p.session_break ? THEME.diamondBorder : THEME.bg)),
             pointBorderWidth: 1.5,
-            pointStyle: pointStyle,
-            pointRadius: pointRadius,
-            pointHoverRadius: pointHoverRadius,
+            pointStyle: pts.map((p) => (p.session_break ? "rectRot" : "circle")),
+            pointRadius: pts.map((p) => (p.flagged ? 6 : (p.session_break ? 5 : 3.5))),
+            pointHoverRadius: pts.map((p) => (p.flagged ? 8 : 6)),
             tension: 0.1,
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        onClick: (evt, elements) => {
-          if (elements.length > 0) {
-            const idx = elements[0].index;
-            const pt = pts[idx];
-            openDrillModal(pt.sha, bench);
-          }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: "#1A1712",
-            borderColor: "#332E26",
-            borderWidth: 1,
-            titleFont: { family: "monospace", size: 12 },
-            bodyFont: { family: "monospace", size: 11 },
-            callbacks: {
-              title: (items) => {
-                const idx = items[0].dataIndex;
-                const p = pts[idx];
-                return `${p.sha} · ${p.date}`;
-              },
-              label: (item) => {
-                const idx = item.dataIndex;
-                const p = pts[idx];
-                const flagStr = p.flagged ? " [FLAGGED REGRESSION]" : "";
-                const lines = [
-                  `Median: ${p.median_ns.toLocaleString()} ns${flagStr}`,
-                  `Noise Band: ${p.p10_ns.toLocaleString()} - ${p.p90_ns.toLocaleString()} ns`,
-                ];
-                if (p.session_gap_min != null) {
-                  lines.push(`Gap before run: ${formatGap(p.session_gap_min)}${p.session_break ? " [SESSION BREAK — environment-confounded]" : ""}`);
-                }
-                lines.push(`Subject: ${p.subject.substring(0, 45)}...`);
-                return lines;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: "#221E18" },
-            ticks: { color: "#635B4C", font: { family: "monospace", size: 10 } }
           },
-          y: {
-            grid: { color: "#221E18" },
-            ticks: {
-              color: "#635B4C",
-              font: { family: "monospace", size: 10 },
-              callback: (val) => `${(val / 1000).toFixed(0)}µs`
-            }
-          }
-        }
-      }
+        ],
+      },
+      options,
     });
   });
 }
 
-function renderComparisonsLog() {
-  const tbody = document.getElementById("log-body");
-  tbody.innerHTML = "";
-
-  const flags = projectComparisons.filter(c => c.verdict === "flag" && c.fdr_significant);
-  if (flags.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-faint);padding:24px;">No comparisons currently flagged in this project.</td></tr>`;
-    return;
-  }
-
-  flags.forEach(c => {
-    const tr = document.createElement("tr");
-    const isPos = c.shift_pct > 0;
-    const sign = isPos ? "+" : "";
-    const shiftClass = isPos ? "pos" : "neg";
-
-    tr.innerHTML = `
-      <td class="sha" title="Inspect Commit Distribution">${esc(c.cand_sha)}</td>
-      <td class="bench">${esc(c.benchmark)}</td>
-      <td class="shift ${shiftClass}">${sign}${esc(c.shift_pct)}%</td>
-      <td>${Number(c.p_value).toExponential(2)}</td>
-      <td>${esc(c.noise_floor_pct)}%</td>
-      <td>${c.session_gap_min == null ? '–' : `<span class="badge ${c.session_break ? 'flag' : 'ok'}" title="${c.session_break ? 'Session break: environment-confounded' : 'Same measurement session'}">${esc(formatGap(c.session_gap_min))}</span>`}</td>
-      <td>
-        <span class="badge ${c.resolution_status==='false_positive'?'fp':'flag'}">${esc(c.resolution_status)}</span>
-        <div style="font-size:11px;color:var(--text-faint);margin-top:4px;">${esc(c.resolution_note)}</div>
-      </td>
-    `;
-    const shaCell = tr.querySelector(".sha");
-    if (shaCell) {
-      shaCell.addEventListener("click", () => openDrillModal(c.cand_sha, c.benchmark));
-    }
-    tbody.appendChild(tr);
-  });
-}
-
+// === Section 5: Ad-Hoc Pairwise Comparison ===
 function populateCompareDropdowns() {
-  const baseSel = document.getElementById("cmp-base");
-  const candSel = document.getElementById("cmp-cand");
-  baseSel.innerHTML = "";
-  candSel.innerHTML = "";
+  const baseSel = $("cmp-base");
+  const candSel = $("cmp-cand");
+  baseSel.replaceChildren();
+  candSel.replaceChildren();
 
   if (!seriesData || !seriesData.series) return;
-  const firstBench = seriesData.benchmarks[0];
-  const pts = seriesData.series[firstBench] || [];
+  const benchWithPoints = seriesData.benchmarks.find((b) => (seriesData.series[b] || []).length > 0);
+  const pts = benchWithPoints ? seriesData.series[benchWithPoints] : [];
 
-  pts.forEach((p, idx) => {
-    const optB = document.createElement("option");
-    optB.value = p.sha;
-    optB.textContent = `${p.sha} · ${p.subject.substring(0, 36)}`;
-    baseSel.appendChild(optB);
-
-    const optC = document.createElement("option");
-    optC.value = p.sha;
-    optC.textContent = `${p.sha} · ${p.subject.substring(0, 36)}`;
-    candSel.appendChild(optC);
-  });
+  const options = pts.map((p) => ({
+    value: p.sha,
+    label: `${p.sha} · ${(p.subject || "").substring(0, 36)}`,
+  }));
+  populateSelect(baseSel, options);
+  populateSelect(candSel, options);
 
   if (pts.length >= 2) {
     baseSel.selectedIndex = pts.length - 2;
@@ -561,72 +699,142 @@ function populateCompareDropdowns() {
 }
 
 async function runAdHocCompare() {
-  const baseSha = document.getElementById("cmp-base").value;
-  const candSha = document.getElementById("cmp-cand").value;
+  const baseSha = $("cmp-base").value;
+  const candSha = $("cmp-cand").value;
+  const errEl = $("cmp-error");
+  errEl.style.display = "none";
   if (!baseSha || !candSha) return;
 
   try {
-    const res = await fetch("/api/compare", {
+    const data = await fetchJson("/api/compare", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         project: currentProject,
         base_sha: baseSha,
         cand_sha: candSha,
-      })
+      }),
     });
-    const data = await res.json();
     renderCompareResults(data);
-  } catch (e) {
-    console.error("Ad-hoc compare failed:", e);
+  } catch (err) {
+    $("cmp-results").style.display = "none";
+    errEl.textContent = err.message;
+    errEl.style.display = "block";
   }
 }
 
 function renderCompareResults(data) {
-  const box = document.getElementById("cmp-results");
-  const grid = document.getElementById("cmp-grid");
-  const hdr = document.getElementById("cmp-summary-header");
+  const box = $("cmp-results");
+  const grid = $("cmp-grid");
+  $("cmp-summary-header").textContent =
+    `Results: ${data.base_commit.short_sha} (${data.base_commit.date}) -> ${data.cand_commit.short_sha} (${data.cand_commit.date})`;
+  grid.replaceChildren();
 
-  hdr.textContent = `Results: ${data.base_commit.short_sha} (${data.base_commit.date}) -> ${data.cand_commit.short_sha} (${data.cand_commit.date})`;
-  grid.innerHTML = "";
+  if (!data.comparisons || data.comparisons.length === 0) {
+    grid.appendChild(el("div", { className: "empty-state", text: "Insufficient runs (need >= 3 per benchmark) to compare these commits." }));
+    box.style.display = "block";
+    return;
+  }
 
-  data.comparisons.forEach(c => {
+  data.comparisons.forEach((c) => {
     const isFlag = c.verdict === "flag";
-    const sign = c.shift_pct > 0 ? "+" : "";
-    const card = document.createElement("div");
-    card.className = "cmp-card";
-    card.innerHTML = `
-      <div class="cmp-card-bench">${esc(c.benchmark)}</div>
-      <div class="cmp-card-shift ${isFlag ? 'flag' : 'ok'}">${sign}${Number(c.shift_pct).toFixed(2)}%</div>
-      <div class="cmp-card-meta">
-        Verdict: <b>${esc(String(c.verdict).toUpperCase())}</b><br>
-        p-value: ${Number(c.p_value).toExponential(2)}<br>
-        3x CV Noise Floor: ${Number(c.noise_floor_pct).toFixed(2)}%<br>
-        Hodges-Lehmann: ${Number(c.shift_pct).toFixed(2)}%
-      </div>
-    `;
+    const card = el("div", { className: "cmp-card" },
+      el("div", { className: "cmp-card-bench", text: c.benchmark }),
+      el("div", { className: `cmp-card-shift ${isFlag ? "flag" : "ok"}`, text: formatShiftPct(c.shift_pct) }),
+      el("div", { className: "cmp-card-meta" },
+        "Verdict: ", el("b", { text: String(c.verdict).toUpperCase() }), el("br"),
+        `p-value: ${Number(c.p_value).toExponential(2)}`, el("br"),
+        `3x CV Noise Floor: ${Number(c.noise_floor_pct).toFixed(2)}%`, el("br"),
+        `Hodges-Lehmann: ${Number(c.shift_pct).toFixed(2)}%`,
+      ),
+    );
     grid.appendChild(card);
   });
 
   box.style.display = "block";
 }
 
+// === Section 6: Investigation Triage Log & Flamegraph Tabs ===
+function renderComparisonsLog() {
+  const tbody = $("log-body");
+  tbody.replaceChildren();
+
+  const flags = getFlaggedComparisons(projectComparisons);
+  if (flags.length === 0) {
+    tbody.appendChild(el("tr", {},
+      el("td", { className: "empty-state", attrs: { colspan: "7" }, text: "No comparisons currently flagged in this project." })
+    ));
+    return;
+  }
+
+  flags.forEach((c) => {
+    const shiftClass = c.shift_pct > 0 ? "pos" : "neg";
+    const gapCell = c.session_gap_min == null
+      ? el("td", { text: "–" })
+      : el("td", {}, createBadge(
+          formatGap(c.session_gap_min),
+          c.session_break ? "flag" : "ok",
+          c.session_break ? "Session break: environment-confounded" : "Same measurement session",
+        ));
+
+    const tr = el("tr", {},
+      el("td", {
+        className: "sha",
+        text: c.cand_sha,
+        attrs: { title: "Inspect Commit Distribution" },
+        on: { click: () => openDrillModal(c.cand_sha, c.benchmark) },
+      }),
+      el("td", { className: "bench", text: c.benchmark }),
+      el("td", { className: `shift ${shiftClass}`, text: formatShiftPct(c.shift_pct) }),
+      el("td", { text: Number(c.p_value).toExponential(2) }),
+      el("td", { text: `${Number(c.noise_floor_pct).toFixed(2)}%` }),
+      gapCell,
+      el("td", {},
+        createBadge(c.resolution_status, c.resolution_status === "false_positive" ? "fp" : "flag"),
+        el("div", { className: "triage-note", text: c.resolution_note || "" }),
+      ),
+    );
+    tbody.appendChild(tr);
+  });
+}
+
 function showFlame(type, btn) {
-  document.querySelectorAll(".flame-tab").forEach(t => t.classList.remove("active"));
+  const cfg = FLAMEGRAPHS[type];
+  if (!cfg) return;
+  document.querySelectorAll(".flame-tab").forEach((t) => t.classList.remove("active"));
   btn.classList.add("active");
+  $("flame-iframe").src = cfg.src;
+  $("flame-caption-text").replaceChildren(el("b", { text: cfg.lead }), cfg.body);
+}
 
-  const iframe = document.getElementById("flame-iframe");
-  const caption = document.getElementById("flame-caption-text");
+// === Section 7: Commit Drill-Down Modal ===
+function renderModalSessionContext(session) {
+  const s = session || {};
+  const gapEl = $("m-gap");
+  const banner = $("m-session-banner");
+  gapEl.replaceChildren();
+  banner.replaceChildren();
 
-  if (type === "diff") {
-    iframe.src = "/flamegraphs/flamegraph_diff.svg";
-    caption.innerHTML = "<b>Differential profile:</b> red = more sampled time in the candidate, blue = less. No function shows a large change. This shows the slowdown did not reproduce on a second measurement; it does not establish what caused the original shift.";
-  } else if (type === "candidate") {
-    iframe.src = "/flamegraphs/flamegraph_candidate_0a446ec.svg";
-    caption.innerHTML = "<b>Candidate profile (0a446ec):</b> software cpu-clock samples during the re-measurement run.";
+  if (s.gap_min == null) {
+    gapEl.textContent = s.prev_short_sha ? "unknown (timestamps missing)" : "n/a (first commit in series)";
+    banner.style.display = "none";
+    return;
+  }
+
+  const gapText = formatGap(s.gap_min);
+  const badge = createBadge(s.session_break ? "session break" : "same session", s.session_break ? "flag" : "ok");
+  gapEl.append(`${gapText} after ${s.prev_short_sha} `, badge);
+
+  if (s.session_break) {
+    banner.append(
+      el("b", { text: "Session break:" }),
+      ` this commit's runs started ${gapText} after ${s.prev_short_sha}'s finished (threshold ${s.threshold_min} min). Comparisons against ${s.prev_short_sha} cross a measurement session and may reflect host drift rather than a code change. Re-measure with `,
+      el("code", { text: "compare-interleaved" }),
+      " before attributing a shift.",
+    );
+    banner.style.display = "block";
   } else {
-    iframe.src = "/flamegraphs/flamegraph_parent_16d47c5.svg";
-    caption.innerHTML = "<b>Parent profile (16d47c5):</b> software cpu-clock samples during the re-measurement run.";
+    banner.style.display = "none";
   }
 }
 
@@ -636,117 +844,75 @@ function renderModalBenchmark(benchName) {
   if (!bData) return;
 
   if (modalChart) modalChart.destroy();
-  const ctx = document.getElementById("modal-hist-canvas").getContext("2d");
   const hBins = bData.histogram;
+  const options = baseChartOptions(
+    (val) => String(val),
+    {
+      title: (items) => {
+        const b = hBins[items[0].dataIndex];
+        return `${b.bin_start_ns.toLocaleString()} - ${b.bin_end_ns.toLocaleString()} ns`;
+      },
+    },
+  );
 
-  modalChart = new Chart(ctx, {
+  modalChart = new Chart($("modal-hist-canvas").getContext("2d"), {
     type: "bar",
     data: {
-      labels: hBins.map(b => `${(b.bin_start_ns/1000).toFixed(1)}k`),
+      labels: hBins.map((b) => `${(b.bin_start_ns / 1000).toFixed(1)}k`),
       datasets: [{
         label: "Run Count",
-        data: hBins.map(b => b.count),
-        backgroundColor: "rgba(122, 148, 113, 0.4)",
-        borderColor: "#7A9471",
+        data: hBins.map((b) => b.count),
+        backgroundColor: THEME.mossHistFill,
+        borderColor: THEME.moss,
         borderWidth: 1,
-      }]
+      }],
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: (items) => {
-              const b = hBins[items[0].dataIndex];
-              return `${b.bin_start_ns.toLocaleString()} - ${b.bin_end_ns.toLocaleString()} ns`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: { ticks: { color: "#635B4C", font: { family: "monospace", size: 10 } } },
-        y: { ticks: { color: "#635B4C", font: { family: "monospace", size: 10 } } }
-      }
-    }
+    options,
   });
 
-  const repHdr = document.getElementById("m-rep-header");
-  if (repHdr) {
-    repHdr.textContent = `${bData.rep_medians.length} Independent Process Invocations · ${benchName} (median ${(bData.median_ns / 1000).toFixed(1)}µs, CV ${bData.cv_pct.toFixed(2)}%)`;
-  }
+  $("m-rep-header").textContent =
+    `${bData.rep_medians.length} Independent Process Invocations · ${benchName} (median ${formatUs(bData.median_ns)}, CV ${bData.cv_pct.toFixed(2)}%)`;
 
-  const grid = document.getElementById("m-rep-grid");
-  grid.innerHTML = "";
-  bData.rep_medians.forEach((val) => {
-    const cell = document.createElement("div");
-    cell.className = "rep-cell";
-    cell.textContent = `${(val/1000).toFixed(1)}µs`;
-    grid.appendChild(cell);
-  });
+  const grid = $("m-rep-grid");
+  grid.replaceChildren(
+    ...bData.rep_medians.map((val) => el("div", { className: "rep-cell", text: formatUs(val) }))
+  );
 }
 
 async function openDrillModal(sha, preferredBench = null) {
   try {
-    const res = await fetch(`/api/commits/${encodeURIComponent(sha)}/distribution?project=${encodeURIComponent(currentProject)}`);
-    const data = await res.json();
+    const data = await fetchJson(
+      `/api/commits/${encodeURIComponent(sha)}/distribution?project=${encodeURIComponent(currentProject)}`
+    );
     modalDistributionData = data;
 
-    document.getElementById("m-sha").textContent = `${data.commit.short_sha} (${data.commit.sha})`;
-    document.getElementById("m-subject").textContent = data.commit.subject;
-    document.getElementById("m-date").textContent = (data.commit.author_date || "").replace("T", " ");
-    document.getElementById("m-cpu").textContent = data.commit.cpu_model;
-    document.getElementById("m-rustc").textContent = data.commit.rustc_version;
+    $("m-sha").textContent = `${data.commit.short_sha} (${data.commit.sha})`;
+    $("m-subject").textContent = data.commit.subject || "-";
+    $("m-date").textContent = (data.commit.author_date || "-").replace("T", " ");
+    $("m-cpu").textContent = data.commit.cpu_model || "-";
+    $("m-rustc").textContent = data.commit.rustc_version || "-";
 
-    // Session context: run window and wall-clock gap since the previous commit's run
-    const fmtUtc = (s) => s ? s.replace("T", " ").replace(/\+00:00$|Z$/, "").substring(0, 19) + " UTC" : "not recorded";
-    const st = data.commit.run_started_utc, fin = data.commit.run_finished_utc;
-    document.getElementById("m-window").textContent = st ? `${fmtUtc(st)} → ${fin ? fmtUtc(fin).substring(11) : "?"}` : "not recorded";
-    const s = data.session || {};
-    const gapEl = document.getElementById("m-gap");
-    const banner = document.getElementById("m-session-banner");
-    if (s.gap_min == null) {
-      gapEl.textContent = s.prev_short_sha ? "unknown (timestamps missing)" : "n/a (first commit in series)";
-      banner.style.display = "none";
-    } else {
-      const prevSafe = esc(s.prev_short_sha);
-      gapEl.innerHTML = `${esc(formatGap(s.gap_min))} after ${prevSafe} <span class="badge ${s.session_break ? 'flag' : 'ok'}">${s.session_break ? 'session break' : 'same session'}</span>`;
-      if (s.session_break) {
-        banner.innerHTML = `<b>Session break:</b> this commit's runs started ${esc(formatGap(s.gap_min))} after ${prevSafe}'s finished (threshold ${esc(s.threshold_min)} min). Comparisons against ${prevSafe} cross a measurement session and may reflect host drift rather than a code change. Re-measure with <code>compare-interleaved</code> before attributing a shift.`;
-        banner.style.display = "block";
-      } else {
-        banner.style.display = "none";
-      }
-    }
+    const st = data.commit.run_started_utc;
+    const fin = data.commit.run_finished_utc;
+    $("m-window").textContent = st ? `${formatUtc(st)} → ${fin ? formatUtc(fin).substring(11) : "?"}` : "not recorded";
+    renderModalSessionContext(data.session);
 
     const benchNames = Object.keys(data.benchmarks || {});
-    const benchSel = document.getElementById("m-bench-select");
-    benchSel.innerHTML = "";
-    benchNames.forEach(bn => {
-      const opt = document.createElement("option");
-      opt.value = bn;
-      opt.textContent = bn;
-      benchSel.appendChild(opt);
-    });
+    const benchSel = $("m-bench-select");
     const activeBench = (preferredBench && data.benchmarks[preferredBench]) ? preferredBench : benchNames[0];
+    populateSelect(benchSel, benchNames.map((bn) => ({ value: bn, label: bn })), activeBench);
     if (activeBench) {
-      benchSel.value = activeBench;
       renderModalBenchmark(activeBench);
     }
 
-    document.getElementById("drill-modal").style.display = "flex";
-  } catch (e) {
-    console.error("Failed to load commit distribution:", e);
+    $("drill-modal").style.display = "flex";
+  } catch (err) {
+    console.error("Failed to load commit distribution:", err);
   }
 }
 
 function closeModal() {
-  document.getElementById("drill-modal").style.display = "none";
-}
-
-function closeModalOnBg(evt) {
-  if (evt.target.id === "drill-modal") closeModal();
+  $("drill-modal").style.display = "none";
 }
 
 window.addEventListener("DOMContentLoaded", init);
