@@ -1,36 +1,45 @@
 """
 tests/test_stage5_api_hardening.py
-Input validation on the ad-hoc compare endpoint.
+Tests for API input validation and security headers, CLI/import validation,
+packaging and Dockerfile configuration, SVG/Markdown XSS sanitization, POSIX
+script compatibility, and documentation/artifact invariants.
 """
 
+import gzip
+import json
+import shlex
+import sys
+import tomllib
 from pathlib import Path
 
 import pytest
 
-from core.db import Database
+import regressor
+from core.report import render_markdown
+from core.session import SESSION_BREAK_MIN
+from tests.helpers import make_test_client, seed_project_db
 
 
 @pytest.fixture
 def client(tmp_path):
-    pytest.importorskip("httpx")
-    from fastapi.testclient import TestClient
-
-    from server.app import create_app
-
     db_path = tmp_path / "t.db"
-    db = Database(str(db_path))
-    pid = db.register_project(name="demo", repo_url="https://example.invalid/demo.git",
-                              build_cmd="", adapter="PyMicroAdapter", config_toml="")
-    for sha, base in (("aaaaaaa", 1000.0), ("bbbbbbb", 1100.0)):
-        cid = db.insert_commit(project_id=pid, sha=sha * 2, short_sha=sha, author_date="2026-01-01",
-                               subject=f"commit {sha}", build_ok=True, build_seconds=1.0,
-                               cpu_model="test", rustc_version="n/a",
-                               run_started_utc="2026-01-01T10:00:00+00:00",
-                               run_finished_utc="2026-01-01T10:10:00+00:00")
-        for i in range(6):
-            db.insert_run(commit_id=cid, benchmark="b", rep_index=i + 1,
-                          sample_file_path="", median_ns=base + i)
-    return TestClient(create_app(db_path=str(db_path)))
+    commits = [
+        {
+            "short_sha": sha,
+            "run_started_utc": "2026-01-01T10:00:00+00:00",
+            "run_finished_utc": "2026-01-01T10:10:00+00:00",
+            "base_ns": base - 1.0,
+        }
+        for sha, base in (("aaaaaaa", 1000.0), ("bbbbbbb", 1100.0))
+    ]
+    seed_project_db(
+        db_path,
+        repo_url="https://example.invalid/demo.git",
+        commits=commits,
+        benchmarks=("b",),
+        reps=6,
+    )
+    return make_test_client(db_path)
 
 
 def _post(client, base, cand):
@@ -57,12 +66,6 @@ def test_compare_valid_pair_still_works(client):
 
 
 def test_import_data_rejects_corrupt_or_malformed_files_cleanly(tmp_path, monkeypatch, capsys):
-    import gzip
-    import json
-    import sys
-
-    import regressor
-
     db_path = str(tmp_path / "imp.db")
 
     # 1. Corrupt gzip
@@ -99,11 +102,6 @@ def test_import_data_rejects_corrupt_or_malformed_files_cleanly(tmp_path, monkey
 
 
 def test_cli_rejects_non_positive_counts_and_unknown_changepoint_benchmark(tmp_path, monkeypatch, capsys):
-    import sys
-    from pathlib import Path
-
-    import regressor
-
     for bad_argv in (
         ["regressor", "batch", "regex", "--rolling-window", "0"],
         ["regressor", "compare-interleaved", "--base", "a", "--cand", "b", "--pairs", "0"],
@@ -124,9 +122,6 @@ def test_cli_rejects_non_positive_counts_and_unknown_changepoint_benchmark(tmp_p
 
 
 def test_packaging_and_dockerfile_configuration():
-    import tomllib
-    from pathlib import Path
-
     root = Path(__file__).resolve().parent.parent
     pyproject = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     st = pyproject.get("tool", {}).get("setuptools", {})
@@ -168,8 +163,6 @@ def test_compare_rejects_mass_assignment_and_oversized_fields(client):
 
 
 def test_flamegraph_svgs_guard_prototype_pollution_and_selector_injection():
-    from pathlib import Path
-
     fg_dir = Path(__file__).resolve().parent.parent / "assets" / "flamegraphs"
     for svg_path in fg_dir.glob("*.svg"):
         text = svg_path.read_text(encoding="utf-8")
@@ -179,8 +172,6 @@ def test_flamegraph_svgs_guard_prototype_pollution_and_selector_injection():
 
 
 def test_markdown_report_sanitizes_html_and_table_injection():
-    from core.report import render_markdown
-
     results = [{
         "benchmark": "bench|name`<script>alert(1)</script>",
         "baseline_median_ns": 1000.0,
@@ -209,22 +200,34 @@ def test_markdown_report_sanitizes_html_and_table_injection():
 def test_markdown_docs_contain_no_local_file_urls_or_author_paths():
     for unwanted in ("FINAL.md", "SESSION.md", "HANDOFF.md", "CHECKPOINTS.md"):
         assert not Path(unwanted).exists(), f"{unwanted} should be deleted"
-    for md_name in ("README.md", "PROJECT_EXPLANATION.md", "SETUP.md", "LICENSE", "pyproject.toml"):
-        p = Path(md_name)
-        assert p.exists(), f"{md_name} is missing"
+    checked_paths = (
+        "README.md",
+        "PROJECT_EXPLANATION.md",
+        "SETUP.md",
+        "BUILD_LOG.md",
+        "CONTRIBUTING.md",
+        "noise-bench/REPORT.md",
+        "LICENSE",
+        "pyproject.toml",
+        "Dockerfile",
+        "action.yml",
+        ".github/workflows/tests.yml",
+        "examples/perf-check.yml",
+        "noise-bench/results/ablation_8f5d947_instructions.json",
+        "noise-bench/results/study2_analysis.json",
+        "assets/flamegraphs/flamegraph_diff_8f5d947.svg",
+    )
+    for rel_path in checked_paths:
+        p = Path(rel_path)
+        assert p.exists(), f"{rel_path} is missing"
         text = p.read_text(encoding="utf-8")
-        assert "file://" not in text, f"{md_name} contains a file:// URL"
-        assert "Users/Dev" not in text and "Users\\Dev" not in text, f"{md_name} contains a hardcoded author path"
-        assert "Dev Gupta" not in text and "dev@example" not in text, f"{md_name} still references 'Dev'"
-        assert "YOUR_USER" not in text, f"{md_name} still has a YOUR_USER placeholder"
+        assert "file://" not in text, f"{rel_path} contains a file:// URL"
+        assert "Users/Dev" not in text and "Users\\Dev" not in text, f"{rel_path} contains a hardcoded author path"
+        assert "Dev Gupta" not in text and "dev@example" not in text, f"{rel_path} still references 'Dev'"
+        assert "YOUR_USER" not in text, f"{rel_path} still has a YOUR_USER placeholder"
 
 
 def test_docs_invariants_and_cli_commands_match_codebase(tmp_path: Path, monkeypatch):
-    import shlex
-
-    import regressor
-    from core.session import SESSION_BREAK_MIN
-
     readme_text = Path("README.md").read_text(encoding="utf-8")
     explanation_text = Path("PROJECT_EXPLANATION.md").read_text(encoding="utf-8")
 
@@ -283,4 +286,35 @@ def test_verify_sh_is_posix_sh_compatible():
     assert "pipefail" not in sh_text
 
 
+def test_docs_and_container_paths_and_study_counts_agree():
+    readme = Path("README.md").read_text(encoding="utf-8")
+    report = Path("noise-bench/REPORT.md").read_text(encoding="utf-8")
+    setup = Path("SETUP.md").read_text(encoding="utf-8")
+    explanation = Path("PROJECT_EXPLANATION.md").read_text(encoding="utf-8")
+    dockerfile = Path("Dockerfile").read_text(encoding="utf-8")
+    run_batch = Path("noise-bench/run_batch.sh").read_text(encoding="utf-8")
 
+    # Study results table sits above Architecture diagram, and Where This Breaks + BUILD_LOG.md exist
+    assert readme.index("## Study Results") < readme.index("## Architecture & Key Innovations")
+    assert "## Where This Breaks" in readme
+    assert Path("BUILD_LOG.md").exists()
+    assert Path("assets/flamegraphs/flamegraph_diff_8f5d947.svg").exists()
+    assert Path("noise-bench/results/ablation_8f5d947_instructions.json").exists()
+    assert Path("data/regex_study2_history.json.gz").exists()
+    assert Path("noise-bench/results/study2_analysis.json").exists()
+
+    # Span & sub-threshold candidate consistency across README, REPORT.md, and PROJECT_EXPLANATION.md
+    for name, text in (("README.md", readme), ("REPORT.md", report), ("PROJECT_EXPLANATION.md", explanation)):
+        assert "12 months" not in text, f"{name} still claims 12 months"
+        assert "14 Aug 2025" in text and "27 Jan 2026" in text, f"{name} missing real commit span"
+        assert "62 commits" in text, f"{name} missing source-range commit count (62)"
+        assert "8f5d947" in text and "under investigation" in text.lower(), f"{name} missing 8f5d947 candidate status"
+
+    # Container paths agree across Dockerfile, SETUP.md, and run_batch.sh
+    assert "/work/regressor/noise-bench/results" in dockerfile
+    assert "CARGO_HOME" in dockerfile
+    for name, text in (("SETUP.md", setup), ("run_batch.sh", run_batch)):
+        assert "/work/noise-bench" not in text, f"{name} still uses old /work/noise-bench path"
+        assert "/work/regex" not in text, f"{name} still uses old /work/regex path"
+        assert "/work/regressor/noise-bench" in text, f"{name} missing /work/regressor/noise-bench"
+        assert "/work/regressor/regex" in text, f"{name} missing /work/regressor/regex"

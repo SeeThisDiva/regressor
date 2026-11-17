@@ -1,21 +1,23 @@
 """
-Tests for the review fixes: p-value floor reporting, Benjamini-Yekutieli, bisect confirmation
-without optional stopping, unique SHA-prefix resolution, CLI argument validation, and the
-in-place RegexAdapter source guard.
+tests/test_review_fixes.py
+Tests for Wilcoxon p-value floor reporting, Benjamini-Yekutieli FDR control,
+confirmation-batch bisection, unique SHA-prefix resolution, CLI argument
+validation, and RegexAdapter in-place build checks.
 """
 
+import shutil
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import pytest
 
-from adapters.base import BaseAdapter
+import regressor
+from adapters.regex_adapter import RegexAdapter
 from core.bisect import bisect_builds
 from core.db import resolve_commit_prefix
 from core.detector import bh_fdr_correct
 from core.interleaved import analyze_paired, min_wilcoxon_p
-from core.models import BuildResult
 from core.report import render_markdown
+from tests.helpers import ScriptedAdapter, make_test_client, seed_project_db
 
 # ---------------------------------------------------------------------------
 # p-value floor
@@ -90,7 +92,6 @@ def test_fdr_rejects_unknown_method():
 
 
 def test_default_fdr_is_bh_and_keeps_the_original_study(tmp_path: Path, monkeypatch):
-    import regressor
     db = tmp_path / "s.db"
     monkeypatch.setattr("sys.argv", ["regressor.py", "--db", str(db), "import-data", "data/regex_history.json.gz"])
     assert regressor.main() == 0
@@ -108,40 +109,13 @@ def test_default_fdr_is_bh_and_keeps_the_original_study(tmp_path: Path, monkeypa
 # ---------------------------------------------------------------------------
 
 
-class _ScriptedAdapter(BaseAdapter):
-    """Good build is always 1000 ns. Each candidate returns values from a per-ref script, one
-    entry per run() call on that candidate (pairs run A and B, so B calls == pairs)."""
-
-    def __init__(self, commits: List[str], script: Dict[str, List[float]], default_bad_from: int):
-        self.commits = commits
-        self.script = script
-        self.calls: Dict[str, int] = {}
-        self.default_bad_from = default_bad_from
-
-    def list_benchmarks(self) -> List[str]:
-        return ["b1"]
-
-    def build(self, commit_ref: str, workdir: Optional[Path] = None) -> BuildResult:
-        return BuildResult(ok=True, seconds=0.0, log_tail="", artifact=commit_ref)
-
-    def run(self, bench_name, iters, warmup, inject_ns=0, artifact=None) -> List[float]:
-        if artifact == self.commits[0]:
-            return [1000.0] * 5
-        k = self.calls.get(artifact, 0)
-        self.calls[artifact] = k + 1
-        if artifact in self.script:
-            seq = self.script[artifact]
-            return [seq[min(k, len(seq) - 1)]] * 5
-        return [1080.0 if self.commits.index(artifact) >= self.default_bad_from else 1000.0] * 5
-
-
 def test_borderline_probe_uses_only_the_confirmation_batch():
     commits = [f"c{i:02d}" for i in range(8)]
     # c03 (truly bad here) looks borderline in batch 1 and clearly bad in batch 2.
     # Batch 1: alternating +0.4% / +2.2% -> borderline flag (CI does not clear 1%).
     first = [1004.0 if (i % 2) else 1022.0 for i in range(12)]
     second = [1080.0] * 12
-    adapter = _ScriptedAdapter(commits, {"c03": first + second}, default_bad_from=3)
+    adapter = ScriptedAdapter(commits, {"c03": first + second}, default_bad_from=3)
     res = bisect_builds(adapter, commits, "b1", pairs=12, log=lambda _: None)
     step = next(s for s in res["steps"] if s["ref"] == "c03")
     assert step["repeated"] is True
@@ -153,7 +127,7 @@ def test_confirmation_batch_can_overturn_a_borderline_flag():
     commits = [f"c{i:02d}" for i in range(8)]
     first = [1004.0 if (i % 2) else 1022.0 for i in range(12)]
     second = [1000.0] * 12                                     # spike gone on re-measurement
-    adapter = _ScriptedAdapter(commits, {"c03": first + second}, default_bad_from=5)
+    adapter = ScriptedAdapter(commits, {"c03": first + second}, default_bad_from=5)
     res = bisect_builds(adapter, commits, "b1", pairs=12, log=lambda _: None)
     assert res["culprit"] == "c05"
     assert res["last_good"] == "c04"
@@ -183,18 +157,20 @@ def test_bad_prefixes_are_errors(prefix, needle):
 
 
 def test_api_compare_rejects_ambiguous_prefix(tmp_path: Path):
-    from fastapi.testclient import TestClient
-
-    from core.db import Database
-    from server.app import create_app
-
     db_path = tmp_path / "amb.db"
-    db = Database(str(db_path))
-    pid = db.register_project("regex", "", "", "RegexAdapter", "")
-    for sha in ("abcd1111ffff", "abcd2222ffff", "9999aaaa0000"):
-        cid = db.insert_commit(pid, sha, sha[:7], "", "s", True, 0.0)
-        db.insert_runs_bulk((cid, "b1", i, "", 1000.0 + i) for i in range(1, 6))
-    client = TestClient(create_app(str(db_path)))
+    seed_project_db(
+        db_path,
+        project_name="regex",
+        adapter="RegexAdapter",
+        commits=[
+            {"sha": sha, "short_sha": sha[:7]}
+            for sha in ("abcd1111ffff", "abcd2222ffff", "9999aaaa0000")
+        ],
+        benchmarks=("b1",),
+        reps=5,
+        base_ns=1000.0,
+    )
+    client = make_test_client(db_path)
     r = client.post("/api/compare", json={"project": "regex", "base_sha": "abcd", "cand_sha": "9999"})
     assert r.status_code == 400
     assert "ambiguous" in r.json()["detail"]
@@ -219,7 +195,6 @@ def test_api_compare_rejects_ambiguous_prefix(tmp_path: Path):
     ["batch", "--fdr", "bonferroni"],
 ])
 def test_cli_rejects_out_of_range_arguments(argv, monkeypatch):
-    import regressor
     monkeypatch.setattr("sys.argv", ["regressor.py", *argv])
     with pytest.raises(SystemExit) as exc:
         regressor.main()
@@ -232,10 +207,6 @@ def test_cli_rejects_out_of_range_arguments(argv, monkeypatch):
 
 
 def test_in_place_build_refuses_a_clone_it_would_not_compile(tmp_path: Path, monkeypatch):
-    import shutil
-
-    from adapters.regex_adapter import RegexAdapter
-
     other = tmp_path / "elsewhere"
     (other / ".git").mkdir(parents=True)
     monkeypatch.setattr(shutil, "which", lambda tool: f"/usr/bin/{tool}")

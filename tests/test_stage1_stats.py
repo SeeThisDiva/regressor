@@ -1,6 +1,7 @@
 """
 tests/test_stage1_stats.py
-Statistical-correctness regressions found in the Stage 1 review. All seeded and deterministic.
+Deterministic unit tests for E-Divisive change-point detection, strict sample
+parsing, canary drift bounds, and run-order trend diagnostics.
 """
 
 import numpy as np

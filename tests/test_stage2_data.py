@@ -1,8 +1,10 @@
 """
 tests/test_stage2_data.py
-Data layer, API and reproduction guarantees added in Stage 2.
+Tests for SQLite idempotency/deduplication, API query efficiency and SHA
+prefix validation, CORS policy, and portable Study 1 reproduction.
 """
 
+import importlib
 import sqlite3
 import sys
 from pathlib import Path
@@ -11,27 +13,14 @@ import pytest
 
 import regressor
 from core.db import Database
+from tests.helpers import make_test_client, seed_project_db
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "regex_history.json.gz"
 
 
-def _seed(db, n_commits=3, reps=6):
-    pid = db.register_project(name="demo", repo_url="", build_cmd="", adapter="PyMicroAdapter", config_toml="")
-    ids = []
-    for i in range(n_commits):
-        cid = db.insert_commit(project_id=pid, sha=f"sha{i}" * 4, short_sha=f"sha{i}", author_date="2026-01-01",
-                               subject=f"commit {i}", build_ok=True, build_seconds=1.0,
-                               run_started_utc=f"2026-01-01T10:{i:02d}:00+00:00",
-                               run_finished_utc=f"2026-01-01T10:{i:02d}:30+00:00")
-        db.insert_runs_bulk((cid, b, r, "", 1000.0 + r + i) for b in ("b1", "b2") for r in range(1, reps + 1))
-        ids.append(cid)
-    return pid, ids
-
-
 def test_reinserting_commits_and_runs_is_idempotent(tmp_path):
-    db = Database(str(tmp_path / "t.db"))
-    pid, ids = _seed(db)
+    db, pid, ids = seed_project_db(tmp_path / "t.db")
     again = db.insert_commit(project_id=pid, sha="sha0" * 4, short_sha="sha0", author_date="x", subject="renamed",
                              build_ok=True, build_seconds=2.0)
     db.insert_runs_bulk([(ids[0], "b1", 1, "", 5555.0)])
@@ -42,8 +31,7 @@ def test_reinserting_commits_and_runs_is_idempotent(tmp_path):
 
 
 def test_bulk_runs_match_per_commit_query(tmp_path):
-    db = Database(str(tmp_path / "t.db"))
-    pid, ids = _seed(db)
+    db, pid, ids = seed_project_db(tmp_path / "t.db")
     bulk = db.get_project_runs(pid)
     for cid in ids:
         for b in ("b1", "b2"):
@@ -76,24 +64,22 @@ def test_dedupe_repairs_database_that_already_has_duplicates(tmp_path):
 
 @pytest.fixture
 def client(tmp_path):
-    pytest.importorskip("httpx")
-    from fastapi.testclient import TestClient
-
-    from server.app import create_app
     db_path = tmp_path / "api.db"
-    _seed(Database(str(db_path)))
-    return TestClient(create_app(db_path=str(db_path)))
+    seed_project_db(db_path)
+    return make_test_client(db_path)
 
 
 def test_two_apps_do_not_share_state(tmp_path):
-    pytest.importorskip("httpx")
-    from fastapi.testclient import TestClient
-
-    from server.app import create_app
     a, b = tmp_path / "a.db", tmp_path / "b.db"
-    _seed(Database(str(a)), n_commits=3)
-    _seed(Database(str(b)), n_commits=5)
-    ca, cb = TestClient(create_app(db_path=str(a))), TestClient(create_app(db_path=str(b)))
+    seed_project_db(a)
+    seed_project_db(
+        b,
+        commits=[
+            {"sha": f"sha{i}" * 4, "short_sha": f"sha{i}"}
+            for i in range(5)
+        ],
+    )
+    ca, cb = make_test_client(a), make_test_client(b)
     assert ca.get("/api/projects").json()[0]["total_commits"] == 3
     assert cb.get("/api/projects").json()[0]["total_commits"] == 5
     assert ca.get("/api/projects").json()[0]["total_commits"] == 3     # still 3 after b was created
@@ -104,7 +90,7 @@ def test_series_does_not_regress_to_one_query_per_commit(client, monkeypatch):
     real = sqlite3.connect
     monkeypatch.setattr("core.db.sqlite3.connect", lambda *a, **k: (opened.append(1), real(*a, **k))[1])
     assert client.get("/api/projects/demo/series").status_code == 200
-    assert len(opened) <= 8, f"{len(opened)} connections for one /series request (was 86 before Stage 2)"
+    assert len(opened) <= 8, f"{len(opened)} SQLite connections for one /series request (expected <= 8)"
 
 
 def test_sha_lookup_is_not_a_wildcard_and_needs_a_real_prefix(client):
@@ -121,8 +107,6 @@ def test_cors_is_not_wildcard_with_credentials(client):
 
 def test_importing_server_module_has_no_filesystem_side_effect(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    import importlib
-
     import server.app as m
     importlib.reload(m)
     assert not (ROOT / "regressor.db.sentinel").exists()

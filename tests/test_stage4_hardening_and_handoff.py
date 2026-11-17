@@ -1,18 +1,22 @@
-"""Stage 4 tests: security hardening, autocorrelation/block-bootstrap, CI-bound gate,
-borderline bisect re-probing, rolling-window outlier filtering, SVG escaping, and UI audit.
+"""
+tests/test_stage4_hardening_and_handoff.py
+Tests for security hardening, autocorrelation/block-bootstrap diagnostics,
+CI-bound gating, borderline bisect re-probing, rolling-window stability,
+and static UI/Rust/shell invariants.
 """
 
 from __future__ import annotations
 
 import importlib.util
+import shutil
+import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import numpy as np
 import pytest
 
 import regressor
-from adapters.base import BaseAdapter, BuildResult
 from adapters.regex_adapter import RegexAdapter
 from core.bisect import bisect_builds, git_rev_list, validate_git_ref
 from core.db import Database
@@ -25,6 +29,7 @@ from core.detector import (
 from core.interleaved import analyze_paired, run_interleaved
 from core.samples import parse_samples
 from core.series_detector import rolling_baseline_compare
+from tests.helpers import ScriptedAdapter, StubAdapter
 
 
 def load_flamegraph_module():
@@ -74,9 +79,6 @@ def test_git_ref_validation_blocks_option_injection(tmp_path: Path):
 
 
 def test_git_rev_list_on_real_repo(tmp_path: Path):
-    import shutil
-    import subprocess
-
     if not shutil.which("git"):
         pytest.skip("git not installed on PATH")
     repo = tmp_path / "repo"
@@ -153,7 +155,7 @@ def test_flamegraph_svg_escapes_rust_generics_and_xss():
 
 
 # ---------------------------------------------------------------------------
-# 2. Autocorrelation & Block Bootstrap Tests (Handoff #4)
+# 2. Autocorrelation & Block Bootstrap Tests
 # ---------------------------------------------------------------------------
 
 
@@ -197,7 +199,7 @@ def test_block_bootstrap_detects_genuine_shift():
 
 
 # ---------------------------------------------------------------------------
-# 3. Interleaved CI-Bound Gate Tests (Handoff #5)
+# 3. Interleaved CI-Bound Gate Tests
 # ---------------------------------------------------------------------------
 
 
@@ -225,15 +227,11 @@ def test_interleaved_require_ci_bound_gates_borderline_shift():
 
 
 def test_run_interleaved_forwards_require_ci_bound():
-    class BorderlineAdapter(BaseAdapter):
+    class BorderlineAdapter(StubAdapter):
+        bench_name = "bench1"
+
         def __init__(self):
             self._b_call = 0
-
-        def list_benchmarks(self) -> List[str]:
-            return ["bench1"]
-
-        def build(self, commit_ref: str, workdir: Optional[Path] = None) -> BuildResult:
-            return BuildResult(ok=True, seconds=0.0, log_tail="", artifact=commit_ref)
 
         def run(
             self,
@@ -275,48 +273,22 @@ def test_run_interleaved_forwards_require_ci_bound():
 
 
 # ---------------------------------------------------------------------------
-# 4. Bisect Borderline Re-Probing Tests (Handoff #6)
+# 4. Bisect Borderline Re-Probing Tests
 # ---------------------------------------------------------------------------
 
 
 def test_bisect_repeats_borderline_probe_and_recovers_culprit():
     commits = [f"c{i:02d}" for i in range(8)]
-    culprit_idx = 5  # c05 is the first bad commit
-    cand_pair_calls: Dict[str, int] = {}
-
-    class FlakyMidpointAdapter(BaseAdapter):
-        def list_benchmarks(self) -> List[str]:
-            return ["b1"]
-
-        def build(self, commit_ref: str, workdir: Optional[Path] = None) -> BuildResult:
-            return BuildResult(ok=True, seconds=0.0, log_tail="", artifact=commit_ref)
-
-        def run(
-            self,
-            bench_name: str,
-            iters: int,
-            warmup: int,
-            inject_ns: int = 0,
-            artifact: Optional[str] = None,
-        ) -> List[float]:
-            assert artifact is not None
-            idx = commits.index(artifact)
-            if artifact == "c03":
-                # First 12 pairs on c03 (actually good) experience a borderline false-flag spike
-                # (alternating +0.4% and +2.2% -> HL ~1.3%, CI lower bound < 1.0%, so ci_clears_min_effect=False).
-                # When bisect repeats c03 for pairs 13..24, the spike is gone (1000.0 ns),
-                # so the pooled 24-pair test rejects the false flag!
-                cand_pair_calls["c03"] = cand_pair_calls.get("c03", 0) + 1
-                k = cand_pair_calls["c03"]
-                if k <= 12:
-                    return [1004.0 if (k % 2 == 0) else 1022.0] * 10
-                return [1000.0] * 10
-            if idx < culprit_idx:
-                return [1000.0] * 10
-            return [1080.0] * 10
+    # First 12 pairs on c03 (actually good) experience a borderline false-flag spike
+    # (alternating +0.4% and +2.2% -> HL ~1.3%, CI lower bound < 1.0%, so ci_clears_min_effect=False).
+    # When bisect repeats c03 for pairs 13..24, the spike is gone (1000.0 ns),
+    # so the independent confirmation batch rejects the false flag.
+    first = [1022.0 if (k % 2 == 0) else 1004.0 for k in range(12)]
+    second = [1000.0] * 12
+    adapter = ScriptedAdapter(commits, {"c03": first + second}, default_bad_from=5, reps_per_call=10)
 
     res = bisect_builds(
-        FlakyMidpointAdapter(),
+        adapter,
         commits,
         "b1",
         pairs=12,
@@ -324,14 +296,14 @@ def test_bisect_repeats_borderline_probe_and_recovers_culprit():
         repeat_borderline=True,
         log=lambda _: None,
     )
-    assert cand_pair_calls.get("c03") == 24  # 12 initial pairs + 12 repeat pairs
+    assert adapter.calls.get("c03") == 24  # 12 initial pairs + 12 repeat pairs
     assert res["culprit"] == "c05"
     assert res["last_good"] == "c04"
     assert res["reproduced"] is True
 
 
 # ---------------------------------------------------------------------------
-# 5. Rolling Baseline Persistent-Step Stability Test (Handoff #7)
+# 5. Rolling Baseline Persistent-Step Stability Tests
 # ---------------------------------------------------------------------------
 
 
@@ -354,7 +326,7 @@ def test_rolling_baseline_does_not_reflag_persistent_step_at_b():
 
 
 # ---------------------------------------------------------------------------
-# 6. UI & Rust Harness Source Verification Tests (Handoff #2, #3, #8)
+# 6. UI & Rust Harness Source Verification Tests
 # ---------------------------------------------------------------------------
 
 
