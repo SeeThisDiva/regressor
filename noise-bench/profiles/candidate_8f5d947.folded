@@ -1,0 +1,10 @@
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;Strategy::search_half;Core::search_half;Prefilter::find;memchr::memmem::Finder::find 580600
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;Strategy::search_half;Core::search_half;LazyDFA::try_search_half_fwd 384200
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;Strategy::search_half;Core::search_half;Core::try_search_mayfail 88400
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;Strategy::search_half;vtable_dispatch 48000
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;RegexInfo::is_impossible 92000
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Regex::search_half_with;RegexInfo::captures_disabled 26400
+main;bench_find_all;FindMatches::count;Searcher::try_advance;Input::set_start 72000
+main;bench_find_all;FindMatches::count;Searcher::try_advance;TryHalfMatchesIter::next 68000
+main;bench_find_all;Regex::find_iter;Pool::get 4220
+main;bench_find_all;Instant::elapsed 3810

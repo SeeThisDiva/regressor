@@ -1,0 +1,131 @@
+{
+  "ablation_inner_loop_identical_to_977feeb": true,
+  "dynamic_insn_delta_per_iter_8f5d947_vs_977feeb": 4007,
+  "dynamic_insn_delta_per_process_2000_iters": 8014000,
+  "stack_load_delta_per_match_8f5d947_vs_977feeb": 3,
+  "parent_folded": "noise-bench/profiles/parent_977feeb.folded",
+  "candidate_folded": "noise-bench/profiles/candidate_8f5d947.folded",
+  "flamegraph_svg": "assets/flamegraphs/flamegraph_diff_8f5d947.svg",
+  "targets": {
+    "977feeb": {
+      "target": "977feeb",
+      "asm_path": ".regressor-builds/977feeb93162/bench.s",
+      "bench_find_all_total_static_insns": 649,
+      "handle_overlapping_empty_half_match_static_insns": 87,
+      "cold_helper_has_captures_disabled_check": false,
+      "inner_loop_latch_label": ".LBB17_61",
+      "preheader_static_insns": 18,
+      "preheader_has_captures_disabled_check": false,
+      "wrapper_dynamic_insns_per_iter": 120060,
+      "wrapper_dynamic_insns_per_2000_iters": 240120000,
+      "static_inner_loop_insns": 69,
+      "dynamic_steady_state_insns_per_match": 60,
+      "stack_loads_in_loop": 6,
+      "stack_stores_in_loop": 9,
+      "stack_load_instructions": [
+        "movq\t128(%rsp), %rax",
+        "movq\t136(%rsp), %r8",
+        "movq\t96(%rsp), %r15",
+        "movq\t112(%rsp), %rbp",
+        "movq\t144(%rsp), %rax",
+        "movq\t152(%rsp), %rbx"
+      ],
+      "captures_disabled_insns_in_loop": 0,
+      "frame_breakdown_static": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 0,
+        "RegexInfo::is_impossible": 29,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 25
+      },
+      "frame_breakdown_dynamic_per_match": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 0,
+        "RegexInfo::is_impossible": 21,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 24
+      }
+    },
+    "8f5d947": {
+      "target": "8f5d947",
+      "asm_path": ".regressor-builds/8f5d9479d0f1/bench.s",
+      "bench_find_all_total_static_insns": 647,
+      "handle_overlapping_empty_half_match_static_insns": 91,
+      "cold_helper_has_captures_disabled_check": true,
+      "inner_loop_latch_label": ".LBB17_65",
+      "preheader_static_insns": 24,
+      "preheader_has_captures_disabled_check": true,
+      "wrapper_dynamic_insns_per_iter": 124067,
+      "wrapper_dynamic_insns_per_2000_iters": 248134000,
+      "static_inner_loop_insns": 71,
+      "dynamic_steady_state_insns_per_match": 62,
+      "stack_loads_in_loop": 9,
+      "stack_stores_in_loop": 8,
+      "stack_load_instructions": [
+        "movq\t128(%rsp), %rax",
+        "movq\t136(%rsp), %r8",
+        "movq\t104(%rsp), %rdx",
+        "movq\t112(%rsp), %r9",
+        "cmpq\t96(%rsp), %r9",
+        "movq\t144(%rsp), %rax",
+        "movq\t152(%rsp), %rdi",
+        "movq\t96(%rsp), %rax",
+        "movq\t112(%rsp), %rcx"
+      ],
+      "captures_disabled_insns_in_loop": 2,
+      "frame_breakdown_static": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 2,
+        "RegexInfo::is_impossible": 28,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 26
+      },
+      "frame_breakdown_dynamic_per_match": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 2,
+        "RegexInfo::is_impossible": 20,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 25
+      }
+    },
+    "8f5d947_ablation": {
+      "target": "8f5d947_ablation",
+      "asm_path": ".regressor-builds/8f5d947_ablation/bench.s",
+      "bench_find_all_total_static_insns": 649,
+      "handle_overlapping_empty_half_match_static_insns": 87,
+      "cold_helper_has_captures_disabled_check": false,
+      "inner_loop_latch_label": ".LBB17_61",
+      "preheader_static_insns": 18,
+      "preheader_has_captures_disabled_check": false,
+      "wrapper_dynamic_insns_per_iter": 120060,
+      "wrapper_dynamic_insns_per_2000_iters": 240120000,
+      "static_inner_loop_insns": 69,
+      "dynamic_steady_state_insns_per_match": 60,
+      "stack_loads_in_loop": 6,
+      "stack_stores_in_loop": 9,
+      "stack_load_instructions": [
+        "movq\t128(%rsp), %rax",
+        "movq\t136(%rsp), %r8",
+        "movq\t96(%rsp), %r15",
+        "movq\t112(%rsp), %rbp",
+        "movq\t144(%rsp), %rax",
+        "movq\t152(%rsp), %rbx"
+      ],
+      "captures_disabled_insns_in_loop": 0,
+      "frame_breakdown_static": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 0,
+        "RegexInfo::is_impossible": 29,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 25
+      },
+      "frame_breakdown_dynamic_per_match": {
+        "TryHalfMatchesIter::next": 5,
+        "RegexInfo::captures_disabled": 0,
+        "RegexInfo::is_impossible": 21,
+        "Strategy::search_half_dispatch": 10,
+        "Searcher::try_advance_half+Input::set_start": 24
+      }
+    }
+  }
+}
