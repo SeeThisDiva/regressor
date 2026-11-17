@@ -1,13 +1,35 @@
-# Local state
-regressor.db
+# Local state and build artifacts
+regressor.db*
 .regressor-builds/
+noise-bench/target/
+noise-bench/results/study2_commits/
+regex/
+
+# Generated report outputs from local CLI smoke runs
+pr-comment.md
+regressor.json
+regressor.md
+
+# Local scratch / archive directories
 _archive/
 files/
+
+# Python / tooling caches
+.venv/
+venv/
+env/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 .pytest_cache/
 .ruff_cache/
-.coverage
-noise-bench/target/
-regex/
+.coverage*
+htmlcov/
+coverage.xml
+dist/
+build/
 *.egg-info/
+
+# OS metadata
+.DS_Store
+Thumbs.db

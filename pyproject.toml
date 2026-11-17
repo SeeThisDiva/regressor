@@ -12,6 +12,17 @@ license = { text = "MIT" }
 authors = [
     { name = "SeeThisDiva" }
 ]
+keywords = ["benchmarking", "performance", "regression-testing", "statistics", "ci"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "numpy>=1.24.0",
     "scipy>=1.10.0",
@@ -19,6 +30,11 @@ dependencies = [
     "uvicorn>=0.22.0",
     "pydantic>=2.0.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/SeeThisDiva/regressor"
+Repository = "https://github.com/SeeThisDiva/regressor"
+Issues = "https://github.com/SeeThisDiva/regressor/issues"
 
 [project.optional-dependencies]
 dev = [

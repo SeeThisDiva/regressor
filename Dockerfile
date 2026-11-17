@@ -28,7 +28,7 @@ RUN pip3 install --no-cache-dir --break-system-packages -e /work/regressor
 WORKDIR /work/regressor/noise-bench
 RUN cargo build --release
 
-RUN useradd -m -u 10001 regressor && chown -R regressor:regressor /work
+RUN useradd -m -u 10001 regressor && chown -R regressor:regressor /work "${CARGO_HOME:-/usr/local/cargo}"
 USER regressor
 WORKDIR /work/regressor
 
