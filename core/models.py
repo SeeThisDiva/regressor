@@ -9,14 +9,18 @@ from typing import Any, Dict, List, Optional
 
 @dataclass
 class BuildResult:
+    """Outcome of building a commit or variant for benchmarking."""
+
     ok: bool
     seconds: float
     log_tail: str = ""
-    artifact: Optional[str] = None  # path/identifier of the built benchmark binary
+    artifact: Optional[str] = None  # path or identifier of the built benchmark binary
 
 
 @dataclass
 class RunResult:
+    """Summary of a single benchmark repetition (one process invocation)."""
+
     benchmark: str
     rep_index: int
     sample_file_path: str
@@ -26,6 +30,8 @@ class RunResult:
 
 @dataclass
 class ComparisonResult:
+    """Structured result of comparing a candidate commit against a baseline."""
+
     base_sha: str
     cand_sha: str
     benchmark: str
@@ -43,6 +49,8 @@ class ComparisonResult:
 
 @dataclass
 class ProjectConfig:
+    """Project configuration loaded from ``projects/<name>.toml``."""
+
     name: str
     repo_url: str
     adapter_name: str
@@ -56,6 +64,8 @@ class ProjectConfig:
 
 @dataclass
 class SyntheticValidationResult:
+    """Outcome of the 3-point synthetic injection gate for an adapter."""
+
     adapter_name: str
     benchmark: str
     true_negative_ok: bool

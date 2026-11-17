@@ -2,25 +2,30 @@
 core/samples.py
 Strict parsing of benchmark sample output.
 
-The old pattern `[float(x) for x in text.split() if x.isdigit()]` silently dropped any token
-that was not a bare non-negative integer (decimals, scientific notation, error text), so a
-truncated or malformed run produced a shorter list, or an empty one whose median is NaN,
-and nothing complained. Here malformed output raises.
+Rejects empty, non-numeric, non-finite, non-positive, or wrong-length sample
+outputs rather than silently dropping malformed tokens.
 """
 
-from typing import List, Optional
+import math
+import statistics
+from pathlib import Path
+from typing import List, Optional, Union
 
 
 def parse_samples(text: str, expected: Optional[int] = None, source: str = "benchmark output") -> List[float]:
+    """Parse whitespace-delimited positive finite durations from benchmark output."""
     tokens = text.split()
     if not tokens:
         raise ValueError(f"{source}: no samples produced")
-    try:
-        vals = [float(t) for t in tokens]
-    except ValueError as exc:
-        bad = next(t for t in tokens if not _is_number(t))
-        raise ValueError(f"{source}: non-numeric token {bad!r}") from exc
-    if any(v != v or v in (float("inf"), float("-inf")) for v in vals):
+
+    vals: List[float] = []
+    for tok in tokens:
+        try:
+            vals.append(float(tok))
+        except ValueError as exc:
+            raise ValueError(f"{source}: non-numeric token {tok!r}") from exc
+
+    if not all(math.isfinite(v) for v in vals):
         raise ValueError(f"{source}: non-finite sample")
     if any(v <= 0 for v in vals):
         raise ValueError(f"{source}: non-positive sample (durations must be > 0)")
@@ -29,9 +34,8 @@ def parse_samples(text: str, expected: Optional[int] = None, source: str = "benc
     return vals
 
 
-def _is_number(tok: str) -> bool:
-    try:
-        float(tok)
-        return True
-    except ValueError:
-        return False
+def read_sample_median(path: Union[Path, str], expected: Optional[int] = None) -> float:
+    """Read a sample file and return the median of its parsed duration values."""
+    sample_path = Path(path)
+    vals = parse_samples(sample_path.read_text(encoding="utf-8"), expected=expected, source=str(sample_path))
+    return float(statistics.median(vals))
