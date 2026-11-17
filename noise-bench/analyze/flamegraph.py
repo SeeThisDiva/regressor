@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-flamegraph.py
-Cross-platform Brendan Gregg-style Differential Flamegraph Generator
-Ingests folded stack profiles and outputs an interactive, zoomable vector SVG.
-Red = Slower in Candidate (consumed higher % CPU time)
-Blue = Faster in Candidate (consumed lower % CPU time)
+Differential flamegraph generator for folded stack profiles.
+
+Ingests baseline and candidate folded stack traces (`frame1;frame2 <count>`)
+and outputs an interactive, hoverable SVG where:
+  - Red  = hotter in candidate (higher % CPU time)
+  - Blue = cooler in candidate (lower % CPU time)
 """
 
 import argparse
@@ -14,8 +15,25 @@ from collections import defaultdict
 from pathlib import Path
 
 
+def _pct_delta(base_samples, total_base, cand_samples, total_cand):
+    """Return `(pct_base, pct_cand, delta)` percentages for a stack or frame."""
+    pct_base = (base_samples / total_base * 100.0) if total_base > 0 else 0.0
+    pct_cand = (cand_samples / total_cand * 100.0) if total_cand > 0 else 0.0
+    return pct_base, pct_cand, pct_cand - pct_base
+
+
+def _delta_colors(delta):
+    """Return `(fill_color, text_color)` for a frame percentage delta."""
+    if abs(delta) < 0.1:
+        return "#e2e8f0", "#334155"
+    intensity = min(int(160 + abs(delta) * 15), 245)
+    if delta > 0:
+        return f"rgb({intensity}, 50, 50)", "#ffffff"
+    return f"rgb(50, 80, {intensity})", "#ffffff"
+
+
 def parse_folded(path):
-    """Parses a folded stack trace file (frame1;frame2;frame3 <count>)."""
+    """Parse a folded stack trace file (`frame1;frame2;frame3 <count>`)."""
     stacks = {}
     total = 0
     with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -23,38 +41,33 @@ def parse_folded(path):
             line = line.strip()
             if not line:
                 continue
-            parts = line.rsplit(" ", 1)
-            if len(parts) == 2:
-                stack, count_str = parts
-                try:
-                    count = int(count_str)
-                    stacks[stack] = stacks.get(stack, 0) + count
-                    total += count
-                except ValueError:
-                    continue
+            parts = line.rsplit(None, 1)
+            if len(parts) != 2:
+                continue
+            stack, count_str = parts
+            try:
+                count = int(count_str)
+            except ValueError:
+                continue
+            stacks[stack] = stacks.get(stack, 0) + count
+            total += count
     return stacks, total
 
 
 def compute_leaf_movers(stacks_a, total_a, stacks_b, total_b):
-    """Computes self-time deltas grouped by the leaf (innermost) function."""
+    """Compute self-time deltas grouped by leaf (innermost) function."""
     leaves_a = defaultdict(int)
     leaves_b = defaultdict(int)
 
     for stack, count in stacks_a.items():
-        leaf = stack.split(";")[-1]
-        leaves_a[leaf] += count
+        leaves_a[stack.split(";")[-1]] += count
 
     for stack, count in stacks_b.items():
-        leaf = stack.split(";")[-1]
-        leaves_b[leaf] += count
+        leaves_b[stack.split(";")[-1]] += count
 
-    all_leaves = set(leaves_a.keys()) | set(leaves_b.keys())
     movers = []
-
-    for leaf in all_leaves:
-        pct_a = (leaves_a[leaf] / total_a * 100.0) if total_a > 0 else 0.0
-        pct_b = (leaves_b[leaf] / total_b * 100.0) if total_b > 0 else 0.0
-        delta = pct_b - pct_a
+    for leaf in set(leaves_a) | set(leaves_b):
+        pct_a, pct_b, delta = _pct_delta(leaves_a[leaf], total_a, leaves_b[leaf], total_b)
         movers.append({
             "function": leaf,
             "pct_base": pct_a,
@@ -67,11 +80,8 @@ def compute_leaf_movers(stacks_a, total_a, stacks_b, total_b):
 
 
 def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential Flamegraph"):
-    """Generates an interactive vector SVG with red/blue differential shading."""
-    # Use candidate stacks as layout basis, or combined
-    all_stacks = sorted(set(stacks_a.keys()) | set(stacks_b.keys()))
-    
-    # Calculate stack hierarchy
+    """Generate an interactive differential SVG with red/blue frame shading."""
+    all_stacks = sorted(set(stacks_a) | set(stacks_b))
     tree = {"name": "root", "children": {}, "base_samples": 0, "cand_samples": 0}
 
     for stack in all_stacks:
@@ -95,11 +105,9 @@ def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential 
             curr["base_samples"] += cnt_a
             curr["cand_samples"] += cnt_b
 
-    # Flatten hierarchy into SVG boxes
     svg_width = 1200
     svg_box_height = 18
     max_depth = 0
-
     boxes = []
 
     def layout_node(node, depth, x, width):
@@ -107,24 +115,12 @@ def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential 
         if depth > max_depth:
             max_depth = depth
 
-        pct_a = (node["base_samples"] / total_a * 100.0) if total_a > 0 else 0.0
-        pct_b = (node["cand_samples"] / total_b * 100.0) if total_b > 0 else 0.0
-        delta = pct_b - pct_a
+        pct_a, pct_b, delta = _pct_delta(
+            node["base_samples"], total_a, node["cand_samples"], total_cand=total_b
+        )
 
         if depth > 0 and width >= 1.0:
-            # Determine color: red for slower (delta > 0), blue for faster (delta < 0)
-            if abs(delta) < 0.1:
-                color = "#e2e8f0" # neutral slate/gray
-                text_color = "#334155"
-            elif delta > 0:
-                intensity = min(int(160 + abs(delta) * 15), 245)
-                color = f"rgb({intensity}, 50, 50)"
-                text_color = "#ffffff"
-            else:
-                intensity = min(int(160 + abs(delta) * 15), 245)
-                color = f"rgb(50, 80, {intensity})"
-                text_color = "#ffffff"
-
+            color, text_color = _delta_colors(delta)
             boxes.append({
                 "name": node["name"],
                 "depth": depth,
@@ -138,7 +134,8 @@ def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential 
             })
 
         curr_x = x
-        for child_name, child_node in sorted(node["children"].items(), key=lambda c: c[1]["cand_samples"], reverse=True):
+        children = sorted(node["children"].values(), key=lambda c: c["cand_samples"], reverse=True)
+        for child_node in children:
             child_weight = (child_node["cand_samples"] / node["cand_samples"]) if node["cand_samples"] > 0 else 0
             child_w = width * child_weight
             if child_w >= 0.5:
@@ -193,6 +190,25 @@ def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential 
     <text id="status" x="10" y="{svg_height - 8}" font-family="monospace" font-size="11" fill="#f8fafc">Hover over any frame to inspect stack percentage and delta</text>
 
     <script><![CDATA[
+        "use strict";
+        function get_params() {{
+            var params = Object.create(null);
+            var paramsarr = window.location.search.substr(1).split('&');
+            for (var i = 0; i < paramsarr.length; ++i) {{
+                var tmp = paramsarr[i].split("=");
+                if (!tmp[0] || !tmp[1]) continue;
+                if (tmp[0] === "__proto__" || tmp[0] === "prototype" || tmp[0] === "constructor") continue;
+                params[tmp[0]] = decodeURIComponent(tmp[1]);
+            }}
+            return params;
+        }}
+        var params = get_params();
+        if (params.x && /^[0-9.]+$/.test(params.x)) {{
+            var match = document.querySelector('rect[x="' + params.x + '"]');
+            if (match && match.parentElement) {{
+                document.getElementById('status').textContent = match.parentElement.getAttribute('data-info');
+            }}
+        }}
         document.querySelectorAll('.func').forEach(el => {{
             el.addEventListener('mouseenter', () => {{
                 document.getElementById('status').textContent = el.getAttribute('data-info');
@@ -225,7 +241,7 @@ def main():
     stacks_a, total_a = parse_folded(base_path)
     stacks_b, total_b = parse_folded(cand_path)
 
-    print(f"\n[perf-guard flamegraph] Parsing profiles:")
+    print("\n[flamegraph] Parsing profiles:")
     print(f"  Baseline:  {base_path.name} ({total_a:,} total samples, {len(stacks_a):,} unique stacks)")
     print(f"  Candidate: {cand_path.name} ({total_b:,} total samples, {len(stacks_b):,} unique stacks)\n")
 
@@ -245,8 +261,9 @@ def main():
 
     svg_content, num_boxes = generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title=args.title)
     out_file = Path(args.output)
+    out_file.parent.mkdir(parents=True, exist_ok=True)
     out_file.write_text(svg_content, encoding="utf-8")
-    print(f"[perf-guard flamegraph] Differential SVG generated ({num_boxes} frames): {out_file.resolve()}\n")
+    print(f"[flamegraph] Differential SVG generated ({num_boxes} frames): {out_file.resolve()}\n")
 
     return 0
 

@@ -1,39 +1,30 @@
 #!/usr/bin/env python3
 """
-Change-point detector for benchmark regressions.
+Change-point detector for benchmark regressions (standalone noise-bench module).
 
 Why not a fixed percentage threshold:
-  - Noise is heteroscedastic across benchmarks. Phase 1 measured 1.4% CV on
-    a millisecond-scale benchmark and 10.5% CV on a microsecond-scale one,
-    on the SAME machine, SAME commit. One global "%slower" cutoff is either
-    too loose for the quiet benchmark or drowns you in false positives on
-    the noisy one.
-  - A single before/after run is a sample size of one on each side. You
-    cannot tell signal from noise without knowing what noise looks like for
-    THIS benchmark, which requires a distribution, not a point estimate.
-  - The noise we measured is not symmetric -- OS scheduling jitter produces
-    a heavy right tail (occasional slow outliers), so a mean/stdev-based
-    test (e.g. Student's t-test) gets pulled around by rare huge samples.
-    A rank-based test is robust to that without needing to guess a
-    distribution shape.
+  - Noise is heteroscedastic across benchmarks. Baseline calibration measured
+    1.4% CV on a millisecond-scale benchmark and 10.5% CV on a microsecond-scale
+    one on the SAME machine and commit. One global "% slower" cutoff is either
+    too loose for the quiet benchmark or floods you with false positives on the
+    noisy one.
+  - A single before/after run has sample size 1 on each side; telling signal
+    from noise requires a distribution of independent process invocations.
+  - Measured OS scheduling jitter has a heavy right tail, which pulls mean/stdev
+    tests (e.g. Student's t-test) around. Rank-based tests stay robust without
+    assuming normality.
 
 Method:
-  1. Mann-Whitney U test: nonparametric test of whether the candidate
-     distribution is stochastically shifted from the baseline. Makes no
-     assumption of normality -- appropriate given the observed tail.
-  2. Effect size: Hodges-Lehmann estimator (median of all pairwise
-     differences between the two samples) as a robust point estimate,
-     reported as a percentage of the baseline median.
-  3. Practical-significance floor: even a p<0.001 result is not
-     interesting if the shift is smaller than the benchmark's own known
-     noise band. Require the effect size to exceed
-     `noise_floor_multiplier` x the baseline's measured coefficient of
-     variation before calling it a regression, not just p < alpha.
-  4. Benjamini-Hochberg FDR correction: run across N commits and a flat
-     alpha=0.01 per comparison, you'll get ~1 spurious flag per 100
-     commits by chance alone. BH controls the expected false-discovery
-     rate across the whole batch instead of per-comparison.
+  1. Mann-Whitney U test across per-process summary medians.
+  2. Hodges-Lehmann effect size (median of pairwise differences), reported as
+     a percentage of the baseline median.
+  3. Practical-significance floor: shift must exceed
+     `noise_floor_multiplier` x baseline CV (note: this standalone module keeps
+     population std `ddof=0` for parity with Study 1's `batch_analysis.json`,
+     while `core/detector.py` uses sample std `ddof=1`).
+  4. Benjamini-Hochberg FDR correction across the batch of comparisons.
 """
+
 import argparse
 import json
 from pathlib import Path
@@ -42,40 +33,45 @@ import numpy as np
 from scipy import stats
 
 
-def load_samples(dir_path):
-    """All raw per-iteration timings, pooled across every rep file. Useful
-    for eyeballing the full distribution shape, NOT for hypothesis testing
-    -- samples within one process invocation are not independent of each
-    other (shared cache/allocator/branch-predictor state), so pooling them
-    and feeding the result to a test that assumes IID samples inflates
-    apparent significance. See load_rep_summaries."""
+def _read_int_samples(path):
+    """Read non-empty integer timing lines from a single sample file."""
+    with Path(path).open(encoding="utf-8") as fh:
+        return [int(line) for line in fh if line.strip()]
+
+
+def load_samples(dir_path, pattern="rep*.txt"):
+    """Load all raw per-iteration timings pooled across matching files.
+
+    Useful for inspecting distribution shape, NOT for hypothesis testing:
+    iterations within one process invocation share cache, allocator, and
+    branch-predictor state, so pooling them violates independence and inflates
+    apparent significance. Use load_rep_summaries() for testing.
+    """
     vals = []
-    for f in sorted(Path(dir_path).glob("rep*.txt")):
-        vals.extend(int(x) for x in open(f) if x.strip())
+    for path in sorted(Path(dir_path).glob(pattern)):
+        vals.extend(_read_int_samples(path))
     return np.array(vals, dtype=np.float64)
 
 
-def load_rep_summaries(dir_path, stat=np.median):
-    """One summary value per process invocation (default: the rep's median).
-    This is the correct unit for the significance test: each rep is an
-    independent process launch, so these values are much closer to IID than
-    raw pooled iterations are. It also matches how the phase 1 noise study
-    measured cross-run variance, so the noise floor computed from these
-    numbers is apples-to-apples with what phase 1 reported."""
+def load_rep_summaries(dir_path, stat=np.median, pattern="rep*.txt"):
+    """Load one summary statistic (default: median) per independent process run.
+
+    Each file represents a separate process launch, making these summaries far
+    closer to i.i.d. draws than pooled inner iterations.
+    """
     out = []
-    for f in sorted(Path(dir_path).glob("rep*.txt")):
-        vals = [int(x) for x in open(f) if x.strip()]
+    for path in sorted(Path(dir_path).glob(pattern)):
+        vals = _read_int_samples(path)
         if vals:
             out.append(float(stat(vals)))
     return np.array(out, dtype=np.float64)
 
 
 def hodges_lehmann(a, b, max_n=1000, seed=0):
-    """Median of all pairwise differences b_j - a_i. Robust effect-size
-    estimate that pairs naturally with Mann-Whitney (same null hypothesis).
-    Full O(n*m) pairwise matrix is subsampled above max_n per side --
-    at 2000 reps/side that's 4B pairs and blows past available memory,
-    and a few thousand pairs already estimate the median comfortably."""
+    """Median of all pairwise differences b_j - a_i.
+
+    Subsamples to `max_n` per side to bound memory/runtime on large vectors.
+    """
     rng = np.random.default_rng(seed)
     if len(a) > max_n:
         a = rng.choice(a, size=max_n, replace=False)
@@ -86,19 +82,23 @@ def hodges_lehmann(a, b, max_n=1000, seed=0):
 
 
 def compare(baseline, candidate, alpha=0.01, noise_floor_multiplier=3.0):
-    baseline_median = float(np.median(baseline))
-    baseline_cv = float(np.std(baseline) / np.mean(baseline))
+    """Compare two independent arrays of per-run medians for a shift."""
+    baseline = np.asarray(baseline, dtype=np.float64)
+    candidate = np.asarray(candidate, dtype=np.float64)
+    if len(baseline) == 0 or len(candidate) == 0:
+        raise ValueError("baseline and candidate must both be non-empty")
 
-    u_stat, p_value = stats.mannwhitneyu(
-        candidate, baseline, alternative="two-sided"
-    )
+    baseline_median = float(np.median(baseline))
+    baseline_mean = float(np.mean(baseline))
+    baseline_cv = float(np.std(baseline) / baseline_mean) if baseline_mean > 0 else 0.0
+
+    _, p_value = stats.mannwhitneyu(candidate, baseline, alternative="two-sided")
     shift_abs = hodges_lehmann(baseline, candidate)
-    shift_pct = 100.0 * shift_abs / baseline_median
+    shift_pct = (100.0 * shift_abs / baseline_median) if baseline_median > 0 else 0.0
 
     noise_floor_pct = 100.0 * baseline_cv * noise_floor_multiplier
-    statistically_significant = p_value < alpha
-    exceeds_noise_floor = abs(shift_pct) > noise_floor_pct
-
+    statistically_significant = bool(p_value < alpha)
+    exceeds_noise_floor = bool(abs(shift_pct) > noise_floor_pct)
     verdict = "flag" if (statistically_significant and exceeds_noise_floor) else "ok"
 
     return {
@@ -108,8 +108,8 @@ def compare(baseline, candidate, alpha=0.01, noise_floor_multiplier=3.0):
         "baseline_median_ns": round(baseline_median, 1),
         "baseline_cv_pct": round(100 * baseline_cv, 3),
         "noise_floor_pct": round(noise_floor_pct, 3),
-        "statistically_significant": bool(statistically_significant),
-        "exceeds_noise_floor": bool(exceeds_noise_floor),
+        "statistically_significant": statistically_significant,
+        "exceeds_noise_floor": exceeds_noise_floor,
         "n_baseline": len(baseline),
         "n_candidate": len(candidate),
     }
@@ -124,17 +124,7 @@ def compare_dual(
     noise_floor_multiplier=3.0,
     pmu_metric_name="instructions",
 ):
-    """
-    Dual-track change-point detection: cross-references wall-clock latency shifts
-    against deterministic hardware PMU counters (e.g. retired instructions or CPU cycles).
-
-    Returns combined analysis with automated Attribution:
-      - CONFIRMED_CODE_REGRESSION: latency increase confirmed by deterministic instruction/cycle increase
-      - ENVIRONMENTAL_JITTER_DISPROVEN: latency shifted due to OS/hypervisor scheduling,
-        but hardware PMU counter remained constant (100% false positive)
-      - CACHE_OR_MEMORY_REGRESSION: latency increased, instructions constant, but cycles/cache-misses surged
-      - NO_REGRESSION: within normal variance
-    """
+    """Cross-reference wall-clock latency shifts against PMU cycle/instruction counts."""
     time_res = compare(time_base, time_cand, alpha=alpha, noise_floor_multiplier=noise_floor_multiplier)
 
     if pmu_base is not None and pmu_cand is not None and len(pmu_base) >= 5 and len(pmu_cand) >= 5:
@@ -194,10 +184,10 @@ def compare_dual(
 
 
 def bh_fdr_correct(results, alpha=0.05):
-    """Benjamini-Hochberg step-up procedure. Mutates results in place,
-    adding 'fdr_significant'. Call this across a whole batch of commits
-    before trusting any individual p-value."""
+    """Apply Benjamini-Hochberg step-up FDR correction in place ('fdr_significant')."""
     m = len(results)
+    if m == 0:
+        return results
     order = sorted(range(m), key=lambda i: results[i]["p_value"])
     threshold_rank = 0
     for rank, idx in enumerate(order, start=1):
@@ -208,15 +198,26 @@ def bh_fdr_correct(results, alpha=0.05):
     return results
 
 
-if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument("baseline_dir")
-    ap.add_argument("candidate_dir")
-    ap.add_argument("--alpha", type=float, default=0.01)
-    ap.add_argument("--noise-floor-multiplier", type=float, default=3.0)
+def main():
+    ap = argparse.ArgumentParser(
+        description="Compare baseline vs candidate per-run benchmark directories (Mann-Whitney U + 3x CV floor)."
+    )
+    ap.add_argument("baseline_dir", help="Directory containing baseline rep*.txt files")
+    ap.add_argument("candidate_dir", help="Directory containing candidate rep*.txt files")
+    ap.add_argument("--alpha", type=float, default=0.01, help="Mann-Whitney significance threshold (default: 0.01)")
+    ap.add_argument(
+        "--noise-floor-multiplier",
+        type=float,
+        default=3.0,
+        help="Minimum |shift| / baseline CV ratio required to flag (default: 3.0)",
+    )
     args = ap.parse_args()
 
     baseline = load_rep_summaries(args.baseline_dir)
     candidate = load_rep_summaries(args.candidate_dir)
     result = compare(baseline, candidate, args.alpha, args.noise_floor_multiplier)
     print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()

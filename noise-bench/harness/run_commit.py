@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-Phase 2 harness: checkout -> build -> run N -> store, with full metadata.
+Single-commit benchmark harness: checkout -> build -> run N -> store results + meta.json.
 
 Usage:
-    run_commit.py <git-ref> [--reps 20] [--iters 2000] [--warmup 200]
+    python3 harness/run_commit.py <git-ref> [--reps 20] [--iters 2000] [--warmup 200] [--pmu]
 
-Designed to be called once per commit by an outer driver (phase 4). Never
-raises on a build failure -- it records the failure and exits 0, because a
-year of someone else's history will include commits that don't build in
-isolation (broken intermediate states, MSRV bumps, etc.) and the batch run
-must not die on the first one.
+Designed to be called once per commit by `run_batch.sh`. Never exits non-zero on
+a Rust build failure — it records the failed build in `meta.json` and exits 0 so
+long historical commit sweeps do not abort on intermediate unbuildable commits.
 """
+
 import argparse
 import json
 import os
@@ -28,18 +27,17 @@ BENCHES = ["compile_moderate", "find_iter_userid", "is_match_status"]
 
 
 def sh(cmd, cwd=None, timeout=900):
-    """Run a command, return (returncode, stdout, stderr)."""
-    p = subprocess.run(
-        cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout
-    )
-    return p.returncode, p.stdout, p.stderr
+    """Run a command and return `(returncode, stdout, stderr)`."""
+    proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout)
+    return proc.returncode, proc.stdout, proc.stderr
 
 
 def cpu_model():
+    """Return a human-readable CPU model string for metadata provenance."""
     if platform.system() == "Linux":
         try:
-            with open("/proc/cpuinfo") as f:
-                for line in f:
+            with open("/proc/cpuinfo", encoding="utf-8") as fh:
+                for line in fh:
                     if line.startswith("model name"):
                         return line.split(":", 1)[1].strip()
         except FileNotFoundError:
@@ -48,114 +46,146 @@ def cpu_model():
 
 
 def get_version(cmd):
+    """Return trimmed stdout from a tool `--version` command, or a fallback status."""
     try:
-        p = subprocess.run(cmd, capture_output=True, text=True)
-        return p.stdout.strip() if p.returncode == 0 else "unknown"
+        rc, out, _ = sh(cmd, timeout=30)
+        return out.strip() if rc == 0 else "unknown"
     except (FileNotFoundError, OSError):
         return "not installed"
 
 
 def resolve_commit(ref):
+    """Resolve `ref` inside `REGEX_REPO` and return `(sha, author_date, subject)`."""
     if not ref or ref.startswith("-"):
         raise RuntimeError(f"invalid git ref: {ref!r}")
+    if not (REGEX_REPO / ".git").exists():
+        raise RuntimeError(
+            f"regex repository not found at {REGEX_REPO} (clone rust-lang/regex there or set REGEX_REPO)"
+        )
     rc, out, err = sh(["git", "rev-parse", "--verify", f"{ref}^{{commit}}"], cwd=REGEX_REPO)
     if rc != 0:
-        raise RuntimeError(f"cannot resolve ref {ref!r}: {err}")
+        raise RuntimeError(f"cannot resolve ref {ref!r}: {err.strip()}")
     sha = out.strip()
-    rc, out, _ = sh(
-        ["git", "show", "-s", "--format=%aI%x00%s", sha, "--"], cwd=REGEX_REPO
-    )
+    rc, out, err = sh(["git", "show", "-s", "--format=%aI%x00%s", sha, "--"], cwd=REGEX_REPO)
+    if rc != 0 or "\x00" not in out:
+        raise RuntimeError(f"cannot read metadata for {sha}: {err.strip()}")
     author_date, subject = out.strip().split("\x00", 1)
     return sha, author_date, subject
 
 
 def checkout(sha):
-    # Hard reset any stray state (e.g. Cargo.lock rewrites from a prior
-    # build) before moving to the next commit.
+    """Force-checkout `sha` (detached) and clean untracked build artifacts."""
     rc, _, err = sh(["git", "checkout", "--quiet", "--force", "--detach", sha], cwd=REGEX_REPO)
     if rc != 0:
-        raise RuntimeError(f"git checkout {sha} failed: {err}")
+        raise RuntimeError(f"git checkout {sha} failed: {err.strip()}")
     sh(["git", "clean", "-fdq"], cwd=REGEX_REPO)
 
 
 def build():
+    """Build `noise-bench` in release mode and return `(ok, seconds, log_tail)`."""
     t0 = time.monotonic()
     rc, out, err = sh(["cargo", "build", "--release"], cwd=NOISE_BENCH)
     seconds = time.monotonic() - t0
-    ok = rc == 0
-    # Keep only the tail of the log -- full cargo output across 100+ commits
-    # is not something anyone will read, and it bloats every meta.json.
+    # Retain only the last 25 log lines so meta.json stays small across multi-commit sweeps.
     log_tail = (out + err).splitlines()[-25:]
-    return ok, seconds, "\n".join(log_tail)
+    return rc == 0, seconds, "\n".join(log_tail)
+
+
+def _parse_perf_stderr(err_text):
+    """Parse `perf stat -x,` stderr output into a counter dictionary."""
+    metrics = {}
+    for line in err_text.splitlines():
+        parts = line.strip().split(",")
+        if len(parts) >= 3 and parts[0].isdigit():
+            metrics[parts[2]] = int(parts[0])
+    if "instructions" in metrics and metrics.get("cycles", 0) > 0:
+        metrics["ipc"] = round(metrics["instructions"] / metrics["cycles"], 3)
+    return metrics
+
+
+def _split_pmu_csv(out_text):
+    """Split `elapsed_ns,tsc_ticks` CSV stdout into separate string line lists."""
+    nanos_lines = []
+    cycle_lines = []
+    for line in out_text.splitlines():
+        if line.startswith("elapsed_ns"):
+            continue
+        stripped = line.strip()
+        if not stripped:
+            continue
+        parts = stripped.split(",")
+        if len(parts) >= 2:
+            nanos_lines.append(parts[0])
+            cycle_lines.append(parts[1])
+        else:
+            nanos_lines.append(stripped)
+    return nanos_lines, cycle_lines
 
 
 def run_bench(bench_name, reps, iters, warmup, outdir, enable_pmu=False):
+    """Execute `reps` independent invocations of `bench_name` and store raw outputs."""
     bin_name = "noise-bench.exe" if platform.system() == "Windows" else "noise-bench"
     binpath = NOISE_BENCH / "target" / "release" / bin_name
+    if not binpath.exists():
+        raise RuntimeError(f"noise-bench binary not found at {binpath}")
 
     has_perf = False
     if enable_pmu and platform.system() == "Linux":
         rc, _, _ = sh(["perf", "--version"])
-        has_perf = (rc == 0)
+        has_perf = rc == 0
+
+    base_cmd = [str(binpath), bench_name, str(iters), str(warmup)]
+    if enable_pmu:
+        base_cmd.extend(["0", "--pmu"])
 
     pmu_results = []
     for rep in range(1, reps + 1):
+        cmd = (
+            ["perf", "stat", "-x,", "-e", "instructions,cycles,cache-misses,branch-misses", *base_cmd]
+            if (enable_pmu and has_perf)
+            else base_cmd
+        )
+        rc, out, err = sh(cmd, timeout=300)
+        if rc != 0:
+            raise RuntimeError(f"{bench_name} rep {rep} failed: {err.strip()}")
+
         if enable_pmu:
             if has_perf:
-                cmd = [
-                    "perf", "stat", "-x,", "-e",
-                    "instructions,cycles,cache-misses,branch-misses",
-                    str(binpath), bench_name, str(iters), str(warmup), "0", "--pmu"
-                ]
-                rc, out, err = sh(cmd, timeout=300)
-                metrics = {}
-                for line in err.splitlines():
-                    parts = line.strip().split(",")
-                    if len(parts) >= 3 and parts[0].isdigit():
-                        val = int(parts[0])
-                        metrics[parts[2]] = val
-                if "instructions" in metrics and "cycles" in metrics and metrics["cycles"] > 0:
-                    metrics["ipc"] = round(metrics["instructions"] / metrics["cycles"], 3)
-                pmu_results.append(metrics)
-            else:
-                cmd = [str(binpath), bench_name, str(iters), str(warmup), "0", "--pmu"]
-                rc, out, err = sh(cmd, timeout=300)
-
-            if rc != 0:
-                raise RuntimeError(f"{bench_name} rep {rep} failed: {err}")
-
-            nanos_lines = []
-            cycle_lines = []
-            for line in out.splitlines():
-                if line.startswith("elapsed_ns"):
-                    continue
-                parts = line.strip().split(",")
-                if len(parts) >= 2:
-                    nanos_lines.append(parts[0])
-                    cycle_lines.append(parts[1])
-                elif line.strip():
-                    nanos_lines.append(line.strip())
-
-            (outdir / f"{bench_name}_rep{rep:03d}.txt").write_text("\n".join(nanos_lines) + "\n")
+                pmu_results.append(_parse_perf_stderr(err))
+            nanos_lines, cycle_lines = _split_pmu_csv(out)
+            (outdir / f"{bench_name}_rep{rep:03d}.txt").write_text("\n".join(nanos_lines) + "\n", encoding="utf-8")
             if cycle_lines:
-                (outdir / f"{bench_name}_cycles_rep{rep:03d}.txt").write_text("\n".join(cycle_lines) + "\n")
+                (outdir / f"{bench_name}_cycles_rep{rep:03d}.txt").write_text(
+                    "\n".join(cycle_lines) + "\n", encoding="utf-8"
+                )
         else:
-            rc, out, err = sh(
-                [str(binpath), bench_name, str(iters), str(warmup)], timeout=300
-            )
-            if rc != 0:
-                raise RuntimeError(f"{bench_name} rep {rep} failed: {err}")
-            (outdir / f"{bench_name}_rep{rep:03d}.txt").write_text(out)
+            (outdir / f"{bench_name}_rep{rep:03d}.txt").write_text(out, encoding="utf-8")
 
     return pmu_results
 
 
+def _positive_int(value):
+    ival = int(value)
+    if ival <= 0:
+        raise argparse.ArgumentTypeError(f"must be > 0 (got {value})")
+    return ival
+
+
+def _non_negative_int(value):
+    ival = int(value)
+    if ival < 0:
+        raise argparse.ArgumentTypeError(f"must be >= 0 (got {value})")
+    return ival
+
+
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("ref")
-    ap.add_argument("--reps", type=int, default=20)
-    ap.add_argument("--iters", type=int, default=2000)
-    ap.add_argument("--warmup", type=int, default=200)
+    ap = argparse.ArgumentParser(
+        description="Build and benchmark a single rust-lang/regex commit using noise-bench."
+    )
+    ap.add_argument("ref", help="Git ref or SHA in REGEX_REPO to check out and benchmark")
+    ap.add_argument("--reps", type=_positive_int, default=20, help="Independent process repetitions (default: 20)")
+    ap.add_argument("--iters", type=_positive_int, default=2000, help="Timed iterations per rep (default: 2000)")
+    ap.add_argument("--warmup", type=_non_negative_int, default=200, help="Warmup iterations per rep (default: 200)")
     ap.add_argument("--pmu", action="store_true", help="Enable PMU / hardware cycle counters")
     args = ap.parse_args()
 
@@ -163,9 +193,9 @@ def main():
 
     try:
         sha, author_date, subject = resolve_commit(args.ref)
-    except RuntimeError as e:
-        print(f"ERROR resolving {args.ref}: {e}", file=sys.stderr)
-        sys.exit(1)
+    except RuntimeError as exc:
+        print(f"ERROR resolving {args.ref}: {exc}", file=sys.stderr)
+        return 1
 
     short_sha = sha[:10]
     outdir = RESULTS_ROOT / short_sha
@@ -199,9 +229,9 @@ def main():
     if not build_ok:
         meta["build"]["log_tail"] = build_log_tail
         meta["bench_run"] = {"attempted": False, "reason": "build_failed"}
-        (outdir / "meta.json").write_text(json.dumps(meta, indent=2))
+        (outdir / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
         print(f"BUILD FAILED {short_sha}: {subject!r} ({build_seconds:.1f}s)")
-        sys.exit(0)  # not a harness error -- a real, recordable outcome
+        return 0  # Recordable outcome, not a harness error
 
     bench_t0 = time.monotonic()
     pmu_telemetry = {}
@@ -214,9 +244,9 @@ def main():
                 pmu_telemetry[bench_name] = bench_pmu
         bench_ok = True
         bench_error = None
-    except RuntimeError as e:
+    except RuntimeError as exc:
         bench_ok = False
-        bench_error = str(e)
+        bench_error = str(exc)
     bench_seconds = time.monotonic() - bench_t0
 
     meta["bench_run"] = {
@@ -230,14 +260,15 @@ def main():
         meta["bench_run"]["error"] = bench_error
 
     meta["run_finished_utc"] = datetime.now(timezone.utc).isoformat()
-    (outdir / "meta.json").write_text(json.dumps(meta, indent=2))
+    (outdir / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
     status = "OK" if bench_ok else "BENCH FAILED"
     print(
         f"{status} {short_sha}: {subject!r} "
         f"(build {build_seconds:.1f}s, bench {bench_seconds:.1f}s)"
     )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
