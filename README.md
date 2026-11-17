@@ -1,23 +1,57 @@
 # regressor: Generalized Continuous Performance Regression Framework
 
 [![tests](https://github.com/SeeThisDiva/regressor/actions/workflows/tests.yml/badge.svg)](https://github.com/SeeThisDiva/regressor/actions/workflows/tests.yml)
-[![Statistics](https://img.shields.io/badge/Stats-Mann--Whitney%20U%20%2B%20BH--FDR%20%2B%20E--Divisive-blue?style=flat-square)](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test)
+[![Statistics](https://img.shields.io/badge/Stats-Mann--Whitney%20U%20%2B%20BH--FDR%20%2B%20E--Divisive-blue?style=flat-square)](PROJECT_EXPLANATION.md)
 [![Harnesses](https://img.shields.io/badge/Adapters-Rust%20%7C%20Python%20%7C%20Extensible-orange?style=flat-square)](adapters/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-> **A project-agnostic, statistically rigorous framework for continuous performance regression detection in cloud CI/CD.**  
-> Combines non-parametric rank statistics, dynamic $3\times\text{CV}$ noise-floor gating, Benjamini-Hochberg FDR control, interleaved A/B execution, invariant canary tracking, and series-level E-Divisive change-point detection.
+**A project-agnostic, statistically rigorous framework for catching real performance regressions in noisy cloud CI.**
+
+Shared VMs and CI runners suffer from **12% to 37%** timing variance across hours due to CPU frequency scaling, co-tenant contention, and host migrations—turning naive fixed thresholds (e.g., `>5% slower`) into constant false alarms. `regressor` combines process-level rank statistics, dynamic $3\times\text{CV}$ noise-floor gating, BH/BY FDR control, interleaved A/B execution, session-gap tagging, an invariant SHA-256 canary, and E-Divisive change-point detection.
 
 ---
 
-## The Core Problem
+## 30-Second Quickstart
 
-Running automated performance benchmarks in virtualized cloud environments (AWS, GCP, GitHub Actions) is plagued by **12% to 37% timing variance** on identical, unchanged code due to:
-* Dynamic CPU frequency scaling and thermal throttling.
-* Hypervisor co-tenant vCPU contention on shared hardware.
-* Uncontrolled cloud host migrations across multi-hour intervals.
+Explore the bundled `rust-lang/regex` dataset and live dashboard locally with **Python 3.11+ only** (no Rust toolchain or Docker required):
 
-Traditional benchmark systems rely on naive fixed percentage thresholds (e.g., `flag if >5% slower`). In shared cloud environments, this triggers **constant false alarms**, causing developer friction and alert fatigue.
+```bash
+pip install -e ".[dev]"
+python regressor.py init
+python regressor.py import-data data/regex_history.json.gz
+python regressor.py batch regex --verify-legacy
+python regressor.py serve --port 8000
+```
+
+Open **`http://localhost:8000`** to inspect the time-series ledger, run histograms, session breaks, and differential flamegraphs. For native Rust benchmarking (`RegexAdapter`), Docker sandboxing, or bare-metal Linux CPU isolation, see [`SETUP.md`](SETUP.md).
+
+---
+
+## Study Results (`rust-lang/regex`)
+
+| Study / Environment | Span & Scope | Comparisons | Sequential Flags | Confirmed | Sub-threshold Candidate | Status |
+|---|---|---|---:|---:|---|---|
+| **Study 1 (Cloud Sandbox 1-vCPU VM)** | 27 commits (`14 Aug 2025` – `27 Jan 2026`), picked from 62 commits touching `src/`, `regex-automata/src/`, or `regex-syntax/src/` | 78 (26 adjacent pairs × 3 benches) | 5 (5/5 false positives) | **0** | **1** (`8f5d947` on `find_iter_userid`, $+2.95\%$ sequential / $+4.10\%$ interleaved; under investigation in Study 1) | Triaged (5/5 FP) |
+| **Local Hardware Verification (`8f5d947` + Ablation)** | Intel Alder Lake (Windows 11, High Priority; `find_iter_userid` CV **1.03%** vs 10.54% sandbox) + LTO x86_64 assembly & `_rdtsc` | 50-rep baseline + 3×30 interleaved pairs (`977feeb`, `8f5d947`, `8f5d947-ablation`) | — | **0** | `8f5d947-ablation vs 8f5d947`: **`+0.08%`** time / **`+0.06%`** TSC ($p=0.804$, `ok`); `977feeb vs 8f5d947-ablation` (`+0` insns): **`+3.27%`** LTO layout shift | **Resolved (`ok`, layout artifact)** |
+| **Study 2 (Upstream Extension `4733e28..3d79fe9`)** | 24 commits (`4733e28` anchor + 23 new source-touching commits through 7 Nov 2026) | 69 (23 adjacent pairs × 3 benches; 0 session breaks) | 4 (3 refuted by interleaved A/B; 1 cross-crate layout shift) | **0** | 0 (`0/3` doc-only null transitions flagged) | **Complete (0 regressions)** |
+
+### Key Triage Outcomes (0 Upstream Issues Filed)
+
+- **`16d47c5` (`find_iter_userid`, `+1.45%`)**: Doc-only commit (`LazyLock` example); zero compiled code changed. Background cache noise.
+- **`0a446ec` (`compile_moderate`, `+12.13%`)**: Clippy lint cleanup. Re-profiling with `perf record -e cpu-clock` showed only `+0.3%` CPU sample delta ([`flamegraph_diff.svg`](assets/flamegraphs/flamegraph_diff.svg)), and 30-pair `compare-interleaved` gave `+0.36%` ($\text{CI}_{95}[-0.64\%, +1.12\%]$, $p=0.440$, `ok`).
+- **`dd96592` (All 3 benchmarks, `-12.85%` to `-25.73%`)**: Doc-only commit executed after a **201 min** (3h21m) wall-clock gap on an unpinned shared VM (`SESSION_BREAK`).
+- **`8f5d947` (`find_iter_userid`, `+2.95%` sequential, `+4.10%` interleaved — under investigation in Study 1, resolved via ablation)**: Same-hash ablation (`8f5d947-ablation` vs `8f5d947`) isolated `captures_disabled()` at **`+0.08%`** wall-clock ($p=0.804$, `ok`), while `977feeb` vs `8f5d947-ablation` (`+0` executed instructions) shifted **`+3.27%`** due to `rustc` `#[doc]` crate-hash LTO binary-layout reordering ([`flamegraph_diff_8f5d947.svg`](assets/flamegraphs/flamegraph_diff_8f5d947.svg)).
+
+Full forensic write-up, instruction counts, and Study 2 details: [`noise-bench/REPORT.md`](noise-bench/REPORT.md). Hardest engineering bugs fixed: [`BUILD_LOG.md`](BUILD_LOG.md).
+
+---
+
+## Where This Breaks
+
+- **Three single-threaded microbenchmarks**: `compile_moderate`, `find_iter_userid`, and `is_match_status` cover only three specific single-threaded paths. Regressions elsewhere in `regex` (such as `captures_iter` or multi-threaded cache-pool contention) are outside their scope.
+- **Adjacent-commit negative dependence**: Commit $C_i$ is the candidate in $(C_{i-1}, C_i)$ and the baseline in $(C_i, C_{i+1})$, so a noisy $C_i$ pushes consecutive shifts in opposite directions. Pass `batch --fdr by` for Benjamini-Yekutieli FDR control under arbitrary dependence, or run `changepoint`.
+- **Unpinned sandbox noise**: Study 1 ran on a shared 1-vCPU VM (1.38%–10.54% baseline CV and a 201 min session break), producing 5/5 false positives in sequential batch mode and masking sub-5% effects under the $3\times\text{CV}$ gate.
+- **Binary-layout luck in LTO builds**: `rustc` hashes `#[doc]` attributes into crate symbol disambiguators during LTO, causing `+0`-instruction changes to shift hot loops by 2.5%–3.3% (`0a446ec` `find_iter_userid`, `8f5d947-ablation`, `c4865a0`). Separating real extra work from layout effects requires interleaved builds plus assembly or instruction-level ablation.
 
 ---
 
@@ -26,25 +60,25 @@ Traditional benchmark systems rely on naive fixed percentage thresholds (e.g., `
 ```mermaid
 flowchart TD
     subgraph Harness ["1. Extensible Harness Layer (adapters/)"]
-        BA["BaseAdapter Interface\n(build, run, list_benchmarks)"]
-        RA["RegexAdapter (native Rust noise-bench,\ngit worktree per commit)"]
-        PA["PyMicroAdapter (real Python ops +\nbusy-wait injection)"]
+        BA["BaseAdapter Interface\n(list_benchmarks, build, run)"]
+        RA["RegexAdapter (Rust noise-bench,\nisolated git worktree per commit)"]
+        PA["PyMicroAdapter (Python ops +\nbusy-wait injection)"]
         RA & PA --> BA
     end
 
     subgraph Strategies ["2. Multi-Strategy Execution"]
         SEQ["Sequential Runs (N=20)\nPer-run median aggregation"]
         INTL["Interleaved A/B, randomized pair order\nPaired Wilcoxon + Walsh HL + bootstrap CI"]
-        CAN["Invariant Canary Benchmark\n(8000 SHA-256 cycles)"]
+        CAN["Invariant Canary Benchmark\n(8,000 SHA-256 cycles)"]
     end
 
     subgraph Stats ["3. Statistical Decision Engine (core/)"]
         MW["Mann-Whitney U on Process Medians\n(Prevents pooling bug)"]
-        HL["Hodges-Lehmann Robust Shift %"]
+        HL["Hodges-Lehmann Shift %"]
         NF{"Dynamic Noise Floor Gate\n|Shift| > 3x CV?"}
-        FDR["Benjamini-Hochberg FDR (α=0.05)"]
+        FDR["BH / BY FDR Control (α=0.05)"]
         SG["Session-Gap Tagging\n(gap > 15 min = SESSION_BREAK)"]
-        ED["E-Divisive Series Change-Points\n(Energy Distance)"]
+        ED["E-Divisive Change-Points\n(Energy Distance)"]
         PWR["3-Way Empirical FPR + Power/MDE"]
     end
 
@@ -52,7 +86,7 @@ flowchart TD
         CLI["regressor CLI"]
         API["FastAPI REST Server (server/app.py)"]
         UI["Laboratory Ledger UI (http://localhost:8000)"]
-        FG["Differential Flamegraphs (software cpu-clock)"]
+        FG["Differential Flamegraphs (assets/flamegraphs/)"]
     end
 
     BA --> SEQ & INTL & CAN
@@ -64,171 +98,103 @@ flowchart TD
     FG --> UI
 ```
 
-### 1. Interleaved A/B Benchmarking (`regressor compare-interleaved`)
-Sequential benchmarking (running A 20x, then B 20x) is vulnerable to temporal thermal and scheduling drift. `compare-interleaved` builds two refs (`--base`, `--cand`) and runs them in pairs inside the same time window:
-* **Randomized pair order**: each pair runs $A \to B$ or $B \to A$ with 50% probability, so second-run warmup bias cannot masquerade as a shift. The `order_effect_pct` diagnostic ($\text{median}(d_{AB}) - \text{median}(d_{BA})$) is reported so you can see whether order matters.
-* **Paired test**: percentage differences $d_k = 100 \cdot (B_k - A_k)/A_k$ are tested with the **Wilcoxon signed-rank test**.
-* **Effect size**: one-sample **Walsh Hodges-Lehmann** shift with a 2,000-resample 95% bootstrap CI.
-* **Power guard**: pair counts that mathematically cannot reach $\alpha$ are refused (e.g. $N=7$ cannot reach $\alpha=0.01$).
-* **p-value floor**: with $N$ non-zero pairs the exact test cannot go below $2/2^N$ ($1.86\times10^{-9}$ for 30 pairs). A result at that floor means every pair moved the same way; it is marked `(floor)` in the CLI and PR report, and such results should be compared by shift and CI, not by p.
-* **Canary and CI exit code**: `--fail-on-regression` fails on a flagged slowdown even when the canary reports `ENVIRONMENT_SUSPECT` (the flag is attributed to drift in the report). Add `--no-fail-on-env-suspect` to keep the job green in that case.
+- **Interleaved A/B (`compare-interleaved`)**: Builds `--base` and `--cand` in isolated worktrees and alternates pairs in randomized `AB`/`BA` order (reporting `order_effect_pct`). Uses the paired **Wilcoxon signed-rank test**, **Walsh Hodges-Lehmann** effect size with 2,000-resample 95% bootstrap CI, `--require-ci-bound` gating, upfront power checks, `(floor)` markers when all non-zero pairs agree ($p = 2/2^N$), and `--no-fail-on-env-suspect` for CI gates.
+- **Process-Level Independence & Dynamic $3\times\text{CV}$ Gate**: Summarizes each process invocation to one median before running Mann-Whitney U (avoiding the $p < 10^{-20}$ pooled-iterations fallacy) and scales sensitivity using sample standard deviation (`ddof=1`, Bessel's correction).
+- **Session-Break Tagging & Series Change-Points (`batch`, `changepoint`)**: Flags wall-clock gaps $> 15$ min (`[SESSION_BREAK: 201 min gap ...]`) in both CLI output and the UI timeline; complements pairwise tests with $O(n^2)$ E-Divisive permutation testing (`4.3%` FPR on pure noise) and rolling-window baselines (`--rolling-window K`).
+- **Three-Way FPR & Power Calibration (`evaluate-power`)**: Reports empirical FPR separately across (1) random within-session splits, (2) contiguous half-session splits, and (3) real doc-only null transitions split by session break, alongside MDE curves.
+- **Invariant Canary & Honest Adapters (`core/canary.py`, `adapters/`)**: Samples an 8,000-cycle SHA-256 loop before and after `compare-interleaved` (`warmup=2`, $\max(\min(2\times\text{CV}_{\text{MAD}}, 5.0\%), 2.5\%)$) to catch host drift. Neither adapter falls back silently, and `pmu_status` is recorded honestly as `UNAVAILABLE` when `perf_event_open` is unsupported.
 
-### 2. Session-Break Tagging (`regressor batch`)
-Every adjacent comparison records `session_gap_min`, the wall-clock minutes between the end of the base run and the start of the candidate run. Gaps over 15 minutes are tagged as crossing a measurement session, so host drift isn't silently reported as a code change:
+Mathematical derivations and ecosystem comparisons (`benchstat`, `rustc-perf`, `Hunter`, `Perfherder`, `asv`) live in [`PROJECT_EXPLANATION.md`](PROJECT_EXPLANATION.md).
+
+---
+
+## Repository Layout
+
 ```text
-[FLAG] compile_moderate   a66fde6 -> dd96592   Shift: -21.37%   p=6.80e-08   floor=2.25%
-       [SESSION_BREAK: 201 min gap before run — environment-confounded]
-```
-The dashboard shows the same information: session-break points render as diamonds on the timeline, the tooltip shows the gap before each run, and the commit drill-down shows the run window plus a warning banner.
-
-### 3. Series-Level E-Divisive Change-Points (`regressor changepoint`)
-Adjacent pairwise comparisons share a commit: $C_i$ is the candidate in one test and the baseline in the next, so a noisy $C_i$ pushes the two shifts in opposite directions. That negative dependence is outside what Benjamini-Hochberg guarantees (`batch --fdr by` switches to Benjamini-Yekutieli, valid under arbitrary dependence; BH stays the default to reproduce the original study). `regressor` also implements non-parametric **E-Divisive change-point detection** (Energy Distance) to identify macro structural shifts across the entire commit timeline simultaneously.
-
-### 4. Process-Level Independence (Preventing the Pooling Fallacy)
-Aggregates inner iterations to one summary **median per process invocation** first, running hypothesis tests strictly across independent process medians. This prevents non-independent cache/ASLR state from inflating test statistics into false significance ($p < 10^{-20}$).
-
-### 5. Dynamic Noise-Floor Gating & Bessel's Correction
-Shift must exceed $3\times\text{CV}$ of the baseline benchmark. Standard deviations use sample standard deviation (`ddof=1`, Bessel's correction), scaling the noise floor appropriately ($\sqrt{20/19}$ ratio over population std).
-
-### 6. False-Positive Rate, Measured Three Ways (`regressor evaluate-power`)
-A single A/A number hides where false alarms come from. `evaluate-power` reports three FPRs from real recorded runs, each with an exact Clopper-Pearson 95% CI:
-1. **Within-session, random split**: run-to-run jitter only.
-2. **Within-session, first half vs second half**: adds slow in-session drift.
-3. **Historical doc-only null transitions**: real adjacent commits where the candidate changed no code, split by whether the comparison crossed a session break.
-
-It also computes power curves and the Minimum Detectable Effect at 80% power by resampling real baseline runs.
-
-### 7. Invariant Canary Benchmark (`core/canary.py`)
-A fixed SHA-256 loop is sampled before and after every `compare-interleaved` window (`--canary-reps`, default 10, first 2 samples discarded as warmup). If the median moves by more than $\max(\min(2\times\text{CV}_{\text{MAD}}, 5.0\%), 2.5\%)$, the result is marked `ENVIRONMENT_SUSPECT` and any flag in that window is attributed `ENVIRONMENT_DRIFT_SUSPECTED`. The spread is MAD-based (a std-based CV let a single cold-start sample widen the band to about +/-27% and hid a 22% drift), and the `5.0%` upper cap (`max_allowed_noise_pct=5.0`) ensures a noisy baseline never blinds the canary to a $>5\%$ environment shift. The canary runs in the Python process, so it detects host-level change, not drift that only affects the benchmark binary.
-
-### 8. Honest Adapters (`adapters/`)
-* **`RegexAdapter`** runs the native `noise-bench` Rust binary, building each commit in an isolated git worktree. There is no silent fallback: if the binary is missing it raises `FileNotFoundError`.
-* **`PyMicroAdapter`** runs real Python operations (`json_loads`, `sha256_small`) and injects slowdowns as real busy-wait CPU work. It is used for cross-platform validation, tests, and `bisect --demo`. It generates no synthetic noise.
-
-> [!NOTE]
-> Hardware PMU counters are not read. Unprivileged cloud VMs report `<not supported>` and Windows has no `perf_event_open`, so `pmu_status` is recorded as `UNAVAILABLE`.
-
----
-
-## Prior Art & Ecosystem Comparison
-
-```
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| Framework          | Methodology & Primary Strengths                              | Limitations Addressed by regressor                      |
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| benchstat (Go)     | Mann-Whitney U on per-run medians; Hodges-Lehmann delta;       | Strictly pairwise; lacks batch-wide FDR control and     |
-|                    | 95% confidence intervals. Gold standard for pair comparisons. | host-drift canary telemetry.                            |
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| rustc-perf (Rust)  | Bare-metal Linux pinning (isolcpus); perf stat instruction     | Requires dedicated bare-metal hardware with PMU         |
-|                    | counters (PERF_COUNT_HW_INSTRUCTIONS); highly deterministic.  | access; not portable to unprivileged cloud CI runners.  |
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| Hunter / MongoDB   | E-Divisive non-parametric change-point detection across        | Designed for macro-trend time series; lacks native      |
-|                    | full historical series without pairwise independence bugs.    | adapter harness layer or differential flamegraph triage.|
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| Mozilla Perfherder | Dynamic noise bands and alert heuristics for browser suites;   | Complex internal infrastructure coupled to Mozilla tree;|
-|                    | handles continuous integration telemetry at massive scale.    | heuristic-heavy rather than unified rank statistics.    |
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
-| asv (Python)       | Airspeed Velocity for Python; git commit series traversal;    | Relies primarily on flat percentage thresholds;        |
-|                    | interactive web charts; multi-benchmark matrix tracking.      | vulnerable to false alarms under hypervisor jitter.     |
-+--------------------+---------------------------------------------------------------+---------------------------------------------------------+
+regressor.py           CLI entrypoint (init, batch, compare-interleaved, bisect, serve, ...)
+core/                  Statistical engine, SQLite persistence, canary, power/FPR, PR reports
+adapters/              BaseAdapter contract, RegexAdapter (Rust), PyMicroAdapter (Python)
+server/, ui/           FastAPI backend and laboratory-ledger dashboard (vendored Chart.js)
+projects/              Project manifests (regex.toml) and human triage logs (regex.triage.json)
+data/                  Portable gzipped datasets (Study 1 & Study 2)
+noise-bench/           Rust timing harness, raw Study 1 commits, analysis scripts, REPORT.md
+assets/flamegraphs/    Differential SVG flamegraphs (0a446ec, 8f5d947)
+tests/                 Unit, statistical, API, security, and doc/CLI verification suite
+scripts/verify.sh      End-to-end verification script (tests, ruff lint, Study 1 reproduction)
+examples/              Sample GitHub Actions PR workflow (perf-check.yml)
+Dockerfile, action.yml Containerized Rust harness and composite GitHub Action
 ```
 
 ---
 
-## Historical Study: 27 Commits of `rust-lang/regex`
-
-Evaluated across 27 source-touching commits of `rust-lang/regex` over 12 months (78 comparisons across 3 benchmarks):
-- **Raw Statistical Flags**: 5 transitions flagged by the detector.
-- **Confirmed Real Regressions**: **0** (All 5 triaged as false positives by human investigation).
-- **Scope Note**: Three microbenchmarks evaluate only their specific codepaths, not the entire crate.
-
-### Triage Outcomes
-
-1. **`16d47c5` (`find_iter_userid`, +1.45%)**: Documentation-only update (`LazyLock` suggestion). Zero source code touched. Shift was background cache noise.
-2. **`0a446ec` (`compile_moderate`, +12.13%)**: Stylistic Clippy lints cleanup. Re-measurement with 30 interleaved A/B pairs (`compare-interleaved --pairs 30`) yielded a $+0.36\%$ shift ($\text{CI}_{95}[-0.64\%, +1.12\%]$, $p=0.440$, verdict `ok`), and software profiling (`perf record -e cpu-clock`) showed only a $+0.3\%$ CPU sample delta. Confirmed false positive from session drift.
-3. **`dd96592` (All 3 Benchmarks, -12% to -25%)**: Discovered to be caused by a 3h21m wall-clock gap between adjacent commit runs on an unpinned shared VM. Concurrent drop across all 3 benchmarks on a pure documentation commit.
-4. **`8f5d947` (`find_iter_userid`, missed by single-commit pairwise, spotted by E-Divisive + interleaved A/B)**: Single-commit pairwise `batch` gated `977feeb -> 8f5d947` (`+2.95%`, $p=3.4\times 10^{-4}$) below its `5.19%` single-commit `3x CV` noise floor. Series-level E-Divisive (`changepoint`) flagged a $+2.53\%$ structural step ($p=0.020$), and 30-pair `compare-interleaved` measured $+4.10\%$ ($\text{CI}_{95}[+3.68\%, +4.51\%]$, $p=1.86\times 10^{-9}$; $+3.3\%$, $p=0.023$ on a shared-core Linux VM replication). Because the lint-only commit `0a446ec` moved `find_iter_userid` by $-2.54\%$ ($p=1.86\times 10^{-9}$), binary-layout differences between two separate builds can be ~2.5%, so $+4.10\%$ is **consistent with** a small slowdown from the added `self.imp.info.captures_disabled()` check at the entry of `meta::Regex::search` (and an ablation removing only that check gave $+0.08\%$, $p=0.402$ vs `977feeb` and $+3.76\%$, $p=1.86\times 10^{-9}$ vs `8f5d947`).
-
-### Interleaved re-measurement (`compare-interleaved --pairs 30`, native Rust build)
-
-| Comparison | Benchmark | Shift (HL) | 95% CI | Wilcoxon p | Verdict |
-|---|---|---|---|---|---|
-| `16d47c5 -> 0a446ec` | `compile_moderate` | +0.36% | [-0.64%, +1.12%] | 0.440 | ok (the sequential +12.13% flag does not reproduce) |
-| `16d47c5 -> 0a446ec` | `is_match_status` | +0.60% | [-0.20%, +2.48%] | 0.132 | ok |
-| `16d47c5 -> 0a446ec` | `find_iter_userid` | -2.54% | [-2.93%, -2.08%] | 1.86e-9 (floor) | flag, faster: ~2.5% binary-layout effect on a lint-only commit |
-| `977feeb -> 8f5d947` | `find_iter_userid` | +4.10% | [+3.68%, +4.51%] | 1.86e-9 (floor) | flag |
-| `977feeb -> 8f5d947` | `is_match_status` | +0.00% | [-0.98%, +0.41%] | 0.733 | ok |
-| `977feeb -> 8f5d947` | `compile_moderate` | -0.03% | [-0.40%, +0.30%] | 0.871 | ok |
-
-"(floor)" means all 30 pairs moved in the same direction, which is the smallest p the exact test can report; compare those rows by shift and CI. The canary moved +10.84% during the `0a446ec` window (`ENVIRONMENT_SUSPECT`) and +0.15% during the `8f5d947` window (`OK`).
-
----
-
-## CLI Quickstart
+## CLI Cheat Sheet
 
 ```bash
-# 1. Initialize SQLite database & register projects from projects/*.toml
-python regressor.py init
-python regressor.py import-data data/regex_history.json.gz   # load the 27-commit regex study (idempotent, no Rust needed)
-python regressor.py import-legacy          # alternative: rebuild from raw noise-bench/results/commits/
-
-# 2. Run mandatory 3-point synthetic validation & canary test
+# Validate an adapter with the 3-point synthetic injection & canary check
 python regressor.py validate-adapter PyMicroAdapter --reps 20
-python regressor.py validate-adapter RegexAdapter --reps 20   # needs the noise-bench binary
+python regressor.py validate-adapter RegexAdapter --reps 20
 
-# 3. Interleaved A/B between two builds (randomized pair order, paired Wilcoxon)
-#    PyMicroAdapter: --base/--cand are labels; --inject-ns adds real busy-wait to the candidate
+# Interleaved A/B comparison (randomized pair order, paired Wilcoxon + markdown PR report)
 python regressor.py compare-interleaved --adapter PyMicroAdapter --base v1 --cand v2 --pairs 20 --inject-ns 500
-#    RegexAdapter: --base/--cand are git refs, each built in its own worktree
-python regressor.py compare-interleaved --adapter RegexAdapter --repo ../regex --base 16d47c5 --cand 0a446ec \
+python regressor.py compare-interleaved --adapter RegexAdapter --repo regex --base 16d47c5 --cand 0a446ec \
     --markdown pr-comment.md --fail-on-regression
 
-# 4. Adjacent-pair batch analysis across stored commits (+BH-FDR, [SESSION_BREAK] tagging)
-python regressor.py batch regex                  # add --verify-legacy to assert the original 27/78/5 numbers
-python regressor.py batch regex --fdr by         # Benjamini-Yekutieli: FDR control under arbitrary dependence
+# Batch analysis with Benjamini-Yekutieli FDR control under negative dependence
+python regressor.py batch regex --fdr by
 
-# 5. False-positive rate three ways + power/MDE curve (run `batch` first for tier 3)
+# Three-way empirical FPR & statistical power / MDE curves
 python regressor.py evaluate-power regex --benchmark compile_moderate
 
-# 6. Series-level E-Divisive change-point detection
+# Series-level E-Divisive change-point detection & ad-hoc commit comparison
 python regressor.py changepoint regex --benchmark compile_moderate
-
-# 7. Ad-hoc pairwise comparison between two stored commits
 python regressor.py analyze regex 16d47c5 0a446ec
 
-# 8. Build-based bisection with interleaved probes
-python regressor.py bisect --demo                                  # simulated 16-commit history
-python regressor.py bisect --adapter RegexAdapter --repo ../regex --good cf00423 --bad 0a446ec
+# Automated statistical bisection with interleaved probes
+python regressor.py bisect --demo
+python regressor.py bisect --adapter RegexAdapter --repo regex --good cf00423 --bad 0a446ec
 
-# 9. Start live laboratory ledger UI & FastAPI backend
-python regressor.py serve --port 8000
+# Export / repair SQLite snapshots
+python regressor.py export-data regex --out regex_backup.json.gz
+python regressor.py dedupe
 ```
-Open **`http://localhost:8000`** to view the live dashboard.
+
+To run `regressor` as a PR check in GitHub Actions, see [`action.yml`](action.yml) and [`examples/perf-check.yml`](examples/perf-check.yml).
 
 ---
 
-## Verification Status
+## Documentation
 
-Measured during the Stage 1 to 3 review (numbers are reproducible with the tests named):
+| Document | Focus |
+|---|---|
+| [`SETUP.md`](SETUP.md) | Local Python install, Docker container setup, bare-metal Linux CPU isolation, PMU notes |
+| [`PROJECT_EXPLANATION.md`](PROJECT_EXPLANATION.md) | Statistical methodology, prior-art comparison, architecture, SQLite schema, power tables |
+| [`noise-bench/REPORT.md`](noise-bench/REPORT.md) | Full Study 1 & Study 2 report, triage breakdown, `8f5d947` LTO assembly & ablation |
+| [`BUILD_LOG.md`](BUILD_LOG.md) | Engineering postmortems of the hardest bugs fixed while building `regressor` |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contributor setup, verification checks, and adding new `BaseAdapter` targets |
 
-| Claim | Result | Where |
-|---|---|---|
-| Original study reproduces from `data/` in a clean database | 27 commits, 78 comparisons, 5 flags | `tests/test_stage2_data.py::test_original_study_reproduces_from_portable_data` |
-| E-Divisive false positives on pure noise (nominal 5%) | 4.3% (was 37.3% before the permutation fix) | `tests/test_stage1_stats.py` |
-| Canary catches a 20% drift despite a cold-start outlier | yes | `tests/test_stage1_stats.py` |
-| `/series` API request | 11 ms, 5 DB connections (was 31 ms, 86) | `tests/test_stage2_data.py` |
-| Rust `noise-bench` + `RegexAdapter` + 30-pair `compare-interleaved` (`0a446ec`, `8f5d947`) | verified (`validate-adapter` 3/3 gates; `0a446ec` $+0.36\%$ `ok`; `8f5d947` $+4.10\%$ consistent with small regression + ablation $+3.76\%$) | table in "Interleaved re-measurement" above |
-| Bare-metal Linux CPU pinning (`cset`), Docker build | **not verified** (developed on a Windows host without a Docker daemon) | see [SETUP.md](SETUP.md) |
+---
 
-## Unit Testing
+## Verification & Testing
 
-Run the test suite validating Mann-Whitney U, Hodges-Lehmann, Wilcoxon signed-rank, Bessel correction $\sqrt{20/19}$, and E-Divisive energy distance against `scipy.stats`:
+Run the full test suite, linter, and end-to-end Study 1 reproduction check:
 
 ```bash
-pytest -v
+pytest -p no:cacheprovider
+ruff check .
+sh scripts/verify.sh
 ```
+
+| Verification Check | Verified Behavior | Source |
+|---|---|---|
+| Study 1 portable reproduction | 27 commits, 78 comparisons, 5 flags (`--verify-legacy`) | [`tests/test_stage2_data.py`](tests/test_stage2_data.py) |
+| E-Divisive pure-noise calibration | 4.3% empirical FPR at nominal 5% (fixed from 37.3%) | [`tests/test_stage1_stats.py`](tests/test_stage1_stats.py) |
+| Canary MAD spread & 5% cap | Flags 10%–20% host drift despite cold-start outliers | [`tests/test_stage1_stats.py`](tests/test_stage1_stats.py) |
+| `/series` bulk query efficiency | $\le 8$ SQLite connections per `/series` request | [`tests/test_stage2_data.py`](tests/test_stage2_data.py) |
+| `8f5d947` assembly ablation & Study 2 | `8f5d947-ablation -> 8f5d947` `+0.08%` (`ok`); Study 2 `0` regressions | [`noise-bench/REPORT.md`](noise-bench/REPORT.md) |
+| Bare-metal Linux `isolcpus` & Docker build | **Not run on this Windows host**; workflow documented for Linux | [`SETUP.md`](SETUP.md) |
 
 ---
 
 ## License
-MIT License. See [LICENSE](LICENSE).
+
+MIT License. See [`LICENSE`](LICENSE).
