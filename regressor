@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+# POSIX wrapper that invokes regressor.py with the first real Python interpreter
+# (skipping Windows Store Microsoft Store alias stubs in *WindowsApps*).
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PY=python3
+PY=""
 for cand in python3 python; do
   p="$(command -v "$cand" 2>/dev/null || true)"
   case "$p" in
@@ -8,4 +10,8 @@ for cand in python3 python; do
     *) PY="$cand"; break ;;
   esac
 done
+if [ -z "$PY" ]; then
+  echo "Error: python3 or python not found on PATH." >&2
+  exit 1
+fi
 exec "$PY" "$DIR/regressor.py" "$@"
