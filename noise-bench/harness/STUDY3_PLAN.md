@@ -27,7 +27,7 @@
     - `HIGH_PRIORITY_CLASS` (`creationflags=subprocess.HIGH_PRIORITY_CLASS` on Windows, verified necessary because `CreateProcess` resets child priority to `NORMAL_PRIORITY_CLASS` unless explicitly flagged).
 - **Host drift canary**:
   - `CanaryBenchmark.run_reps(reps=15, iters=8000, warmup=2)` runs on the same pinned P-core immediately **before** and **after** every commit's benchmark sweep.
-  - Both within-commit drift (`canary_before` vs `canary_after`) and cross-commit drift (`prev_canary_after` vs `canary_before`) are logged to `noise-bench/logs/study3_canary.jsonl` and each commit's `meta.json`.
+  - Both within-commit drift (`canary_before` vs `canary_after`) and cross-commit drift (`prev_canary_after` vs `canary_before`) are logged to `noise-bench/logs/study3_canary.jsonl` and each commit's local `meta.json` during collection (per-commit `meta.json` files live under the gitignored `study3_commits` dir and are not retained in this repo).
 
 ## 3. Sample Size (`N`) & Benjamini-Yekutieli FDR Time-Budget Model
 
@@ -52,8 +52,15 @@ With ~25 benchmarks across 50 adjacent transitions (`m ≈ 1,250` hypotheses) un
 ## 4. Crash-Safety & Resumability
 
 - A commit is the atomic measurement unit: interrupting mid-commit leaves its status `"in_progress"`, and resuming cleans up the stale worktree and re-runs that commit cleanly in one uninterrupted session (preventing intra-commit thermal/session splits).
-- Every completed commit persists:
-  1. Compressed raw per-iteration samples in `noise-bench/results/study3_commits/<short10>/<bench>.samples.json.gz`.
+- During local collection, `run_study3.py` persists:
+  1. Compressed raw per-iteration samples in a local per-commit output folder (`noise-bench/results/study3_commits/<short10>/`, gitignored).
   2. SQLite rows via `core.db.Database` (`insert_commit` + `insert_runs_bulk`, idempotent upserts).
   3. Atomic `meta.json` (`status: "complete"`) written via temp file + `os.replace`.
-  4. Append-only `fsync`-flushed logs (`noise-bench/logs/study3_progress.jsonl`, `noise-bench/logs/study3_canary.jsonl`) and atomic `noise-bench/results/study3/checkpoint.json`.
+  4. Append-only `fsync`-flushed logs (`noise-bench/logs/study3_progress.jsonl`, `noise-bench/logs/study3_canary.jsonl`) and a local checkpoint file (`noise-bench/results/study3/checkpoint.json`, gitignored).
+
+## 5. Retention in This Repository
+
+- Raw per-iteration samples for Studies 2 and 3 (`noise-bench/results/study2_commits/`, `noise-bench/results/study3_commits/`, `noise-bench/results/study3_baseline/`) and the working Study 3 directory (`noise-bench/results/study3/`) were not retained in git.
+- Retained are per-run medians (15 per benchmark per commit in `data/regex_study3_history.json.gz`; 20 per benchmark per commit in `data/regex_study2_history.json.gz`), the analysis JSONs (`noise-bench/results/study2_analysis.json`, `noise-bench/results/study3_analysis.json`), JSONL progress/canary logs (`noise-bench/logs/`), and triage profiles (`noise-bench/profiles/`).
+- The `0/25,000` A/A false-positive result is recorded in `noise-bench/results/study3_analysis.json` and cannot be recomputed from the repo.
+- Re-running `run_study3.py` regenerates data locally and will not give identical numbers.

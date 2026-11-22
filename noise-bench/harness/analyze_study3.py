@@ -16,19 +16,45 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import numpy as np
-
 HARNESS_DIR = Path(__file__).resolve().parent
 NOISE_BENCH_DIR = HARNESS_DIR.parent
 REPO_ROOT = NOISE_BENCH_DIR.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from core.db import Database  # noqa: E402
-from core.detector import bh_fdr_correct, compare_distributions  # noqa: E402
-from core.power import aa_contiguous_split, aa_random_split, evaluate_power_curve, load_session_medians, null_transition_fpr  # noqa: E402
-from core.series_detector import detect_series_changepoints_edivisive  # noqa: E402
-from core.session import find_session_break_indices, is_session_break, session_gap_minutes  # noqa: E402
+PORTABLE_STUDY3_DATA = "data/regex_study3_history.json.gz"
+STUDY3_ANALYSIS_JSON = "noise-bench/results/study3_analysis.json"
+
+
+class MissingStudy3DataError(FileNotFoundError):
+    """Raised when Study 3 raw input directories or working SQLite DB are absent."""
+
+
+def validate_raw_inputs(
+    db_path: Path,
+    results_dir: Path,
+    baseline_dir: Optional[Path] = None,
+) -> None:
+    """Fail fast with a clear message when raw Study 3 collection artifacts are missing."""
+    missing: List[str] = []
+    if not db_path.is_file():
+        missing.append(f"--db ({db_path})")
+    if not results_dir.is_dir():
+        missing.append(f"--results-dir ({results_dir})")
+    if baseline_dir is not None and not baseline_dir.is_dir():
+        missing.append(f"--baseline-dir ({baseline_dir})")
+    if not missing:
+        return
+    missing_desc = ", ".join(missing)
+    raise MissingStudy3DataError(
+        f"Cannot analyze raw Study 3 inputs; missing {missing_desc}. "
+        "Raw per-iteration samples for Study 3 and the working Study 3 SQLite DB were not retained "
+        f"in this repository. Retained per-run medians live in {PORTABLE_STUDY3_DATA} "
+        f"and saved analysis metrics live in {STUDY3_ANALYSIS_JSON}. "
+        "Run `python regressor.py summary regex --study study3` to compute summary metrics offline, "
+        "or run `noise-bench/harness/run_study3.py` to regenerate fresh local data "
+        "(note: new runs will not give identical numbers)."
+    )
 
 
 def _sanitize_cli_output(text: str) -> str:
@@ -75,6 +101,22 @@ def analyze_study3(
     output_json_path: Path,
 ) -> Dict[str, Any]:
     """Run all Phase C analyses and export portable Study 3 artifacts."""
+    validate_raw_inputs(db_path=db_path, results_dir=results_dir, baseline_dir=baseline_dir)
+
+    import numpy as np
+
+    from core.db import Database
+    from core.detector import bh_fdr_correct, compare_distributions
+    from core.power import (
+        aa_contiguous_split,
+        aa_random_split,
+        evaluate_power_curve,
+        load_session_medians,
+        null_transition_fpr,
+    )
+    from core.series_detector import detect_series_changepoints_edivisive
+    from core.session import find_session_break_indices, is_session_break, session_gap_minutes
+
     # 1. Execute authoritative CLI commands: batch (--fdr by) and export-data.
     batch_stdout = _run_cli(["--db", str(db_path), "batch", "regex", "--fdr", "by"])
     export_stdout = _run_cli(["--db", str(db_path), "export-data", "regex", "--out", str(export_gz_path)])
@@ -336,14 +378,18 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--out", default=str(NOISE_BENCH_DIR / "results" / "study3_analysis.json"))
     args = ap.parse_args(argv)
 
-    analysis = analyze_study3(
-        db_path=Path(args.db),
-        commits_manifest_path=Path(args.commits_meta),
-        results_dir=Path(args.results_dir),
-        baseline_dir=Path(args.baseline_dir) if args.baseline_dir else None,
-        export_gz_path=Path(args.export_gz),
-        output_json_path=Path(args.out),
-    )
+    try:
+        analysis = analyze_study3(
+            db_path=Path(args.db),
+            commits_manifest_path=Path(args.commits_meta),
+            results_dir=Path(args.results_dir),
+            baseline_dir=Path(args.baseline_dir) if args.baseline_dir else None,
+            export_gz_path=Path(args.export_gz),
+            output_json_path=Path(args.out),
+        )
+    except MissingStudy3DataError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
     print(
         f"[study3-analyze] commits={analysis['total_commits']} benches={analysis['total_benchmarks']} "
         f"comparisons={analysis['total_comparisons']} pre_fdr={analysis['flagged_pre_fdr']} "

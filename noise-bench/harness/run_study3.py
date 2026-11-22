@@ -13,8 +13,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import ctypes
-import ctypes.wintypes as wintypes
 import gzip
 import json
 import os
@@ -32,7 +30,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
-import psutil
+
+try:
+    import psutil
+except ImportError:  # pragma: no cover
+    psutil = None  # type: ignore[assignment]
 
 HARNESS_DIR = Path(__file__).resolve().parent
 NOISE_BENCH_DIR = HARNESS_DIR.parent
@@ -52,6 +54,17 @@ DEFAULT_RESULTS_DIR = NOISE_BENCH_DIR / "results" / "study3_commits"
 DEFAULT_CHECKPOINT_PATH = NOISE_BENCH_DIR / "results" / "study3" / "checkpoint.json"
 DEFAULT_LOG_DIR = NOISE_BENCH_DIR / "logs"
 DEFAULT_WORKDIR = Path(tempfile.gettempdir()) / "regressor-study3-builds"
+PORTABLE_STUDY3_DATA = "data/regex_study3_history.json.gz"
+
+
+class MissingStudy3RawDataError(FileNotFoundError):
+    """Raised when resuming Study 3 without retained raw outputs and working DB."""
+
+
+def _require_psutil() -> Any:
+    if psutil is None:
+        raise RuntimeError("psutil is required for pinned Study 3 runs; install it with `pip install psutil`.")
+    return psutil
 
 
 def _utc_now_iso() -> str:
@@ -106,6 +119,8 @@ def _tool_version(cmd: Sequence[str]) -> str:
 
 def _windows_core_topology() -> List[Tuple[int, List[int]]]:
     """Return `[(efficiency_class, [logical_cpu_ids]), ...]` via Windows kernel32."""
+    import ctypes
+    import ctypes.wintypes as wintypes
 
     class GROUP_AFFINITY(ctypes.Structure):
         _fields_ = [
@@ -156,7 +171,8 @@ def _windows_core_topology() -> List[Tuple[int, List[int]]]:
 
 def detect_p_core_cpu(explicit_cpu: Optional[int] = None) -> Dict[str, Any]:
     """Select one P-core logical CPU ID and describe the host topology."""
-    avail = psutil.Process().cpu_affinity() or list(range(os.cpu_count() or 1))
+    ps = _require_psutil()
+    avail = ps.Process().cpu_affinity() or list(range(os.cpu_count() or 1))
     if explicit_cpu is not None:
         if explicit_cpu not in avail:
             raise ValueError(f"Requested CPU {explicit_cpu} is not in available affinity {avail}")
@@ -192,7 +208,7 @@ class PinnedExecutionContext:
     def __init__(self, cpu_id: int, high_priority: bool = True) -> None:
         self.cpu_id = int(cpu_id)
         self.high_priority = bool(high_priority)
-        self._proc = psutil.Process()
+        self._proc = _require_psutil().Process()
         self._orig_affinity: Optional[List[int]] = None
         self._orig_nice: Optional[int] = None
         self._orig_subprocess_run = None
@@ -546,8 +562,48 @@ def run_baseline_session(
     return 0
 
 
+def validate_resume_state(args: argparse.Namespace) -> None:
+    """Fail fast when resuming Study 3 without its retained DB or per-commit raw directory."""
+    db_path = Path(args.db)
+    results_dir = Path(args.results_dir)
+    checkpoint_path = Path(args.checkpoint)
+    progress_log = Path(args.log_dir) / "study3_progress.jsonl"
+
+    explicit_resume = bool(getattr(args, "resume", False)) or args.start_index > 1
+    has_partial_state = (
+        checkpoint_path.is_file()
+        or progress_log.is_file()
+        or db_path.is_file()
+        or results_dir.is_dir()
+    )
+    implicit_resume = (not args.force) and has_partial_state
+    if not (explicit_resume or implicit_resume):
+        return
+
+    missing: List[str] = []
+    if not db_path.is_file():
+        missing.append(f"--db ({db_path})")
+    if not results_dir.is_dir():
+        missing.append(f"--results-dir ({results_dir})")
+    if not missing:
+        return
+
+    missing_desc = ", ".join(missing)
+    raise MissingStudy3RawDataError(
+        f"Cannot resume Study 3; missing {missing_desc}. "
+        "Raw per-iteration samples for Study 3 and the working Study 3 SQLite DB were not retained "
+        f"in this repository. Retained per-run medians live in {PORTABLE_STUDY3_DATA} "
+        "(run `python regressor.py summary regex --study study3` to summarize offline). "
+        "To start a fresh local collection run instead, pass `--force` or specify fresh "
+        "`--db`, `--results-dir`, and `--log-dir` paths (new runs regenerate data and will not give identical numbers)."
+    )
+
+
 def run_sweep(args: argparse.Namespace) -> int:
     """Execute the resumable Study 3 commit sweep."""
+    if not args.baseline_session or getattr(args, "resume", False):
+        validate_resume_state(args)
+
     regex_repo = Path(args.regex_repo).resolve()
     adapter = RegexAdapter(noise_bench_dir=str(NOISE_BENCH_DIR), regex_repo_dir=str(regex_repo))
     project_toml = REPO_ROOT / "projects" / "regex.toml"
@@ -928,6 +984,11 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--no-high-priority", action="store_true", help="Disable HIGH_PRIORITY_CLASS elevation")
     ap.add_argument("--start-index", type=int, default=1, help="1-based commit index to start from")
     ap.add_argument("--limit", type=int, default=None, help="Maximum number of commits to process")
+    ap.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume an existing Study 3 sweep (requires existing --db and --results-dir)",
+    )
     ap.add_argument("--force", action="store_true", help="Re-run commits even if checkpoint/DB says complete")
     ap.add_argument("--keep-worktrees", action="store_true", help="Keep isolated worktree + target dirs after run")
     ap.add_argument(
@@ -950,7 +1011,11 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[List[str]] = None) -> int:
     """Entrypoint for Study 3 benchmark collection."""
     args = build_parser().parse_args(argv)
-    return run_sweep(args)
+    try:
+        return run_sweep(args)
+    except MissingStudy3RawDataError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
