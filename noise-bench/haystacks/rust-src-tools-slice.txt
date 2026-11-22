@@ -1,0 +1,4000 @@
+                let g = {
+                    let h = {
+                        let i = {
+                            let j = {
+                                matches!(
+                                    x,
+                                    X { a: 1_000, b: 1_000, .. }
+                                )
+                            };
+                            j
+                        };
+                        i
+                    };
+                    h
+                };
+                g
+            };
+            f
+        };
+        e
+    };
+}// rustfmt-struct_field_align_threshold: 30
+
+struct X { a: i32, b: i32 }
+
+fn test(x: X) {
+    let y = matches!(x, X {
+        a: 1,
+        ..
+    });
+}
+// rustfmt-struct_field_align_threshold: 30
+
+struct X {
+    a: i32,
+    b: i32,
+    c: i32,
+    d: i32,
+    e: i32,
+    f: i32,
+    g: i32,
+    h: i32,
+    i: i32,
+    j: i32,
+    k: i32,
+}
+
+fn test(x: X) {
+    let d = {
+        let e = {
+            let f = {
+                let g = {
+                    let h = {
+                        let i = {
+                            let j = {
+                                matches!(
+                                    x,
+                                    X {
+                                        a: 1_000, b: 1_000, c: 1_000, d: 1_000, e: 1_000, f: 1_000, g: 1_000, h: 1_000, i: 1_000, j: 1_000, ..
+                                    }
+                                )
+                            };
+                            j
+                        };
+                        i
+                    };
+                    h
+                };
+                g
+            };
+            f
+        };
+        e
+    };
+}
+// rustfmt-struct_field_align_threshold: 30
+// rustfmt-enum_discrim_align_threshold: 30
+// rustfmt-imports_layout: HorizontalVertical
+
+#[derive(Default)]
+struct InnerStructA { bbbbbbbbb: i32, cccccccc: i32 }
+
+enum SomeEnumNamedD {
+    E(InnerStructA),
+    F {
+        ggggggggggggggggggggggggg: bool,
+        h: bool,
+    }
+}
+
+impl SomeEnumNamedD {
+    fn f_variant() -> Self {
+        Self::F { ggggggggggggggggggggggggg: true, h: true }
+    }
+}
+
+fn main() {
+    let kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk = SomeEnumNamedD::f_variant();
+    let something_we_care_about = matches!(
+        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk,
+        SomeEnumNamedD::F {
+            ggggggggggggggggggggggggg: true,
+            ..
+        }
+    );
+
+    if something_we_care_about {
+        println!("Yup it happened");
+    }
+}
+// rustfmt-struct_field_align_threshold: 30
+
+struct X {
+    a: i32,
+    b: i32,
+    c: i32,
+    d: i32,
+    e: i32,
+    f: i32,
+    g: i32,
+    h: i32,
+    i: i32,
+    j: i32,
+    k: i32,
+}
+
+fn test(x: X) {
+    let y = matches!(x, X {
+        a: 1_000, b: 1_000, c: 1_000, d: 1_000, e: 1_000, f: 1_000, g: 1_000, h: 1_000, i: 1_000, j: 1_000, ..
+    });
+}// rustfmt-struct_field_align_threshold: 30
+
+struct X {
+    really_really_long_field_a: i32,
+    really_really_really_long_field_b: i32,
+    really_really_really_really_long_field_c: i32,
+    really_really_really_really_really_long_field_d: i32,
+    really_really_really_really_really_really_long_field_e: i32,
+    f: i32,
+}
+
+fn test(x: X) {
+    let y = matches!(x, X {
+        really_really_long_field_a: 10,
+        really_really_really_long_field_b: 10,
+        really_really_really_really_long_field_c: 10,
+        really_really_really_really_really_long_field_d: 10,
+        really_really_really_really_really_really_long_field_e: 10,
+        ..
+    });
+}
+// rustfmt-indent_style: Visual
+type CNodeSetAtts = unsafe extern "C" fn(node: *const RsvgNode,
+                                         node_impl: *const RsvgCNodeImpl,
+                                         handle: *const RsvgHandle,
+                                         pbag: *const PropertyBag)
+                                         ;
+type CNodeDraw = unsafe extern "C" fn(node: *const RsvgNode,
+                                      node_impl: *const RsvgCNodeImpl,
+                                      draw_ctx: *const RsvgDrawingCtx,
+                                      dominate: i32);
+// rustfmt-version: Two
+pub enum TestEnum {
+    a,
+    b,
+}
+
+fn the_test(input: TestEnum) {
+    match input {
+        TestEnum::a => String::from("aaa"),
+        TestEnum::b => String::from("this is a very very very very very very very very very very very very very very very ong string"),
+        
+    };
+}
+// rustfmt-wrap_comments: true
+
+//! URLs in items
+//! * [This is a link with a very loooooooooooooooooooooooooooooooooooooooooong URL.](https://example.com/This/is/a/link/with/a/very/loooooooooooooooooooooooooooooooooooooooooong/URL)
+//! * This is a [link](https://example.com/This/is/a/link/with/a/very/loooooooooooooooooooooooooooooooooooooooooong/URL) with a very loooooooooooooooooooooooooooooooooooooooooong URL.
+//! * there is no link here: In hac habitasse platea dictumst. Maecenas in ligula. Duis tincidunt odio sollicitudin quam. Nullam non mauris. Phasellus lacinia, velit sit amet bibendum euismod, leo diam interdum ligula, eu scelerisque sem purus in tellus.
+fn main() {
+    println!("Hello, world!");
+}
+// rustfmt-wrap_comments: true
+
+/// This is a long line that angers rustfmt. Rustfmt shall deal with it swiftly and justly.
+pub mod foo {}
+struct Message {
+    field2: Vec<
+      "MessageEntity"
+    >,
+    field3: Vec<
+      1
+    >,
+    field4: Vec<
+      2 ,    3
+    >,
+
+}
+
+struct RectangularArray<T, const WIDTH: usize, const HEIGHT: usize> {
+    array: [[T; WIDTH]; HEIGHT],
+}
+
+fn main() {
+  const X: usize = 7;
+  let x: RectangularArray<i32, 2, 4>;
+  let y: RectangularArray<i32,  X,  {2 
+  * 2} >;
+}
+
+fn foo<const X: usize>() {
+    const Y: usize = X * 2;
+    static Z: (usize, usize) = (X, X);
+
+    struct Foo([i32; X]);
+}
+
+type Foo<const N: usize> = [i32; N + 1];
+
+pub trait Foo: Bar<{Baz::COUNT}> {
+	const ASD: usize;
+}
+
+// #4263
+fn const_generics_on_params<
+    // AAAA
+        const BBBB: usize,
+    /* CCCC */
+    const DDDD: usize,
+    >() {}
+// rustfmt-version: Two
+
+fn issue_4355() {
+    let _ = ((1,),).0 .0;
+}
+// rustfmt-format_strings: true
+// rustfmt-max_width: 50
+
+const foo: String = "trailing_spaces!!            
+                keep them! Amet neque. Praesent rhoncus eros non velit.";
+// rustfmt-wrap_comments: true
+
+// trailing_spaces_in_comment!!                   
+//                remove those from above
+// rustfmt-format_strings: true
+// rustfmt-max_width: 50
+
+// explicit line breaks should be kept in order to preserve the layout
+
+const foo: String = "Suspendisse vel augue at felis tincidunt sollicitudin. Fusce arcu.
+               Duis et odio et leo
+        sollicitudin consequat. Aliquam lobortis.  Phasellus condimentum.";
+// rustfmt-format_strings: true
+// rustfmt-max_width: 50
+
+impl Foo {
+    fn cxx(&self, target: &str) -> &Path {
+        match self.cxx.get(target) {
+            Some(p) => p.path(),
+            None => panic!("\ntarget `{}`: is not, configured as a host,
+                            only as a target\n\n", target),
+        }
+    }
+}
+// rustfmt-format_strings: true
+// rustfmt-max_width: 50
+
+impl Foo {
+    fn cxx(&self, target: &str) -> &Path {
+        match self.cxx.get(target) {
+            Some(p) => p.path(),
+            None => panic!("\n\ntarget `{}` is not configured as a host,
+                            only as a target\n\n", target),
+        }
+    }
+}
+// rustfmt-reorder_imports: false
+
+use std :: fmt :: { self , Display } ;
+use std :: collections :: HashMap ;
+
+fn main() {}
+fn f() -> Box<
+    dyn FnMut() -> Thing< WithType = LongItemName, Error = LONGLONGLONGLONGLONGONGEvenLongerErrorNameLongerLonger>,
+>{
+}// rustfmt-edition: 2018
+
+async fn bar() -> Result<(), ()> {
+    Ok(())
+}
+
+pub async fn baz() -> Result<(), ()> {
+    Ok(())
+}
+
+async unsafe fn foo() {
+    async move {
+        Ok(())
+    }
+}
+
+async unsafe fn rust() {
+    async move { // comment
+        Ok(())
+    }
+}
+
+async fn await_try() {
+    something
+     .await
+      ?
+     ;
+}
+// rustfmt-wrap_comments: true
+
+/// This may panic if:
+/// - there are fewer than `max_header_bytes` bytes preceding the body
+/// - there are fewer than `max_footer_bytes` bytes following the body
+/// - the sum of the body bytes and post-body bytes is less than the sum
+///   of `min_body_and_padding_bytes` and `max_footer_bytes` (in other
+///   words, the minimum body and padding byte requirement is not met)
+fn foo() {}
+fn issue1518() {
+    Some(Object {
+        field: if a {
+            a_thing
+        } else if b {
+            b_thing
+        } else {
+            c_thing
+        },
+    })
+}
+mod client {
+    impl Client {
+        fn test(self) -> Result<()> {
+            let next_state = match self.state {
+                State::V5(v5::State::Command(v5::coand::State::WriteVersion(ref mut response))) => {
+                         let x   =   reformat . meeee()  ; 
+                }
+            };
+
+            let next_state = match self.state {
+                State::V5(v5::State::Command(v5::comand::State::WriteVersion(ref mut response))) => {
+                    // The pattern cannot be formatted in a way that the match stays
+                    // within the column limit. The rewrite should therefore be
+                    // skipped.
+                    let x =  dont . reformat . meeee();
+                }
+            };
+        }
+    }
+}
+// An import with single line comments.
+use super::{
+    SCHEMA_VERSIONS,
+    LodaModel,
+    ModelProperties,
+    StringMap,
+    ModelSelector,
+    RequestDescription,
+    MethodDescription,
+    ModelBehaviour,
+    ModelRequestGraph,
+    DelayChoice,
+    Holding,
+    Destinations,
+    ModelEdges,
+    Switch,
+    //    ModelMetaData,
+    //    Generated,
+    //    SecondsString,
+    //    DateString,
+    //    ModelConfiguration,
+    //    ModelRequests,
+    //    RestResponse,
+    //    RestResponseCode,
+    //    UniformHolding
+};
+// rustfmt-normalize_comments: true
+#![feature(exclusive_range_pattern)]
+use core::u8::MAX;
+
+fn main() {
+    let z = match x {
+        "pat1" => 1,
+        ( ref  x, ref  mut  y /*comment*/) => 2,
+    };
+
+    if let <  T as  Trait   > :: CONST = ident {
+        do_smth();
+    }
+
+    let Some ( ref   xyz  /*   comment!   */) = opt;
+
+    if let  None  =   opt2 { panic!("oh noes"); }
+
+    let foo@bar (f) = 42;
+    let a::foo ( ..) = 42;
+    let [ ] = 42;
+    let [a,     b,c ] = 42;
+    let [ a,b,c ] = 42;
+    let [a,    b, c, d,e,f,     g] = 42;
+    let foo {   } = 42;
+    let foo {..} = 42;
+    let foo { x, y: ref foo,     .. } = 42;
+    let foo { x, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ref foo,     .. } = 42;
+    let foo { x,       yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ref foo,      } = 42;
+    let foo { x, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ref foo,     .. };
+    let foo { x,       yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: ref foo,      };
+
+    match b"12" {
+        [0,
+        1..MAX
+        ] => {}
+        _ => {}
+    }
+}
+
+impl<'a,'b> ResolveGeneratedContentFragmentMutator<'a,'b> {
+    fn mutate_fragment(&mut self, fragment: &mut Fragment) {
+        match **info {
+            GeneratedContentInfo::ContentItem(
+                ContentItem::Counter(
+                    ref counter_name,
+                    counter_style
+                )
+            ) => {}}}
+}
+
+fn issue_1319() {
+    if let (Event { .. }, .. ) = ev_state {}
+}
+
+fn issue_1874() {
+    if let Some(()) = x {
+y
+    }
+}
+
+fn combine_patterns() {
+    let x = match y {
+        Some(
+            Some(
+                Foo {
+                    z: Bar(..),
+                    a: Bar(..),
+                    b: Bar(..),
+                },
+            ),
+        ) => z,
+        _ => return,
+    };
+}
+
+fn slice_patterns() {
+    match b"123" {
+        [0, ..] => {}
+        [0, foo] => {}
+        _ => {}
+    }
+}
+
+fn issue3728() {
+    let foo = |
+    (c,)
+        | c;
+    foo((1,));
+}
+// rustfmt-wrap_comments: true
+// rustfmt-normalize_doc_attributes: true
+
+// Only doc = "" attributes should be normalized
+#![doc = " Example doc attribute comment"]
+#![doc = "          Example doc attribute comment with 10 leading spaces"]
+#![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
+       html_favicon_url = "https://doc.rust-lang.org/favicon.ico",
+       html_root_url = "https://doc.rust-lang.org/nightly/",
+       html_playground_url = "https://play.rust-lang.org/", test(attr(deny(warnings))))]
+
+
+// Long `#[doc = "..."]`
+struct A { #[doc = " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] b: i32 }
+
+
+#[doc = " The `nodes` and `edges` method each return instantiations of `Cow<[T]>` to leave implementers the freedom to create entirely new vectors or to pass back slices into internally owned vectors."]
+struct B { b: i32 }
+
+
+#[doc = " Level 1 comment"]
+mod tests {
+    #[doc = " Level 2 comment"]
+    impl A {
+        #[doc = " Level 3 comment"]
+        fn f() {
+            #[doc = " Level 4 comment"]
+            fn g() {
+            }
+        }
+    }
+}
+
+struct C {
+    #[doc = " item doc attrib comment"]
+    // regular item comment
+    b: i32,
+
+    // regular item comment
+    #[doc = " item doc attrib comment"]
+    c: i32,
+}
+
+// non-regression test for regular attributes, from #2647
+#[cfg(feature = "this_line_is_101_characters_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")]
+pub fn foo() {}
+
+// path attrs
+#[clippy::bar]
+#[clippy::bar(a, b, c)]
+pub fn foo() {}
+
+mod issue_2620 {
+    #[derive(Debug, StructOpt)]
+#[structopt(about = "Display information about the character on FF Logs")]
+pub struct Params {
+  #[structopt(help = "The server the character is on")]
+  server: String,
+  #[structopt(help = "The character's first name")]
+  first_name: String,
+  #[structopt(help = "The character's last name")]
+  last_name: String,
+  #[structopt(
+    short = "j",
+    long = "job",
+    help = "The job to look at",
+    parse(try_from_str)
+  )]
+  job: Option<Job>
+}
+}
+
+// non-regression test for regular attributes, from #2969
+#[cfg(not(all(feature="std",
+              any(target_os = "linux", target_os = "android",
+                  target_os = "netbsd",
+                  target_os = "dragonfly",
+                  target_os = "haiku",
+                  target_os = "emscripten",
+                  target_os = "solaris",
+                  target_os = "cloudabi",
+                  target_os = "macos", target_os = "ios",
+                  target_os = "freebsd",
+                  target_os = "openbsd",
+                  target_os = "redox",
+                  target_os = "fuchsia",
+                  windows,
+                  all(target_arch = "wasm32", feature = "stdweb"),
+                  all(target_arch = "wasm32", feature = "wasm-bindgen"),
+              ))))]
+type Os = NoSource;
+
+// use cases from bindgen needing precise control over leading spaces
+#[doc = " <div rustbindgen accessor></div>"]
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct ContradictAccessors {
+    #[doc = "<foo>no leading spaces here</foo>"]
+    pub mBothAccessors: ::std::os::raw::c_int,
+    #[doc = " <div rustbindgen accessor=\"false\"></div>"]
+    pub mNoAccessors: ::std::os::raw::c_int,
+    #[doc = " <div rustbindgen accessor=\"unsafe\"></div>"]
+    pub mUnsafeAccessors: ::std::os::raw::c_int,
+    #[doc = " <div rustbindgen accessor=\"immutable\"></div>"]
+    pub mImmutableAccessor: ::std::os::raw::c_int,
+}
+
+#[doc = " \\brief          MPI structure"]
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct mbedtls_mpi {
+    #[doc = "<  integer sign"]
+    pub s: ::std::os::raw::c_int,
+    #[doc = "<  total # of limbs"]
+    pub n: ::std::os::raw::c_ulong,
+    #[doc = "<  pointer to limbs"]
+    pub p: *mut mbedtls_mpi_uint,
+}
+// rustfmt-indent_style: Visual
+fn main() {
+    Struct { field: aaaaaaaaaaa };
+    Struct { field: aaaaaaaaaaaa, };
+    Struct { field: value,
+             field2: value2, };
+}
+// rustfmt-version: Two
+// Tests that a function which is almost short enough, but not quite, gets
+// formatted correctly.
+
+impl Foo {
+    fn some_input(&mut self, input: Input, input_path: Option<PathBuf>, ) -> (Input, Option<PathBuf>) {}
+
+    fn some_inpu(&mut self, input: Input, input_path: Option<PathBuf>) -> (Input, Option<PathBuf>) {}
+}
+
+// #1843
+#[allow(non_snake_case)]
+pub extern "C" fn Java_com_exonum_binding_storage_indices_ValueSetIndexProxy_nativeContainsByHash() -> bool {
+    false
+}
+
+// #3009
+impl Something {
+    fn my_function_name_is_way_to_long_but_used_as_a_case_study_or_an_example_its_fine(
+) -> Result<  (), String  > {}
+}
+// rustfmt-version: One
+// Tests that a function which is almost short enough, but not quite, gets
+// formatted correctly.
+
+impl Foo {
+    fn some_input(&mut self, input: Input, input_path: Option<PathBuf>, ) -> (Input, Option<PathBuf>) {}
+
+    fn some_inpu(&mut self, input: Input, input_path: Option<PathBuf>) -> (Input, Option<PathBuf>) {}
+}
+
+// #1843
+#[allow(non_snake_case)]
+pub extern "C" fn Java_com_exonum_binding_storage_indices_ValueSetIndexProxy_nativeContainsByHash() -> bool {
+    false
+}
+
+// #3009
+impl Something {
+    fn my_function_name_is_way_to_long_but_used_as_a_case_study_or_an_example_its_fine(
+) -> Result<  (), String  > {}
+}
+// rustfmt-version: Two
+
+fn main() {
+    assert!(HAYSTACK
+            .par_iter()
+            .find_any(|&&x| x[0] % 1000 == 999)
+            .is_some());
+
+    assert(
+        HAYSTACK
+            .par_iter()
+            .find_any(|&&x| x[0] % 1000 == 999)
+            .is_some(),
+    );
+}
+// rustfmt-version: One
+
+fn main() {
+    assert!(HAYSTACK
+            .par_iter()
+            .find_any(|&&x| x[0] % 1000 == 999)
+            .is_some());
+
+    assert(
+        HAYSTACK
+            .par_iter()
+            .find_any(|&&x| x[0] % 1000 == 999)
+            .is_some(),
+    );
+}
+const FILE_GENERIC_READ: DWORD =
+                STANDARD_RIGHTS_READ | FILE_READ_DATA |
+                FILE_READ_ATTRIBUTES | FILE_READ_EA | SYNCHRONIZE;
+
+static boolnames: &'static[&'static str] = &["bw", "am", "xsb", "xhp", "xenl", "eo",
+    "gn", "hc", "km", "hs", "in", "db", "da", "mir", "msgr", "os", "eslok", "xt", "hz", "ul", "xon",
+    "nxon", "mc5i", "chts", "nrrmc", "npc", "ndscr", "ccc", "bce", "hls", "xhpa", "crxm", "daisy",
+    "xvpa", "sam", "cpix", "lpix", "OTbs", "OTns", "OTnc", "OTMT", "OTNL", "OTpt", "OTxr"];
+
+static mut name: SomeType = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+
+ pub   static   count  :  u8  = 10 ;
+
+pub const test: &Type = &val;
+
+impl Color {
+    pub const WHITE: u32 = 10;
+}
+
+// #1391
+pub const XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: NTSTATUS = 0 as usize;
+
+pub const XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX: Yyyyyyyyyyyyyyyyyyyyyyyyyyyy = 1;
+    fn main() {}
+// rustfmt-version: Two
+
+fn build_sorted_static_get_entry_names(
+    mut entries: Vec<(u8, &'static str)>,
+) -> (impl Fn(
+    AlphabeticalTraversal,
+    Box<dyn dirents_sink::Sink<AlphabeticalTraversal>>,
+) -> BoxFuture<'static, Result<Box<dyn dirents_sink::Sealed>, Status>>
+      + Send
+      + Sync
+      + 'static) {
+}
+// rustfmt-version: One
+
+fn build_sorted_static_get_entry_names(
+    mut entries: Vec<(u8, &'static str)>,
+) -> (impl Fn(
+    AlphabeticalTraversal,
+    Box<dyn dirents_sink::Sink<AlphabeticalTraversal>>,
+) -> BoxFuture<'static, Result<Box<dyn dirents_sink::Sealed>, Status>>
+      + Send
+      + Sync
+      + 'static) {
+}
+// rustfmt-version: Two
+
+macro_rules! moo1 {
+    () => {
+        bar! {
+"
+"
+        }
+    };
+}
+
+macro_rules! moo2 {
+    () => {
+        bar! {
+        "
+"
+        }
+    };
+}
+
+macro_rules! moo3 {
+    () => {
+        42
+        /*
+        bar! {
+        "
+        toto
+tata"
+        }
+        */
+    };
+}
+
+macro_rules! moo4 {
+    () => {
+        bar! {
+"
+    foo
+        bar
+baz"
+        }
+    };
+}
+// rustfmt-wrap_comments: true
+
+// Pendant la nuit du 9 mars 1860, les nuages, se confondant avec la mer, limitaient à quelques brasses la portée de la vue.
+// Sur cette mer démontée, dont les lames déferlaient en projetant des lueurs livides, un léger bâtiment fuyait presque à sec de toile.
+
+pub mod foo {}
+
+// ゆく河の流れは絶えずして、しかももとの水にあらず。淀みに浮かぶうたかたは、かつ消えかつ結びて、久しくとどまりたるためしなし。世の中にある人とすみかと、またかくのごとし。
+
+pub mod bar {}
+// rustfmt-format_code_in_doc_comments: true
+
+/// Should format
+/// ```rust
+/// assert!( false );
+/// ```
+///
+/// Should format
+/// ```rust,should_panic
+/// assert!( false );
+/// ```
+///
+/// Should format
+/// ```rust,should_panic,edition2018
+/// assert!( false );
+/// ```
+///
+/// Should format
+/// ```rust , should_panic , edition2018
+/// assert!( false );
+/// ```
+///
+/// Should not format
+/// ```ignore
+/// assert!( false );
+/// ```
+///
+/// Should not format (not all are rust)
+/// ```rust,ignore
+/// assert!( false );
+/// ```
+///
+/// Should not format (rust compile_fail)
+/// ```compile_fail
+/// assert!( false );
+/// ```
+///
+/// Should not format (rust compile_fail)
+/// ```rust,compile_fail
+/// assert!( false );
+/// ```
+///
+/// Various unspecified ones that should format
+/// ```
+/// assert!( false );
+/// ```
+///
+/// ```,
+/// assert!( false );
+/// ```
+///
+/// ```,,,,,
+/// assert!( false );
+/// ```
+///
+/// ```,,,  rust  ,,
+/// assert!( false );
+/// ```
+///
+/// Should not format
+/// ```,,,  rust  ,  ignore,
+/// assert!( false );
+/// ```
+///
+/// Few empty ones
+/// ```
+/// ```
+///
+/// ```rust
+/// ```
+///
+/// ```ignore
+/// ```
+fn foo() {}
+// Formatting when original macro snippet is used
+
+// Original issue #4603 code
+#![feature(or_patterns)]
+macro_rules! t_or_f {
+    () => {
+        (true // some comment
+        | false)
+    };
+}
+
+// Other test cases variations
+macro_rules! RULES {
+    () => {
+        (
+		xxxxxxx // COMMENT
+        | yyyyyyy
+        )
+    };
+}
+macro_rules! RULES {
+    () => {
+        (xxxxxxx // COMMENT
+            | yyyyyyy)
+    };
+}
+
+fn main() {
+	macro_rules! RULES {
+		() => {
+			(xxxxxxx // COMMENT
+			| yyyyyyy)
+		};
+	}
+}
+
+macro_rules! RULES {
+    () => {
+        (xxxxxxx /* COMMENT */ | yyyyyyy)
+    };
+}
+macro_rules! RULES {
+    () => {
+        (xxxxxxx /* COMMENT */
+        | yyyyyyy)
+    };
+}
+// rustfmt-file_lines: [{"file":"tests/source/file-lines-2.rs","range":[10,15]}]
+
+fn floaters() {
+    let x = Foo {
+                field1: val1,
+                field2: val2,
+            }
+            .method_call().method_call();
+
+    let y = if cond {
+                val1
+            } else {
+                val2
+            }
+            .method_call();
+
+    {
+        match x {
+            PushParam => {
+                // comment
+                stack.push(mparams[match cur.to_digit(10) {
+                                            Some(d) => d as usize - 1,
+                                            None => return Err("bad param number".to_owned()),
+                                        }]
+                               .clone());
+            }
+        }
+    }
+}
+fn issue1693() {
+    let pixel_data = vec![(f16::from_f32(0.82), f16::from_f32(1.78), f16::from_f32(0.21)); 256 * 256];
+}
+// Test different indents.
+
+fn foo(a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee) {
+    foo();
+}
+
+fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa) {
+    bar();
+}
+
+fn qux() where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+
+fn qux() where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+
+impl Foo {
+    fn foo(self, a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee) {
+        foo();
+    }    
+
+    fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa) {
+        bar();
+    }
+}
+
+struct Foo<TTTTTTTTTTTTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUU, VVVVVVVVVVVVVVVVVVVVVVVVVVV, WWWWWWWWWWWWWWWWWWWWWWWW> {
+    foo: Foo,
+}
+// rustfmt-format_code_in_doc_comments: true
+
+/// ```rust
+/// if (true) { … }
+/// ```
+fn a() {
+}
+
+/// ```rust
+/// if foo() {
+///     …
+/// }
+/// ```
+fn a() {
+}
+
+/// ```rust
+/// k1 == k2 ⇒ hash(k1) == hash(k2)
+/// ```
+pub   struct   a   ;
+// Test different indents.
+
+fn foo(a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee) {
+    foo();
+}
+
+fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa) {
+    bar();
+}
+
+fn baz() where X: TTTTTTTT {
+    baz();
+}
+
+fn qux() where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+
+impl Foo {
+    fn foo(self, a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee) {
+        foo();
+    }    
+
+    fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa) {
+        bar();
+    }
+
+    fn baz() where X: TTTTTTTT {
+        baz();
+    }
+}
+
+struct Foo<TTTTTTTTTTTTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUU, VVVVVVVVVVVVVVVVVVVVVVVVVVV, WWWWWWWWWWWWWWWWWWWWWWWW> {
+    foo: Foo,
+}
+fn by_ref_with_block_before_ident() {
+if let Some(ref     /*def*/      state)=        foo{
+				println!(
+        "asdfasdfasdf");	}
+}
+
+fn mut_block_before_ident() {
+if   let Some(mut     /*def*/    state  ) =foo{
+				println!(
+        "123"   );	}
+}
+
+fn ref_and_mut_blocks_before_ident() {
+if   let Some(ref  /*abc*/
+    mut     /*def*/    state  )    =       foo {
+				println!(
+ "deefefefefefwea"   );	}
+}
+
+fn sub_pattern() {
+    let foo @             /*foo*/
+bar(f) = 42;
+}
+
+fn no_prefix_block_before_ident() {
+if   let Some(
+    /*def*/    state  )    =       foo {
+				println!(
+ "129387123123"   );	}
+}
+
+fn issue_3853() {
+if let Some(ref /*mut*/ state) = foo {
+					}
+}
+
+fn double_slash_comment_between_lhs_and_rhs() {
+    if let Some(e) =
+				 // self.foo.bar(e, tx)
+				 packet.transaction.state.committed
+                {
+            // body
+                            println!(
+                                "a2304712836123");
+                                }
+}
+
+fn block_comment_between_lhs_and_rhs() {
+if let Some(ref     /*def*/  mut     /*abc*/       state)=          /*abc*/foo{
+				println!(
+        "asdfasdfasdf");	}
+}
+// issue 4312
+fn main() {
+    /* " */
+    println!("Hello, world!");
+    /* abc " */
+    println!("Hello, world!");
+    /* " abc */
+    println!("Hello, world!");
+    let y = 4;
+    let x = match 1 + y == 3 {
+        True => 3,
+        False => 4,
+        /* " unreachable */
+    };
+}
+
+// issue 4806
+enum X {
+    A,
+    B,
+    /*"*/
+}
+fn main() {
+    'running: loop {
+        for event in event_pump.poll_iter() {
+            match event {
+                Event::Quit {..} | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => break 'running,
+            }
+        }
+    }
+}
+
+fn main2() {
+    'running: loop {
+        for event in event_pump.poll_iter() {
+            match event {
+                Event::Quit {..} |
+                Event::KeyDownXXXXXXXXXXXXX { keycode: Some(Keycode::Escape), .. } => break 'running,
+            }
+        }
+    }
+}
+fn a<F>(_f: F) -> ()
+where
+  F: FnOnce() -> (),
+{
+}
+fn main() {
+  a(|| {
+    #[allow(irrefutable_let_patterns)]
+    while let _ = 0 {
+      break;
+    }
+  });
+}fn main() {
+    match option {
+        None => if condition {
+            true
+        } else {
+            false
+        },
+    }
+}
+
+fn main() {
+    match option {
+        None => {
+            if condition {
+                true
+            } else {
+                false
+            }
+        }
+    }
+}
+// rustfmt-hard_tabs: true
+
+#[macro_export]
+macro_rules! main {
+	() => {
+		#[spirv(fragment)]
+		pub fn main_fs(
+			mut out_color: ::spirv_std::storage_class::Output<Vec4>,
+			#[spirv(descriptor_set = 1)]iChannelResolution: ::spirv_std::storage_class::UniformConstant<
+				[::spirv_std::glam::Vec3A; 4],
+			>,
+		) {
+		}
+	};
+}
+// rustfmt-hard_tabs: true
+
+impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+{
+    type Ctx = C;
+    type Event = Vec<Target>;
+}
+
+mod foo {
+    impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+    {
+        type Ctx = C;
+        type Event = Vec<Target>;
+    }
+}
+// rustfmt-version: Two
+
+impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+{
+    type Ctx = C;
+    type Event = Vec<Target>;
+}
+
+mod foo {
+    impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+    {
+        type Ctx = C;
+        type Event = Vec<Target>;
+    }
+}
+impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+{
+    type Ctx = C;
+    type Event = Vec<Target>;
+}
+
+mod foo {
+    impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+    {
+        type Ctx = C;
+        type Event = Vec<Target>;
+    }
+}
+// rustfmt-hard_tabs: true
+// rustfmt-version: Two
+
+impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+{
+    type Ctx = C;
+    type Event = Vec<Target>;
+}
+
+mod foo {
+    impl<Target: FromEvent<A> + FromEvent<B>, A: Widget2<Ctx = C>, B: Widget2<Ctx = C>, C: for<'a> CtxFamily<'a>> Widget2 for WidgetEventLifter<Target, A, B>
+    {
+        type Ctx = C;
+        type Event = Vec<Target>;
+    }
+}
+const DATA: &'static [u8] = &[
+    0x42, 0x50, 0x54, 0x44,  //type
+    0x23, 0x00, 0x00, 0x00,  //size
+    0x00, 0x00, 0x04, 0x00,  //flags
+    0xEC, 0x0C, 0x00, 0x00,  //id
+    0x00, 0x00, 0x00, 0x00,  //revision
+    0x2B, 0x00,  //version
+    0x00, 0x00,  //unknown
+    0x42, 0x50, 0x54, 0x4E,  //field type
+    0x1D, 0x00,  //field size
+    0x19, 0x00, 0x00, 0x00,  //decompressed field size
+    0x75, 0xc5, 0x21, 0x0d, 0x00, 0x00, 0x08, 0x05, 0xd1, 0x6c,  //field data (compressed)
+    0x6c, 0xdc, 0x57, 0x48, 0x3c, 0xfd, 0x5b, 0x5c, 0x02, 0xd4,  //field data (compressed)
+    0x6b, 0x32, 0xb5, 0xdc, 0xa3  //field data (compressed)
+];
+// Issue 2842
+// The comment should not make the last line shorter
+
+static XXX: [i8; 64] = [
+    1, // Comment
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+];
+
+static XXX: [i8; 64] = [
+    1,
+    // Comment
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+];
+
+static XXX: [i8; 64] = [
+    1,
+    // Comment
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+];
+// Binary expressions
+
+fn foo() {
+    // 100
+    let x = aaaaaaaaaa || bbbbbbbbbb || cccccccccc || dddddddddd && eeeeeeeeee || ffffffffff || ggg;
+    // 101
+    let x = aaaaaaaaaa || bbbbbbbbbb || cccccccccc || dddddddddd && eeeeeeeeee || ffffffffff || gggg;
+    // 104
+    let x = aaaaaaaaaa || bbbbbbbbbb || cccccccccc || dddddddddd && eeeeeeeeee || ffffffffff || gggggggg;
+}
+// rustfmt-match_block_trailing_comma: true
+// rustfmt-trailing_comma: Always
+
+fn main() {
+    match foo {
+        x => {}
+        y => {
+            foo();
+        }
+        _ => x
+    }
+}
+
+fn f<S, T>(x: T, y: S) -> T where T: P, S: Q
+{
+    x
+}
+
+impl Trait for T where T: P
+{
+    fn f(x: T) -> T where T: Q + R
+    {
+        x
+    }
+}
+
+struct Pair<S, T> where T: P, S: P + Q {
+    a: T,
+    b: S
+}
+
+struct TupPair<S, T> (S, T) where T: P, S: P + Q;
+
+enum E<S, T> where S: P, T: P {
+    A {a: T},
+}
+
+type Double<T> where T: P, T: Q = Pair<T, T>;
+
+extern "C" {
+    fn f<S, T>(x: T, y: S) -> T where T: P, S: Q;
+}
+
+trait Q<S, T> where T: P, S: R
+{
+    fn f<U, V>(self, x: T, y: S, z: U) -> Self where U: P, V: P;
+}
+use bar;
+// Format `lazy_static!`.
+
+lazy_static! {
+static ref CONFIG_NAME_REGEX: regex::Regex =
+regex::Regex::new(r"^## `([^`]+)`").expect("Failed creating configuration pattern");
+static ref CONFIG_VALUE_REGEX: regex::Regex = regex::Regex::new(r#"^#### `"?([^`"]+)"?`"#)
+.expect("Failed creating configuration value pattern");
+}
+
+// We need to be able to format `lazy_static!` without known syntax.
+lazy_static!(
+    xxx,
+yyyy ,
+    zzzzz
+);
+
+lazy_static!{
+}
+
+// #2354
+lazy_static ! {
+pub static ref Sbase64_encode_string : :: lisp :: LispSubrRef = {
+let subr = :: remacs_sys :: Lisp_Subr {
+header : :: remacs_sys :: Lisp_Vectorlike_Header {
+size : (
+( :: remacs_sys :: PseudovecType :: PVEC_SUBR as :: libc :: ptrdiff_t ) << ::
+remacs_sys :: PSEUDOVECTOR_AREA_BITS ) , } , function : self ::
+Fbase64_encode_string as * const :: libc :: c_void , min_args : 1i16 ,
+max_args : 2i16 , symbol_name : ( b"base64-encode-string\x00" ) . as_ptr (  )
+as * const :: libc :: c_char , intspec : :: std :: ptr :: null (  ) , doc : ::
+std :: ptr :: null (  ) , lang : :: remacs_sys :: Lisp_Subr_Lang_Rust , } ;
+unsafe {
+let ptr = :: remacs_sys :: xmalloc (
+:: std :: mem :: size_of :: < :: remacs_sys :: Lisp_Subr > (  ) ) as * mut ::
+remacs_sys :: Lisp_Subr ; :: std :: ptr :: copy_nonoverlapping (
+& subr , ptr , 1 ) ; :: std :: mem :: forget ( subr ) ; :: lisp :: ExternalPtr
+:: new ( ptr ) } } ; }
+
+
+lazy_static! {
+static ref FOO: HashMap<String,
+(&'static str,
+fn(Foo) -> Result<Box<Bar>, Either<FooError, BarError>>
+),> = HashMap::new();
+}
+// rustfmt-brace_style: PreferSameLine
+// Test different indents.
+
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) {
+    foo();
+}
+
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) {
+    bar();
+}
+
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) -> String {
+    foo();
+}
+
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String {
+    bar();
+}
+
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) where T: UUUUUUUUUUU {
+    foo();
+}
+
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) where T: UUUUUUUUUUU {
+    bar();
+}
+
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) -> String where T: UUUUUUUUUUU {
+    foo();
+}
+
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String where T: UUUUUUUUUUU {
+    bar();
+}
+
+trait Test {
+    fn foo(a: u8) {}
+
+    fn bar(a: u8) -> String {}
+}
+#[cfg(any())]
+    type   Type :   Bound ;// rustfmt-normalize_comments: true
+
+fn simple(/*pre-comment on a function!?*/ i: i32/*yes, it's possible!  */   
+                                        ,response: NoWay /* hose */) {
+fn op(x: Typ, key : &[u8], upd : Box<Fn(Option<&memcache::Item>) -> (memcache::Status, Result<memcache::Item, Option<String>>)>) -> MapResult {}
+
+        "cool"}
+
+
+fn weird_comment(/* /*/ double level */ comment */ x: Hello /*/*/* triple, even */*/*/,
+// Does this work?
+y: World
+) {
+        simple(/* does this preserve comments now? */ 42, NoWay)
+}
+
+fn generic<T>(arg: T) -> &SomeType
+    where T: Fn(// First arg
+        A,
+        // Second argument
+        B, C, D, /* pre comment */ E /* last comment */) -> &SomeType {
+    arg(a, b, c, d, e)
+}
+
+fn foo()  ->  !  {}
+
+pub fn http_fetch_async(listener:Box< AsyncCORSResponseListener+Send >,  script_chan:  Box<ScriptChan+Send>) {
+}
+
+fn some_func<T:Box<Trait+Bound>>(val:T){}
+
+fn zzzzzzzzzzzzzzzzzzzz<Type, NodeType>
+                       (selff: Type, mut handle: node::Handle<IdRef<'id, Node<K, V>>, Type, NodeType>)
+                        -> SearchStack<'a, K, V, Type, NodeType>{
+}
+
+unsafe fn generic_call(cx: *mut JSContext, argc: libc::c_uint, vp: *mut JSVal,
+    is_lenient: bool,
+                       call: unsafe extern fn(*const JSJitInfo, *mut JSContext,
+                                              HandleObject, *mut libc::c_void, u32,
+                                              *mut JSVal)
+                                              -> u8) {
+    let f:  fn  ( _ , _  ) ->  _   =  panic!()  ;
+}
+
+pub fn start_export_thread<C: CryptoSchemee + 'static>(database: &Database, crypto_scheme: &C, block_size: usize, source_path: &Path) -> BonzoResult<mpsc::Consumer<'static, FileInstruction>> {}
+
+pub fn waltz(cwd: &Path) -> CliAssert {
+    {
+        {
+            formatted_comment = rewrite_comment(comment, block_style, width, offset, formatting_fig);
+        }
+    }
+}
+
+// #2003
+mod foo {
+    fn __bindgen_test_layout_i_open0_c_open1_char_a_open2_char_close2_close1_close0_instantiation() {
+        foo();
+    }
+}
+
+// #2082
+pub(crate) fn init() {}
+
+pub(crate) fn init() {}
+
+// #2630
+fn make_map<T, F: (Fn(&T) -> String)>(records: &Vec<T>, key_fn: F) -> HashMap<String, usize> {}
+
+// #2956
+fn bar(beans: Asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf, spam: bool, eggs: bool) -> bool{
+    unimplemented!();
+}
+struct AStruct {
+    A: u32,
+    B: u32,
+    C: u32,
+}
+
+impl Something for AStruct {
+    fn a_func() {
+        match a_val {
+            ContextualParseError::InvalidMediaRule(ref err) => {
+                let err: &CStr = match err.kind {
+                    ParseErrorKind::Custom(StyleParseErrorKind::MediaQueryExpectedFeatureName(..)) => {
+                        cstr!("PEMQExpectedFeatureName")
+                    },
+                };
+            }
+        };
+    }
+}
+// These are supported by rustc syntactically but not semantically.
+
+#[cfg(any())]
+unsafe mod m { }
+
+#[cfg(any())]
+unsafe extern "C++" { }
+pub struct SS {}
+
+pub type  A  /* A Comment */      = SS;
+
+pub type  B // Comment
+// B
+= SS;
+
+pub type C 
+ /* Comment C */ = SS;
+
+pub trait D <T> {
+		type E /* Comment E */ = SS;
+}
+
+type F<'a: 'static, T: Ord + 'static>: Eq + PartialEq where T: 'static + Copy     /* x */   = Vec<u8>;
+// rustfmt-normalize_comments: true
+// rustfmt-wrap_comments: true
+
+                                                                       /// A Doc comment
+#[AnAttribute]
+pub union Foo {
+    #[rustfmt::skip]
+    f :   SomeType, // Comment beside a field
+    f: SomeType, // Comment beside a field
+    // Comment on a field
+    #[AnAttribute]
+    g: SomeOtherType,
+      /// A doc comment on a field
+    h: AThirdType,
+    pub i: TypeForPublicField
+}
+
+// #1029
+pub union Foo {
+    #[doc(hidden)]
+    // This will NOT get deleted!
+    bar: String, // hi
+}
+
+// #1029
+union X {
+    // `x` is an important number.
+    #[allow(unused)] // TODO: use
+    x: u32,
+}
+
+// #410
+#[allow(missing_docs)]
+pub union Writebatch<K: Key> {
+    #[allow(dead_code)] //only used for holding the internal pointer
+    writebatch: RawWritebatch,
+    marker: PhantomData<K>,
+}
+
+// With a where-clause and generics.
+pub union Foo<'a, Y: Baz>
+    where X: Whatever
+{
+    f: SomeType, // Comment beside a field
+}
+
+union Baz {
+
+    a: A,  // Comment A
+    b: B, // Comment B
+    c: C,   // Comment C
+
+}
+
+union Baz {
+    a: A,  // Comment A
+
+    b: B, // Comment B
+
+
+
+
+    c: C,   // Comment C
+}
+
+union Baz {
+
+    a: A,
+
+    b: B,
+    c: C,
+
+
+
+    
+    d: D
+
+}
+
+union Baz
+{
+    // Comment A
+    a: A,
+    
+    // Comment B
+b: B,
+    // Comment C
+      c: C,}
+
+pub union State<F: FnMut() -> time::Timespec> { now: F }
+
+pub union State<F: FnMut() -> ()> { now: F }
+
+pub union State<F: FnMut()> { now: F }
+
+union Palette { /// A map of indices in the palette to a count of pixels in approximately that color
+                    foo: i32}
+
+// Splitting a single line comment into a block previously had a misalignment
+// when the field had attributes
+union FieldsWithAttributes {
+    // Pre Comment
+    #[rustfmt::skip] pub host:String, // Post comment BBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBB
+    //Another pre comment
+    #[attr1]
+    #[attr2] pub id: usize // CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCC CCCCCCCCCCCC
+}
+
+union Deep {
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<K, V>>,
+                                                     Type,
+                                                     NodeType>,
+}
+
+mod m {
+    union X<T> where T: Sized {
+        a: T,
+    }
+}
+
+union Issue677 {
+    pub ptr: *const libc::c_void,
+    pub trace: fn(  obj: 
+          *const libc::c_void, tracer   : *mut   JSTracer   ),
+}
+
+union Foo {}
+union Foo {
+    }
+union Foo {
+    // comment
+    }
+union Foo {
+    // trailing space ->    
+
+
+    }
+union Foo { /* comment */ }
+
+union LongUnion {
+    a: A,
+    the_quick_brown_fox_jumps_over_the_lazy_dog:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
+}
+
+union Deep {
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<Key, Value>>,
+                                                                         Type,
+                                                                         NodeType>,
+}
+
+// #1364
+fn foo() {
+    convex_shape.set_point(0, &Vector2f { x: 400.0, y: 100.0 });
+    convex_shape.set_point(1, &Vector2f { x: 500.0, y: 70.0 });
+    convex_shape.set_point(2, &Vector2f { x: 450.0, y: 100.0 });
+    convex_shape.set_point(3, &Vector2f { x: 580.0, y: 150.0 });
+}
+
+// Vertical alignment
+union Foo {
+    aaaaa: u32, // a
+
+    b: u32, // b
+    cc: u32, // cc
+
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 1
+    yy: u32, // comment2
+    zzz: u32, // comment3
+
+    aaaaaa: u32, // comment4
+    bb: u32, // comment5
+    // separate
+    dd: u32, // comment7
+    c: u32, // comment6
+
+    aaaaaaa: u32, /* multi
+     * line
+     * comment
+     */
+    b: u32, // hi
+
+    do_not_push_this_comment1: u32, // comment1
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
+    please_do_not_push_this_comment3: u32, // comment3
+
+    do_not_push_this_comment1: u32, // comment1
+    // separate
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
+    please_do_not_push_this_comment3: u32, // comment3
+
+    do_not_push_this_comment1: u32, // comment1
+    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
+    // separate
+    please_do_not_push_this_comment3: u32, // comment3
+}
+// rustfmt-edition: 2015
+#![feature(rust_2018_preview, uniform_paths)]
+use futures::prelude::*;
+use http_03::cli::Cli;
+use hyper::{service::service_fn_ok, Body, Response, Server};
+use ::log::{error, info, log};
+use structopt::StructOpt;
+// rustfmt-version: Two
+// rustfmt-error_on_line_overflow: false
+
+fn issue_2179() {
+    let (opts, rustflags, clear_env_rust_log) =
+        {
+            // We mustn't lock configuration for the whole build process
+            let rls_config = rls_config.lock().unwrap();
+
+            let opts = CargoOptions::new(&rls_config);
+            trace!("Cargo compilation options:\n{:?}", opts);
+            let rustflags = prepare_cargo_rustflags(&rls_config);
+
+            // Warn about invalid specified bin target or package depending on current mode
+            // TODO: Return client notifications along with diagnostics to inform the user
+            if !rls_config.workspace_mode {
+                let cur_pkg_targets = ws.current().unwrap().targets();
+
+                if let &Some(ref build_bin) = rls_config.build_bin.as_ref() {
+                    let mut bins = cur_pkg_targets.iter().filter(|x| x.is_bin());
+                    if let None = bins.find(|x| x.name() == build_bin) {
+                        warn!("cargo - couldn't find binary `{}` specified in `build_bin` configuration", build_bin);
+                    }
+                }
+            } else {
+                for package in &opts.package {
+                    if let None = ws.members().find(|x| x.name() == package) {
+                        warn!("cargo - couldn't find member package `{}` specified in `analyze_package` configuration", package);
+                    }
+                }
+            }
+
+            (opts, rustflags, rls_config.clear_env_rust_log)
+        };
+
+}
+// rustfmt-version: One
+// rustfmt-error_on_line_overflow: false
+
+fn issue_2179() {
+    let (opts, rustflags, clear_env_rust_log) =
+        {
+            // We mustn't lock configuration for the whole build process
+            let rls_config = rls_config.lock().unwrap();
+
+            let opts = CargoOptions::new(&rls_config);
+            trace!("Cargo compilation options:\n{:?}", opts);
+            let rustflags = prepare_cargo_rustflags(&rls_config);
+
+            // Warn about invalid specified bin target or package depending on current mode
+            // TODO: Return client notifications along with diagnostics to inform the user
+            if !rls_config.workspace_mode {
+                let cur_pkg_targets = ws.current().unwrap().targets();
+
+                if let &Some(ref build_bin) = rls_config.build_bin.as_ref() {
+                    let mut bins = cur_pkg_targets.iter().filter(|x| x.is_bin());
+                    if let None = bins.find(|x| x.name() == build_bin) {
+                        warn!("cargo - couldn't find binary `{}` specified in `build_bin` configuration", build_bin);
+                    }
+                }
+            } else {
+                for package in &opts.package {
+                    if let None = ws.members().find(|x| x.name() == package) {
+                        warn!("cargo - couldn't find member package `{}` specified in `analyze_package` configuration", package);
+                    }
+                }
+            }
+
+            (opts, rustflags, rls_config.clear_env_rust_log)
+        };
+
+}
+fn issue1468() {
+euc_jp_decoder_functions!({
+let trail_minus_offset = byte.wrapping_sub(0xA1);
+// Fast-track Hiragana (60% according to Lunde)
+// and Katakana (10% according to Lunde).
+if jis0208_lead_minus_offset == 0x03 &&
+trail_minus_offset < 0x53 {
+// Hiragana
+handle.write_upper_bmp(0x3041 + trail_minus_offset as u16)
+} else if jis0208_lead_minus_offset == 0x04 &&
+trail_minus_offset < 0x56 {
+// Katakana
+handle.write_upper_bmp(0x30A1 + trail_minus_offset as u16)
+} else if trail_minus_offset > (0xFE - 0xA1) {
+if byte < 0x80 {
+return (DecoderResult::Malformed(1, 0),
+unread_handle_trail.unread(),
+handle.written());
+}
+return (DecoderResult::Malformed(2, 0),
+unread_handle_trail.consumed(),
+handle.written());
+} else {
+unreachable!();
+}
+});
+}
+fn f() {
+    block_flow.base.stacking_relative_position_of_display_port = self.base.stacking_relative_position_of_display_port;
+}
+// rustfmt-edition: 2018
+
+fn main() -> Result<(), !> {
+    let _x: Option<_> = try {
+        4
+    };
+
+    try {}
+}
+
+fn baz() -> Option<i32> {
+    if (1 == 1) {
+        return try {
+            5
+        };
+    }
+
+    // test
+    let x: Option<()> = try {
+        // try blocks are great
+    };
+
+    let y: Option<i32> = try {
+        6
+    }; // comment
+
+    let x: Option<i32> = try { baz()?; baz()?; baz()?; 7 };
+
+    return None;
+}
+fn main() {
+    ;
+           /* extra comment */            ;
+}
+
+fn main() {
+    println!("");
+    // comment 1
+    // comment 2
+    // comment 3
+    // comment 4
+    ;
+}
+struct Struct {
+    // Multiline comment
+    // should be formatted
+    // properly.
+}
+
+struct Struct2 {
+    // This formatting
+// Should be changed
+}
+
+struct Struct3(
+    // This
+    // is
+    // correct
+);
+
+struct Struct4(
+    // This
+// is
+// not
+// correct
+);
+
+struct Struct5 {
+    /*
+    Comment block
+    with many lines.
+    */
+}
+
+struct Struct6(
+    /*
+    Comment block
+    with many lines.
+    */
+);
+
+struct Struct7 {
+    /*
+Invalid
+format
+*/
+}
+
+struct Struct8(
+    /*
+Invalid
+format
+*/
+);
+
+struct Struct9 { /* bar */ }
+
+struct Struct10 { /* bar
+baz
+*/ }
+
+mod module {
+    struct Struct {
+        // Multiline comment
+        // should be formatted
+        // properly.
+    }
+
+    struct Struct2 {
+        // This formatting
+// Should be changed
+    }
+
+    struct Struct3(
+        // This
+        // is
+        // correct
+    );
+
+    struct Struct4(
+        // This
+    // is
+    // not
+// correct
+    );
+
+    struct Struct5 {
+        /*
+        Comment block
+        with many lines.
+         */
+    }
+
+    struct Struct6(
+        /*
+        Comment block
+        with many lines.
+        */
+    );
+
+    struct Struct7 {
+        /*
+Invalid
+format
+*/
+    }
+
+    struct Struct8(
+        /*
+Invalid
+format
+*/
+    );
+
+    struct Struct9 { /* bar */ }
+}
+// rustfmt-wrap_comments: true
+
+/*!
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit. In lacinia
+ * ullamcorper lorem, non hendrerit enim convallis ut. Curabitur id sem volutpat
+ */
+
+/*! Lorem ipsum dolor sit amet, consectetur adipiscing elit. In lacinia ullamcorper lorem, non hendrerit enim convallis ut. Curabitur id sem volutpat */
+// See #1470.
+
+impl Environment {
+    pub fn new_root() -> Rc<RefCell<Environment>> {
+        let mut env = Environment::new();
+        let builtin_functions = &[("println",
+                                   Function::NativeVoid(CallSign {
+                                                            num_params: 0,
+                                                            variadic: true,
+                                                            param_types: vec![],
+                                                        },
+                                                        native_println)),
+                                  ("run_http_server",
+                                   Function::NativeVoid(CallSign {
+                                                            num_params: 1,
+                                                            variadic: false,
+                                                            param_types:
+                                                                vec![Some(ConstraintType::Function)],
+                                                        },
+                                                        native_run_http_server)),
+                                  ("len",
+                                   Function::NativeReturning(CallSign {
+                                                                 num_params: 1,
+                                                                 variadic: false,
+                                                                 param_types: vec![None],
+                                                             },
+                                                             native_len))];
+    }
+}
+// rustfmt-indent_style: Visual
+
+// #1357
+impl<
+    'a,
+    Select,
+    From,
+    Distinct,
+    Where,
+    Order,
+    Limit,
+    Offset,
+    Groupby,
+    DB,
+> InternalBoxedDsl<'a, DB>
+    for SelectStatement<
+        Select,
+        From,
+        Distinct,
+        Where,
+        Order,
+        Limit,
+        Offset,
+        GroupBy,
+    > where
+        DB: Backend,
+        Select: QueryFragment<DB> + SelectableExpression<From> + 'a,
+        Distinct: QueryFragment<DB> + 'a,
+        Where: Into<Option<Box<QueryFragment<DB> + 'a>>>,
+        Order: QueryFragment<DB> + 'a,
+        Limit: QueryFragment<DB> + 'a,
+        Offset: QueryFragment<DB> + 'a,
+{
+    type Output = BoxedSelectStatement<'a, Select::SqlTypeForSelect, From, DB>;
+
+    fn internal_into_boxed(self) -> Self::Output {
+        BoxedSelectStatement::new(
+            Box::new(self.select),
+            self.from,
+            Box::new(self.distinct),
+            self.where_clause.into(),
+            Box::new(self.order),
+            Box::new(self.limit),
+            Box::new(self.offset),
+        )
+    }
+}
+
+// #1369
+impl<
+    ExcessivelyLongGenericName,
+      ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> Foo for Bar {
+    fn foo() {}
+}
+impl Foo<
+    ExcessivelyLongGenericName,
+      ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> for Bar {
+    fn foo() {}
+}
+impl<
+    ExcessivelyLongGenericName,
+    ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> Foo<
+    ExcessivelyLongGenericName,
+      ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> for Bar {
+    fn foo() {}
+}
+impl<
+    ExcessivelyLongGenericName,
+      ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> Foo for Bar<
+    ExcessivelyLongGenericName,
+    ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> {
+    fn foo() {}
+}
+impl Foo<
+    ExcessivelyLongGenericName,
+      ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> for Bar<
+    ExcessivelyLongGenericName,
+    ExcessivelyLongGenericName,
+    AnotherExcessivelyLongGenericName,
+> {
+    fn foo() {}
+}
+impl<ExcessivelyLongGenericName,
+     ExcessivelyLongGenericName,
+     AnotherExcessivelyLongGenericName> Foo<ExcessivelyLongGenericName,
+                                            ExcessivelyLongGenericName,
+                                            AnotherExcessivelyLongGenericName>
+    for Bar<ExcessivelyLongGenericName,
+            ExcessivelyLongGenericName,
+            AnotherExcessivelyLongGenericName> {
+    fn foo() {}
+}
+// rustfmt-brace_style: AlwaysNextLine
+
+mod M {
+    enum A {
+        A,
+    }
+
+    struct B {
+        b: i32,
+    }
+
+    // For empty enums and structs, the brace remains on the same line.
+    enum C {}
+
+    struct D {}
+
+    enum A<T> where T: Copy {
+        A,
+    }
+
+    struct B<T> where T: Copy {
+        b: i32,
+    }
+
+    // For empty enums and structs, the brace remains on the same line.
+    enum C<T> where T: Copy {}
+
+    struct D<T> where T: Copy {}
+}
+
+
+fn function()
+{
+
+}
+
+trait Trait
+{
+
+}
+
+impl<T> Trait for T
+{
+
+}
+
+trait Trait2<T>
+where
+    T: Copy + Display + Write + Read + FromStr, {}
+
+trait Trait3<T>
+where
+    T: Something
+        + SomethingElse
+        + Sync
+        + Send
+        + Display
+        + Debug
+        + Copy
+        + Hash
+        + Debug
+        + Display
+        + Write
+        + Read, {}
+
+fn main() {
+    let xxxxxxxxxxx = yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy  :  SomeTrait<AA, BB, CC>;
+
+    let xxxxxxxxxxxxxxx = yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+
+    let z = funk(yyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzz, wwwwww): AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA;
+
+    x : u32 - 1u32 / 10f32 : u32
+}
+#![feature(generators)]
+
+unsafe fn foo() {
+    let mut ga = static || { 
+        yield 1;
+    };
+}
+// rustfmt-format_code_in_doc_comments: true
+
+/// ```
+/// # #[rustversion::since(1.36)]
+/// # fn dox() {
+/// # use std::pin::Pin;
+/// # type Projection<'a> = &'a ();
+/// # type ProjectionRef<'a> = &'a ();
+/// # trait Dox {
+/// fn   project_ex (self: Pin<&mut Self>) -> Projection<'_>;
+/// fn   project_ref(self: Pin<&Self>) -> ProjectionRef<'_>;
+/// # }
+/// # }
+/// ```
+struct Foo;
+struct Foo {
+        a: i32,
+/*
+asd
+*/
+        // foo
+b: i32,
+}
+fn main() {
+    loop {
+        ();
+        ();
+        }
+
+
+    'label: loop // loop comment  
+    {
+        ();
+    }
+
+
+    cond = true;
+    while cond {
+        ();
+    }
+
+
+    'while_label: while cond { // while comment
+        ();
+    }
+
+
+    for obj in iter {
+        for sub_obj in obj
+        {
+            'nested_while_label: while cond {
+                ();
+            }
+        }
+    }
+
+    match some_var { // match comment
+        pattern0 => val0,
+        pattern1 => val1,
+        pattern2 | pattern3 => {
+            do_stuff();
+            val2
+        },
+    };
+}
+// #1535
+#![feature(struct_field_attributes)]
+
+struct Foo {
+    bar: u64,
+
+    #[cfg(test)]
+    qux: u64,
+}
+
+fn do_something() -> Foo {
+    Foo {
+        bar: 0,
+
+        #[cfg(test)]
+        qux: 1,
+    }
+}
+
+fn main() {
+    do_something();
+}
+
+// #1462
+struct Foo {
+    foo: usize,
+    #[cfg(feature="include-bar")]
+    bar: usize,
+}
+
+fn new_foo() -> Foo {
+    Foo {
+        foo: 0,
+        #[cfg(feature="include-bar")]
+        bar: 0,
+    }
+}
+
+// #2044
+pub enum State {
+    Closure(#[cfg_attr(feature = "serde_derive", serde(state_with = "::serialization::closure"))] GcPtr<ClosureData>),
+}
+
+struct Fields(
+    #[cfg_attr(feature = "serde_derive", serde(state_with = "::base::serialization::shared"))] Arc<Vec<InternedStr>>,
+);
+
+// #2309
+pub struct A {
+#[doc="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"]
+pub foos:Vec<bool>
+}
+// rustfmt-file_lines: [{"file":"tests/source/file-lines-6.rs","range":[9,10]}]
+
+struct A {
+    t: i64,
+}
+
+mod foo {
+    fn bar() {
+                         // test	
+                             let i = 12;
+                                 // test
+    }
+
+    fn baz() {
+///
+        let j = 15;     
+    }
+}
+// rustfmt-imports_granularity: One
+
+pub use foo::x;
+pub use foo::x as x2;
+pub use foo::y;
+use bar::a;
+use bar::b;
+use bar::b::f;
+use bar::b::f as f2;
+use bar::b::g;
+use bar::c;
+use bar::d::e;
+use bar::d::e as e2;
+use qux::h;
+use qux::i;
+// rustfmt-use_try_shorthand: true
+
+fn main() {
+    let x = try!(some_expr());
+
+    let y = try!(a.very.loooooooooooooooooooooooooooooooooooooong().chain().inside().weeeeeeeeeeeeeee()).test().0.x;
+}
+
+fn test() {
+    a?
+}
+
+fn issue1291() {
+    try!(fs::create_dir_all(&gitfiledir).chain_err(|| {
+        format!("failed to create the {} submodule directory for the workarea",
+                name)
+    }));
+}
+macro_rules! fuzz_target {
+    (|$data:ident: &[u8]| $body:block) => {};
+}
+
+fuzz_target!(|data: &[u8]| {
+
+    if let Ok(app_img) = AppImage::parse(data) {
+        if let Ok(app_img) = app_img.sign_for_secureboot(include_str!("../../test-data/signing-key")) {
+            assert!(app_img.is_signed());
+            Gbl::from_app_image(app_img).to_bytes();
+        }
+    }
+
+});
+// rustfmt-newline_style: Windows
+#[cfg(test)]
+mod test {
+    summary_test! {
+        tokenize_recipe_interpolation_eol,
+    "foo: # some comment
+ {{hello}}
+",
+    "foo: \
+ {{hello}} \
+{{ahah}}",
+        "N:#$>^{N}$<.",
+      }
+}
+// rustfmt-file_lines: [{"file":"tests/source/file-lines-3.rs","range":[4,8]},{"file":"tests/source/file-lines-3.rs","range":[10,15]}]
+
+fn floaters() {
+    let x = Foo {
+                field1: val1,
+                field2: val2,
+            }
+            .method_call().method_call();
+
+    let y = if cond {
+                val1
+            } else {
+                val2
+            }
+                .method_call();
+
+    {
+        match x {
+            PushParam => {
+                // comment
+                stack.push(mparams[match cur.to_digit(10) {
+                                            Some(d) => d as usize - 1,
+                                            None => return Err("bad param number".to_owned()),
+                                        }]
+                               .clone());
+            }
+        }
+    }
+}
+// rustfmt-format_strings: true
+
+fn main() {
+    println!("ThisIsAReallyLongStringWithNoSpaces.It_should_prefer_to_break_onpunctuation:Likethisssssssssssss");
+    format!("{}__{}__{}ItShouldOnlyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyNoticeSemicolonsPeriodsColonsAndCommasAndResortToMid-CharBreaksAfterPunctuation{}{}",x,y,z,a,b);
+    println!("aaaaaaaaaaaaaaaaaaaaaaaaaaaaalhijalfhiigjapdighjapdigjapdighdapighapdighpaidhg;adopgihadoguaadbadgad,qeoihapethae8t0aet8haetadbjtaeg;ooeouthaoeutgadlgajduabgoiuadogabudogubaodugbadgadgadga;adoughaoeugbaouea");
+    println!("sentuhaesnuthaesnutheasunteahusnaethuseantuihaesntdiastnidaetnuhaideuhsenathe。WeShouldSupportNonAsciiPunctuations§ensuhatheasunteahsuneathusneathuasnuhaesnuhaesnuaethusnaetuheasnuth");
+    println!("ThisIsASampleOfCJKString.祇園精舍の鐘の声、諸行無常の響きあり。娑羅双樹の花の色、盛者必衰の理をあらはす。奢れる人も久しからず、ただ春の夜の夢のごとし。猛き者もつひにはほろびぬ、ひとへに風の前の塵に同じ。");
+}
+// Test different indents.
+
+fn qux() where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+
+fn qux() where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+
+fn qux(a: Aaaaaaaaaaaaaaaaa) where X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT, X: TTTTTTTTTTTTTTTTTTTTTTTTTTTT {
+    baz();
+}
+// rustfmt-control_brace_style: AlwaysNextLine
+
+fn main() {
+    loop {
+        ();
+        ();
+        }
+
+
+    'label: loop // loop comment  
+    {
+        ();
+    }
+
+
+    cond = true;
+    while cond {
+        ();
+    }
+
+
+    'while_label: while cond { // while comment
+        ();
+    }
+
+
+    for obj in iter {
+        for sub_obj in obj
+        {
+            'nested_while_label: while cond {
+                ();
+            }
+        }
+    }
+
+    match some_var { // match comment
+        pattern0 => val0,
+        pattern1 => val1,
+        pattern2 | pattern3 => {
+            do_stuff();
+            val2
+        },
+    };
+}
+// Test proper wrapping of long associated type bounds
+
+pub trait HttpService {
+    type WsService: 'static + Service<Request = WsCommand, Response = WsResponse, Error = ServerError>;
+}
+fn main() {
+    fn f() -> Option<i32> {
+        Some("fffffffsssssssssddddssssfffffddddff").map(|s| s).map(|s| s.to_string()).map(|res| {
+            match Some(res) {
+                Some(ref s) if s == "" => 41,
+                Some(_) => 42,
+                _ => 43,
+            }
+        })
+    }
+    println!("{:?}", f())
+}
+// rustfmt-indent_style: Block
+// rustfmt-imports_indent: Block
+// rustfmt-imports_layout: Vertical
+
+use std::{
+    env, fs, io::{Read, Write},
+};
+// rustfmt-trailing_comma: Never
+
+enum X {
+    A,
+    B,
+}
+
+enum Y {
+    A,
+    B
+}
+
+enum TupX {
+    A(u32),
+    B(i32, u16),
+}
+
+enum TupY {
+    A(u32),
+    B(i32, u16)
+}
+
+enum StructX {
+    A {
+        s: u16,
+    },
+    B {
+        u: u32,
+        i: i32,
+    },
+}
+
+enum StructY {
+    A {
+        s: u16,
+    },
+    B {
+        u: u32,
+        i: i32,
+    }
+}
+
+static XXX: [i8; 64] = [
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1,
+];
+fn main() -> &'static str {
+    let too_many_lines = "Hello";
+    let leave_me = "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\
+                    s
+                    jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj";
+}
+
+fn issue_1237() {
+    let msg = "eedadn\n\
+               drvtee\n\
+               eandsr\n\
+               raavrd\n\
+               atevrs\n\
+               tsrnev\n\
+               sdttsa\n\
+               rasrtv\n\
+               nssdts\n\
+               ntnada\n\
+               svetve\n\
+               tesnvt\n\
+               vntsnd\n\
+               vrdear\n\
+               dvrsen\n\
+               enarar";
+}
+pub      // Oh, no. A line comment.
+struct Foo {}
+
+pub     /* Oh, no. A block comment. */     struct Foo {}
+
+mod inner {
+pub      // Oh, no. A line comment.
+struct Foo {}
+
+pub     /* Oh, no. A block comment. */     struct Foo {}
+}
+// rustfmt-format_code_in_doc_comments: true
+
+//! Empty pound line
+//!
+//! ```rust
+//! #
+//! # fn main() {
+//!  foo ( )  ;
+//! # }
+//! ```
+// rustfmt-normalize_comments: true
+
+fn main() {
+   let constellation_chan = Constellation::<layout::layout_task::LayoutTask,  script::script_task::ScriptTask> ::start(
+     compositor_proxy,
+     resource_task,
+     image_cache_task,font_cache_task,
+     time_profiler_chan,
+     mem_profiler_chan,
+     devtools_chan,
+     storage_task,
+     supports_clipboard
+    );
+
+     Quux::<ParamOne,   // Comment 1
+            ParamTwo,   // Comment 2
+                    >::some_func();
+
+    < *mut JSObject >:: relocate(entry);
+
+    let x: Foo<A   >;
+    let x: Foo/*::*/<A>;
+}
+
+fn op(foo: Bar, key : &[u8], upd : Fn(Option<&memcache::Item> , Baz  ) -> Result) -> MapResult {}
+// rustfmt-reorder_impl_items: true
+
+impl<T> IntoIterator for SafeVec<T> {
+    type F = impl Trait;
+    type IntoIter = self::IntoIter<T>;
+    type Item = T;
+    // comment on foo()
+    fn foo() {println!("hello, world");}
+    type Bar = u32;
+    fn foo1() {println!("hello, world");}
+    type FooBar = u32;
+    fn foo2() {println!("hello, world");}
+    fn foo3() {println!("hello, world");}
+    const SomeConst: i32 = 100;
+    fn foo4() {println!("hello, world");}
+    fn foo5() {println!("hello, world");}
+    // comment on FoooooBar
+    type FoooooBar = u32;
+    fn foo6() {println!("hello, world");}
+    fn foo7() {println!("hello, world");}
+    type BarFoo = u32;
+    type E = impl Trait;
+    const AnotherConst: i32 = 100;
+    fn foo8() {println!("hello, world");}
+}
+macro_rules! m {
+() => {
+type Type;
+};
+}
+// rustfmt-merge_imports: true
+
+use a::b;
+use a::c;info!(//debug
+    "{}: sending function_code={:04x} data={:04x} crc=0x{:04X} data={:02X?}",
+    self.name, function_code, data, crc, output_cmd
+);
+// rustfmt-normalize_comments: true
+
+type PrivateTest<'a, I> = (Box<Parser<Input=I, Output=char> + 'a>, Box<Parser<Input=I, Output=char> + 'a>);
+
+pub type PublicTest<'a, I, O> = Result<Vec<MyLongType>, Box<Parser<Input=I, Output=char> + 'a>, Box<Parser<Input=I, Output=char> + 'a>>;
+
+pub type LongGenericListTest<'a, 'b, 'c, 'd, LONGPARAMETERNAME, LONGPARAMETERNAME, LONGPARAMETERNAME, A, B, C> = Option<Vec<MyType>>;
+
+pub type Exactly100CharsTest<'a, 'b, 'c, 'd, LONGPARAMETERNAME, LONGPARAMETERNAME, A, B> = Vec<i32>;
+
+pub type Exactly101CharsTest<'a, 'b, 'c, 'd, LONGPARAMETERNAME, LONGPARAMETERNAME, A, B> = Vec<Test>;
+
+pub type Exactly100CharsToEqualTest<'a, 'b, 'c, 'd, LONGPARAMETERNAME, LONGPARAMETERNAME, A, B, C> = Vec<i32>;
+
+pub type GenericsFitButNotEqualTest<'a, 'b, 'c, 'd, LONGPARAMETERNAME, LONGPARAMETERNAME, A1, B, C> = Vec<i32>;
+
+pub type CommentTest< /* Lifetime */ 'a
+            ,
+        // Type
+        T
+                    > = ();
+
+
+pub type WithWhereClause<LONGPARAMETERNAME, T> where T: Clone, LONGPARAMETERNAME: Clone + Eq + OtherTrait = Option<T>;
+
+pub type Exactly100CharstoEqualWhereTest<T, U, PARAMET> where T: Clone + Ord + Eq + SomeOtherTrait = Option<T>;
+
+pub type Exactly101CharstoEqualWhereTest<T, U, PARAMETE> where T: Clone + Ord + Eq + SomeOtherTrait = Option<T>;
+
+type RegisterPlugin = unsafe fn(pt: *const c_char, plugin: *mut c_void, data: *mut CallbackData);
+
+// #1683
+pub type Between<Lhs, Rhs> = super::operators::Between<Lhs, super::operators::And<AsExpr<Rhs, Lhs>, AsExpr<Rhs, Lhs>>>;
+pub type NotBetween<Lhs, Rhs> = super::operators::NotBetween<Lhs, super::operators::And<AsExpr<Rhs, Lhs>, AsExpr<Rhs, Lhs>>>;
+// rustfmt-wrap_comments: true
+
+//! This is a long line that angers rustfmt. Rustfmt shall deal with it swiftly and justly.
+
+pub mod foo {}
+#[cfg_attr(feature = "foo", path = "foo.rs")]
+#[cfg_attr(not(feture = "foo"), path = "bar.rs")]
+mod sub_mod;
+
+#[cfg_attr(target_arch = "wasm32", path = "dir/dir1/dir2/wasm32.rs")]
+#[cfg_attr(not(target_arch = "wasm32"), path = "dir/dir1/dir3/wasm32.rs")]
+mod wasm32;
+
+#[some_attr(path = "somewhere.rs")]
+mod other;
+fn
+    wasm32
+    () -> &str
+{
+    "wasm32"
+}
+fn
+    wasm32
+    () -> &str
+{
+    "wasm32"
+}
+fn bar( ) -> &str {
+"bar"
+}
+fn foo( )
+         -> &str {
+    "foo"
+}
+fn other() -> &str { "other"}
+fn
+    wasm32() -> &str {
+        "wasm32"
+    }
+// rustfmt-edition: 2018
+
+use ::ignore;
+use ::ignore::some::more;
+use ::{foo, bar};
+use ::*;
+use ::baz::{foo, bar};
+
+fn main() {
+    println!("Hello, world!");
+}
+// rustfmt-normalize_comments: true
+// rustfmt-wrap_comments: true
+// Struct literal expressions.
+
+fn main() {
+    let x = Bar;
+
+    // Comment
+    let y = Foo {a: x };
+
+    Foo { a: foo() /* comment*/, /* comment*/ b: bar(), ..something };
+
+    Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo { a: f(), b: b(), };
+
+    Foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo { a: f(), b: b(), };
+
+    Foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo {
+        // Comment
+        a: foo(), // Comment
+        // Comment
+        b: bar(), // Comment
+    };
+
+    Foo { a:Bar,
+          b:f() };
+
+    Quux { x: if cond { bar(); }, y: baz() };
+
+    A { 
+    // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.
+    first: item(),
+        // Praesent et diam eget libero egestas mattis sit amet vitae augue.
+        // Nam tincidunt congue enim, ut porta lorem lacinia consectetur.
+        second: Item
+    };
+
+    Some(Data::MethodCallData(MethodCallData {
+        span: sub_span.unwrap(),
+        scope: self.enclosing_scope(id),
+        ref_id: def_id,
+        decl_id: Some(decl_id),
+    }));
+
+    Diagram { /*                 o        This graph demonstrates how                  
+               *                / \       significant whitespace is           
+               *               o   o      preserved.  
+               *              /|\   \
+               *             o o o   o */
+              graph: G, }
+}
+
+fn matcher() {
+    TagTerminatedByteMatcher {
+        matcher: ByteMatcher {
+        pattern: b"<HTML",
+        mask: b"\xFF\xDF\xDF\xDF\xDF\xFF",
+    },
+    };
+}
+
+fn issue177() {
+    struct Foo<T> { memb: T }
+    let foo = Foo::<i64> { memb: 10 };
+}
+
+fn issue201() {
+    let s = S{a:0, ..  b};
+}
+
+fn issue201_2() {
+    let s = S{a: S2{    .. c}, ..  b};
+}
+
+fn issue278() {
+    let s = S {
+        a: 0,
+        //       
+        b: 0,
+    };
+    let s1 = S {
+        a: 0,
+        // foo
+        //      
+        // bar
+        b: 0,
+    };
+}
+
+fn struct_exprs() {
+    Foo
+    { a :  1, b:f( 2)};
+    Foo{a:1,b:f(2),..g(3)};
+    LoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongStruct { ..base };
+    IntrinsicISizesContribution { content_intrinsic_sizes: IntrinsicISizes { minimum_inline_size: 0, }, };
+}
+
+fn issue123() {
+    Foo { a: b, c: d, e: f };
+
+    Foo { a: bb, c: dd, e: ff };
+
+    Foo { a: ddddddddddddddddddddd, b: cccccccccccccccccccccccccccccccccccccc };
+}
+
+fn issue491() {
+    Foo {
+        guard: None,
+        arm: 0, // Comment
+    };
+
+    Foo {
+        arm: 0, // Comment
+    };
+
+    Foo { a: aaaaaaaaaa, b: bbbbbbbb, c: cccccccccc, d: dddddddddd, /* a comment */
+      e: eeeeeeeee };
+}
+
+fn issue698() {
+    Record {
+        ffffffffffffffffffffffffffields: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
+    };
+    Record {
+        ffffffffffffffffffffffffffields: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
+    }
+}
+
+fn issue835() {
+    MyStruct {};
+    MyStruct { /* a comment */ };
+    MyStruct {
+        // Another comment
+    };
+    MyStruct {}
+}
+
+fn field_init_shorthand() {
+    MyStruct { x, y, z };
+    MyStruct { x, y, z, .. base };
+    Foo { aaaaaaaaaa, bbbbbbbb, cccccccccc, dddddddddd, /* a comment */
+        eeeeeeeee };
+    Record { ffffffffffffffffffffffffffieldsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa };
+}
+// Deeply indented modules.
+
+  mod foo { mod bar { mod baz {} } }
+
+mod foo {
+    mod bar {
+    mod baz {
+    fn foo() { bar() }
+    }
+    }
+
+    mod qux {
+
+    }
+}
+
+mod boxed { pub use std::boxed::{Box, HEAP}; }
+
+pub  mod x {
+        pub fn freopen(filename: *const c_char,
+                   mode: *const c_char,
+                     mode2: *const c_char,
+                   mode3: *const c_char,
+                   file: *mut FILE)
+                   -> *mut FILE{}
+}
+
+  mod    y    { // sup boooooiiii
+   }
+#![feature(const_generics_defaults)]
+struct Foo<const N: usize    =  1, const N2: usize =           2>;
+struct Bar<const N: usize, const N2: usize = {      N + 
+1 }>;
+struct Lots<const N1BlahFooUwU: usize = { 10 + 28 + 1872 / 10 * 3 },const N2SecondParamOhmyyy: usize = { N1BlahFooUwU / 2 + 10 * 2 },>;
+struct NamesRHard<const N: usize = { 1 + 1 + 1 + 1 + 1 + 1 }>;
+struct FooBar<
+    const LessThan100ButClose: usize = {1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1}
+>;
+struct FooBarrrrrrrr<const N: usize        =           {13478234326456456444323871+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+ 1+1+1+1 + 1},>;
+// rustfmt-normalize_comments: true
+// rustfmt-wrap_comments: true
+// rustfmt-indent_style: Visual
+fn foo() {
+    Fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(f(), b());
+
+    Foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(// Comment
+                                                                                      foo(), /* Comment */
+                                                                                      // Comment
+                                                                                      bar() /* Comment */);
+
+    Foo(Bar, f());
+
+    Quux(if cond {
+             bar();
+         },
+         baz());
+
+    Baz(xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
+        zzzzz /* test */);
+
+    A(// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit
+      // amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante
+      // hendrerit. Donec et mollis dolor.
+      item(),
+      // Praesent et diam eget libero egestas mattis sit amet vitae augue.
+      // Nam tincidunt congue enim, ut porta lorem lacinia consectetur.
+      Item);
+
+    Diagram(//                 o        This graph demonstrates how
+            //                / \       significant whitespace is
+            //               o   o      preserved.
+            //              /|\   \
+            //             o o o   o
+            G)
+}
+// #2398
+pub mod outer_mod {
+    pub mod inner_mod {
+       pub ( in outer_mod ) fn outer_mod_visible_fn() {}
+         pub ( super ) fn super_mod_visible_fn() {}
+      pub ( self ) fn inner_mod_visible_fn() {}
+    }
+}
+// rustfmt-config: small_tabs.toml
+// rustfmt-target: hello.rs
+
+// Smoke test - hello world.
+
+fn main() { println!("Hello world!"); }
+// rustfmt-indent_style = "block"
+
+#![feature(pub_restricted)]
+
+mod inner_mode {
+    pub(super) fn func_name(abc: i32) -> i32 {
+        abc
+    }
+}
+// Test traits
+
+trait Foo {
+    fn bar(x: i32   ) -> Baz<   U> {       Baz::new()
+  }
+
+    fn baz(a: AAAAAAAAAAAAAAAAAAAAAA,
+b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB)
+-> RetType;
+
+    fn foo(a: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, // Another comment
+b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB)
+           -> RetType              ; // Some comment
+
+    fn baz(&mut self        ) -> i32          ;
+
+fn increment(&     mut self, x: i32         );
+
+    fn read(&mut self,          x: BufReader<R> /* Used to be MemReader */)
+    where R: Read;
+}
+
+pub trait WriteMessage {
+    fn write_message  (&mut self, &FrontendMessage) ->   io::Result<()>;
+}
+
+trait Runnable {
+    fn handler(self: & Runnable   );
+}
+
+trait TraitWithExpr {
+    fn fn_with_expr(x: [i32;       1]);
+}
+
+trait Test {
+    fn read_struct<T, F>(&mut self, s_name: &str, len: usize, f: F) -> Result<T, Self::Error> where F: FnOnce(&mut Self) -> Result<T, Self::Error>;
+}
+
+trait T<> {}
+
+trait Foo { type Bar: Baz; type Inner: Foo   = Box< Foo >; }
+
+trait ConstCheck<T>:Foo   where   T: Baz { 
+        const   J:   i32;
+}
+
+trait Tttttttttttttttttttttttttttttttttttttttttttttttttttttttttt<T> 
+    where T: Foo {}
+
+trait Ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt<T> where T: Foo {}
+
+trait FooBar<T> : Tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt where J: Bar { fn test(); }
+
+trait WhereList<T, J> where T: Foo, J: Bar {}
+
+trait X /* comment */ {}
+trait Y // comment
+{
+}
+
+// #2055
+pub trait Foo:
+// A and C
+A + C
+// and B
+    + B
+{}
+
+// #2158
+trait Foo {
+    type ItRev = <MergingUntypedTimeSeries<SliceSeries<SliceWindow>> as UntypedTimeSeries>::IterRev;
+    type IteRev = <MergingUntypedTimeSeries<SliceSeries<SliceWindow>> as UntypedTimeSeries>::IterRev;
+}
+
+// #2331
+trait MyTrait<AAAAAAAAAAAAAAAAAAAA, BBBBBBBBBBBBBBBBBBBB, CCCCCCCCCCCCCCCCCCCC, DDDDDDDDDDDDDDDDDDDD> {
+    fn foo() {}
+}
+
+// Trait aliases
+trait FooBar =
+    Foo 
+    + Bar;
+trait FooBar <A, B, C>=
+    Foo 
+    + Bar;
+pub trait FooBar =
+    Foo 
+    + Bar;
+pub trait FooBar <A, B, C>=
+    Foo 
+    + Bar;
+trait AAAAAAAAAAAAAAAAAA = BBBBBBBBBBBBBBBBBBB + CCCCCCCCCCCCCCCCCCCCCCCCCCCCC + DDDDDDDDDDDDDDDDDD;
+pub trait AAAAAAAAAAAAAAAAAA = BBBBBBBBBBBBBBBBBBB + CCCCCCCCCCCCCCCCCCCCCCCCCCCCC + DDDDDDDDDDDDDDDDDD;
+trait AAAAAAAAAAAAAAAAAAA = BBBBBBBBBBBBBBBBBBB + CCCCCCCCCCCCCCCCCCCCCCCCCCCCC + DDDDDDDDDDDDDDDDDD;
+trait AAAAAAAAAAAAAAAAAA = BBBBBBBBBBBBBBBBBBB + CCCCCCCCCCCCCCCCCCCCCCCCCCCCC + DDDDDDDDDDDDDDDDDDD;
+trait AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA<A, B, C, D, E> = FooBar;
+trait AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA<A, B, C, D, E> = FooBar;
+#[rustfmt::skip]
+trait FooBar = Foo
+    + Bar;
+
+// #2637
+auto trait Example {}
+pub auto trait PubExample {}
+pub unsafe auto trait PubUnsafeExample {}
+
+// #3006
+trait Foo<'a> {
+    type Bar<  'a  >;
+}
+
+impl<'a> Foo<'a> for i32 {
+    type Bar<  'a  > = i32;
+}
+
+// #3092
+pub mod test {
+    pub trait ATraitWithALooongName {}
+    pub trait ATrait
+        :ATraitWithALooongName + ATraitWithALooongName + ATraitWithALooongName + ATraitWithALooongName
+{
+}
+}
+
+// Trait aliases with where clauses.
+trait A = where for<'b> &'b Self: Send;
+
+trait B = where for<'b> &'b Self: Send + Clone + Copy + SomeTrait + AAAAAAAA + BBBBBBB + CCCCCCCCCC;
+trait B = where for<'b> &'b Self: Send + Clone + Copy + SomeTrait + AAAAAAAA + BBBBBBB + CCCCCCCCCCC;
+trait B = where
+    for<'b> &'b Self:
+Send + Clone + Copy + SomeTrait + AAAAAAAA + BBBBBBB + CCCCCCCCCCCCCCCCCCCCCCC;
+trait B = where
+    for<'b> &'b Self:
+Send + Clone + Copy + SomeTrait + AAAAAAAA + BBBBBBB + CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC;
+
+trait B = where
+    for<'b> &'b Self:
+Send
+    + Clone
+    + Copy
+    + SomeTrait
+    + AAAAAAAA
+    + BBBBBBB
+    + CCCCCCCCC
+    + DDDDDDD
+    + DDDDDDDD
+    + DDDDDDDDD
+    + EEEEEEE;
+
+trait A<'a, 'b, 'c> = Debug<T> + Foo where for<'b> &'b Self: Send;
+
+trait B<'a, 'b, 'c> = Debug<T> +Foo
+where for<'b> &'b Self:
+Send
+    + Clone
+    + Copy
+    + SomeTrait
+    + AAAAAAAA
+    + BBBBBBB
+    + CCCCCCCCC
+    + DDDDDDD;
+
+trait B<'a, 'b, 'c,T> = Debug<'a, T> where for<'b> &'b Self:
+Send
+    + Clone
+    + Copy
+    + SomeTrait
+    + AAAAAAAA
+    + BBBBBBB
+    + CCCCCCCCC
+    + DDDDDDD
+    + DDDDDDDD
+    + DDDDDDDDD
+    + EEEEEEE;
+
+trait Visible {
+    pub const C: i32;
+    pub type T;
+    pub fn f();
+    pub fn g() {}
+}
+// rustfmt-normalize_comments: true
+
+fn main() {
+	if /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	cond /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	{
+	} /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	else /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	if /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	cond /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	{
+	} /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	else /* shouldn't be dropped
+	shouldn't be dropped */
+	
+	{
+	}
+	
+	if /* shouldn't be dropped
+	shouldn't be dropped */
+	let Some(x) = y/* shouldn't be dropped
+	shouldn't be dropped */
+	{
+	}
+}
+// rustfmt-control_brace_style: ClosingNextLine
+
+fn main() {
+    if false
+    {
+        ();
+        ();
+    }
+
+    if false // lone if comment
+    {
+        ();
+        ();
+    }
+
+
+    let a =
+        if 0 > 1 {
+            unreachable!()
+        }
+        else
+        {
+            0x0
+        };
+
+
+    if true
+    {
+        ();
+    } else if false {
+        ();
+        ();
+    }
+    else {
+        ();
+        ();
+        ();
+    }
+
+    if true // else-if-chain if comment
+    {
+        ();
+    }
+    else if false // else-if-chain else-if comment
+    {
+        ();
+        ();
+    } else // else-if-chain else comment
+    {
+        ();
+        ();
+        ();
+    }
+}
+// rustfmt-wrap_comments: false
+
+/// no markdown header so rustfmt should wrap this comment when `format_code_in_doc_comments = true` and `wrap_comments = true`
+fn not_documented_with_markdown_header() {
+    // This is just a normal inline comment so rustfmt should wrap this comment when `wrap_comments = true`
+}
+
+/// # We're using a markdown header here so rustfmt should refuse to wrap this comment in all circumstances
+fn documented_with_markdown_header() {
+    // # We're using a markdown header in an inline comment. rustfmt should be able to wrap this comment when `wrap_comments = true`
+}
+// rustfmt-wrap_comments: true
+
+/// no markdown header so rustfmt should wrap this comment when `format_code_in_doc_comments = true` and `wrap_comments = true`
+fn not_documented_with_markdown_header() {
+    // This is just a normal inline comment so rustfmt should wrap this comment when `wrap_comments = true`
+}
+
+/// # We're using a markdown header here so rustfmt should refuse to wrap this comment in all circumstances
+fn documented_with_markdown_header() {
+    // # We're using a markdown header in an inline comment. rustfmt should be able to wrap this comment when `wrap_comments = true`
+}
+// rustfmt-force_explicit_abi: false
+
+ extern  "C" {
+   fn some_fn() -> ();
+ }
+
+ extern "C" fn sup() {
+
+ }
+
+type funky_func = extern "C" fn (unsafe extern "rust-call" fn(*const JSJitInfo, *mut JSContext,
+                                              HandleObject, *mut libc::c_void, u32,
+                                              *mut JSVal)
+                                              -> u8);
+//! Run-time feature detection for the Rust standard library.
+//!
+//! To detect whether a feature is enabled in the system running the binary
+//! use one of the appropriate macro for the target:
+//!
+//! * `x86` and `x86_64`: [`is_x86_feature_detected`]
+//! * `arm`: [`is_arm_feature_detected`]
+//! * `aarch64`: [`is_aarch64_feature_detected`]
+//! * `mips`: [`is_mips_feature_detected`]
+//! * `mips64`: [`is_mips64_feature_detected`]
+//! * `powerpc`: [`is_powerpc_feature_detected`]
+//! * `powerpc64`: [`is_powerpc64_feature_detected`]
+
+#![unstable(feature = "stdsimd", issue = "27731")]
+#![feature(const_fn, staged_api, stdsimd, doc_cfg, allow_internal_unstable)]
+#![allow(clippy::shadow_reuse)]
+#![deny(clippy::missing_inline_in_public_items)]
+#![cfg_attr(target_os = "linux", feature(linkage))]
+#![cfg_attr(all(target_os = "freebsd", target_arch = "aarch64"), feature(asm))]
+#![cfg_attr(stdsimd_strict, deny(warnings))]
+#![cfg_attr(test, allow(unused_imports))]
+#![no_std]
+
+#[macro_use]
+extern crate cfg_if;
+
+cfg_if! {
+    if #[cfg(feature = "std_detect_file_io")] {
+        #[cfg_attr(test, macro_use(println))]
+        extern crate std;
+
+        #[allow(unused_imports)]
+        use std::{arch, fs, io, mem, sync};
+    } else {
+        #[cfg(test)]
+        #[macro_use(println)]
+        extern crate std;
+
+        #[allow(unused_imports)]
+        use core::{arch, mem, sync};
+    }
+}
+
+#[cfg(feature = "std_detect_dlsym_getauxval")]
+extern crate libc;
+
+#[doc(hidden)]
+#[unstable(feature = "stdsimd", issue = "27731")]
+pub mod detect;
+//! `std_detect`
+
+#[doc(hidden)] // unstable implementation detail
+#[unstable(feature = "stdsimd", issue = "27731")]
+pub mod detect;
+//! The `is_{target_arch}_feature_detected!` macro are only available on their
+//! architecture. These macros provide a better error messages when the user
+//! attempts to call them in a different architecture.
+
+/// Prevents compilation if `is_x86_feature_detected` is used somewhere
+/// else than `x86` and `x86_64` targets.
+#[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_x86_feature_detected {
+    ($t: tt) => {
+        compile_error!(
+            r#"
+        is_x86_feature_detected can only be used on x86 and x86_64 targets.
+        You can prevent it from being used in other architectures by
+        guarding it behind a cfg(target_arch) as follows:
+
+            #[cfg(any(target_arch = "x86", target_arch = "x86_64"))] {
+                if is_x86_feature_detected(...) { ... }
+            }
+        "#
+        )
+    };
+}
+
+/// Prevents compilation if `is_arm_feature_detected` is used somewhere else
+/// than `ARM` targets.
+#[cfg(not(target_arch = "arm"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_arm_feature_detected {
+    ($t:tt) => {
+        compile_error!(
+            r#"
+        is_arm_feature_detected can only be used on ARM targets.
+        You can prevent it from being used in other architectures by
+        guarding it behind a cfg(target_arch) as follows:
+
+            #[cfg(target_arch = "arm")] {
+                if is_arm_feature_detected(...) { ... }
+            }
+        "#
+        )
+    };
+}
+
+/// Prevents compilation if `is_aarch64_feature_detected` is used somewhere else
+/// than `aarch64` targets.
+#[cfg(not(target_arch = "aarch64"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_aarch64_feature_detected {
+    ($t: tt) => {
+        compile_error!(
+            r#"
+        is_aarch64_feature_detected can only be used on AArch64 targets.
+        You can prevent it from being used in other architectures by
+        guarding it behind a cfg(target_arch) as follows:
+
+            #[cfg(target_arch = "aarch64")] {
+                if is_aarch64_feature_detected(...) { ... }
+            }
+        "#
+        )
+    };
+}
+
+/// Prevents compilation if `is_powerpc_feature_detected` is used somewhere else
+/// than `PowerPC` targets.
+#[cfg(not(target_arch = "powerpc"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_powerpc_feature_detected {
+    ($t:tt) => {
+        compile_error!(
+            r#"
+is_powerpc_feature_detected can only be used on PowerPC targets.
+You can prevent it from being used in other architectures by
+guarding it behind a cfg(target_arch) as follows:
+
+    #[cfg(target_arch = "powerpc")] {
+        if is_powerpc_feature_detected(...) { ... }
+    }
+"#
+        )
+    };
+}
+
+/// Prevents compilation if `is_powerpc64_feature_detected` is used somewhere
+/// else than `PowerPC64` targets.
+#[cfg(not(target_arch = "powerpc64"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_powerpc64_feature_detected {
+    ($t:tt) => {
+        compile_error!(
+            r#"
+is_powerpc64_feature_detected can only be used on PowerPC64 targets.
+You can prevent it from being used in other architectures by
+guarding it behind a cfg(target_arch) as follows:
+
+    #[cfg(target_arch = "powerpc64")] {
+        if is_powerpc64_feature_detected(...) { ... }
+    }
+"#
+        )
+    };
+}
+
+/// Prevents compilation if `is_mips_feature_detected` is used somewhere else
+/// than `MIPS` targets.
+#[cfg(not(target_arch = "mips"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_mips_feature_detected {
+    ($t:tt) => {
+        compile_error!(
+            r#"
+        is_mips_feature_detected can only be used on MIPS targets.
+        You can prevent it from being used in other architectures by
+        guarding it behind a cfg(target_arch) as follows:
+
+            #[cfg(target_arch = "mips")] {
+                if is_mips_feature_detected(...) { ... }
+            }
+        "#
+        )
+    };
+}
+
+/// Prevents compilation if `is_mips64_feature_detected` is used somewhere else
+/// than `MIPS64` targets.
+#[cfg(not(target_arch = "mips64"))]
+#[macro_export]
+#[unstable(feature = "stdsimd", issue = "27731")]
+macro_rules! is_mips64_feature_detected {
+    ($t:tt) => {
+        compile_error!(
+            r#"
+        is_mips64_feature_detected can only be used on MIPS64 targets.
+        You can prevent it from being used in other architectures by
+        guarding it behind a cfg(target_arch) as follows:
+
+            #[cfg(target_arch = "mips64")] {
+                if is_mips64_feature_detected(...) { ... }
+            }
+        "#
+        )
+    };
+}
+//! Bit manipulation utilities.
+
+/// Tests the `bit` of `x`.
+#[allow(dead_code)]
+#[inline]
+pub(crate) fn test(x: usize, bit: u32) -> bool {
+    debug_assert!(bit < 32, "bit index out-of-bounds");
+    x & (1 << bit) != 0
+}
+//! Run-time feature detection on Linux
+
+mod auxvec;
+
+#[cfg(feature = "std_detect_file_io")]
+mod cpuinfo;
+
+cfg_if! {
+    if #[cfg(target_arch = "aarch64")] {
+        mod aarch64;
+        pub use self::aarch64::check_for;
+    } else if #[cfg(target_arch = "arm")] {
+        mod arm;
+        pub use self::arm::check_for;
+    } else  if #[cfg(any(target_arch = "mips", target_arch = "mips64"))] {
+        mod mips;
+        pub use self::mips::check_for;
+    } else if #[cfg(any(target_arch = "powerpc", target_arch = "powerpc64"))] {
+        mod powerpc;
+        pub use self::powerpc::check_for;
+    } else {
+        use crate::detect::Feature;
+        /// Performs run-time feature detection.
+        pub fn check_for(_x: Feature) -> bool {
+            false
+        }
+    }
+}
+//! Run-time feature detection for MIPS on Linux.
+
+use crate::detect::{Feature, cache, bit};
+use super::auxvec;
+
+/// Performs run-time feature detection.
+#[inline]
+pub fn check_for(x: Feature) -> bool {
+    cache::test(x as u32, detect_features)
+}
+
+/// Try to read the features from the auxiliary vector, and if that fails, try
+/// to read them from `/proc/cpuinfo`.
+fn detect_features() -> cache::Initializer {
+    let mut value = cache::Initializer::default();
+    let enable_feature = |value: &mut cache::Initializer, f, enable| {
+        if enable {
+            value.set(f as u32);
+        }
+    };
+
+    // The values are part of the platform-specific [asm/hwcap.h][hwcap]
+    //
+    // [hwcap]: https://github.com/torvalds/linux/blob/master/arch/arm64/include/uapi/asm/hwcap.h
+    if let Ok(auxv) = auxvec::auxv() {
+        enable_feature(&mut value, Feature::msa, bit::test(auxv.hwcap, 1));
+        return value;
+    }
+    // TODO: fall back via `cpuinfo`.
+    value
+}
+//! Run-time feature detection for Aarch64 on Linux.
+
+use crate::detect::{Feature, cache, bit};
+use super::{auxvec, cpuinfo};
+
+/// Performs run-time feature detection.
+#[inline]
+pub fn check_for(x: Feature) -> bool {
+    cache::test(x as u32, detect_features)
+}
+
+/// Try to read the features from the auxiliary vector, and if that fails, try
+/// to read them from /proc/cpuinfo.
+fn detect_features() -> cache::Initializer {
+    if let Ok(auxv) = auxvec::auxv() {
+        let hwcap: AtHwcap = auxv.into();
+        return hwcap.cache();
+    }
+    if let Ok(c) = cpuinfo::CpuInfo::new() {
+        let hwcap: AtHwcap = c.into();
+        return hwcap.cache();
+    }
+    cache::Initializer::default()
+}
+
+/// These values are part of the platform-specific [asm/hwcap.h][hwcap] .
+///
+/// [hwcap]: https://github.com/torvalds/linux/blob/master/arch/arm64/include/uapi/asm/hwcap.h
+struct AtHwcap {
+    fp: bool, // 0
+    asimd: bool, // 1
+    // evtstrm: bool, // 2
+    aes: bool, // 3
+    pmull: bool, // 4
+    sha1: bool, // 5
+    sha2: bool, // 6
+    crc32: bool, // 7
+    atomics: bool, // 8
+    fphp: bool, // 9
+    asimdhp: bool, // 10
+    // cpuid: bool, // 11
+    asimdrdm: bool, // 12
+    // jscvt: bool, // 13
+    // fcma: bool, // 14
+    lrcpc: bool, // 15
+    // dcpop: bool, // 16
+    // sha3: bool, // 17
+    // sm3: bool, // 18
+    // sm4: bool, // 19
+    asimddp: bool, // 20
+    // sha512: bool, // 21
+    sve: bool, // 22
+}
+
+impl From<auxvec::AuxVec> for AtHwcap {
+    /// Reads AtHwcap from the auxiliary vector.
+    fn from(auxv: auxvec::AuxVec) -> Self {
+        AtHwcap {
+            fp: bit::test(auxv.hwcap, 0),
+            asimd: bit::test(auxv.hwcap, 1),
+            // evtstrm: bit::test(auxv.hwcap, 2),
+            aes: bit::test(auxv.hwcap, 3),
+            pmull: bit::test(auxv.hwcap, 4),
+            sha1: bit::test(auxv.hwcap, 5),
+            sha2: bit::test(auxv.hwcap, 6),
+            crc32: bit::test(auxv.hwcap, 7),
+            atomics: bit::test(auxv.hwcap, 8),
+            fphp: bit::test(auxv.hwcap, 9),
+            asimdhp: bit::test(auxv.hwcap, 10),
+            // cpuid: bit::test(auxv.hwcap, 11),
+            asimdrdm: bit::test(auxv.hwcap, 12),
+            // jscvt: bit::test(auxv.hwcap, 13),
+            // fcma: bit::test(auxv.hwcap, 14),
+            lrcpc: bit::test(auxv.hwcap, 15),
+            // dcpop: bit::test(auxv.hwcap, 16),
+            // sha3: bit::test(auxv.hwcap, 17),
+            // sm3: bit::test(auxv.hwcap, 18),
+            // sm4: bit::test(auxv.hwcap, 19),
+            asimddp: bit::test(auxv.hwcap, 20),
+            // sha512: bit::test(auxv.hwcap, 21),
+            sve: bit::test(auxv.hwcap, 22),
+        }
+    }
+}
+
+impl From<cpuinfo::CpuInfo> for AtHwcap {
+    /// Reads AtHwcap from /proc/cpuinfo .
+    fn from(c: cpuinfo::CpuInfo) -> Self {
+        let f = &c.field("Features");
+        AtHwcap {
+            // 64-bit names. FIXME: In 32-bit compatibility mode /proc/cpuinfo will
+            // map some of the 64-bit names to some 32-bit feature names. This does not
+            // cover that yet.
+            fp: f.has("fp"),
+            asimd: f.has("asimd"),
+            // evtstrm: f.has("evtstrm"),
+            aes: f.has("aes"),
+            pmull: f.has("pmull"),
+            sha1: f.has("sha1"),
+            sha2: f.has("sha2"),
+            crc32: f.has("crc32"),
+            atomics: f.has("atomics"),
+            fphp: f.has("fphp"),
+            asimdhp: f.has("asimdhp"),
+            // cpuid: f.has("cpuid"),
+            asimdrdm: f.has("asimdrdm"),
+            // jscvt: f.has("jscvt"),
+            // fcma: f.has("fcma"),
+            lrcpc: f.has("lrcpc"),
+            // dcpop: f.has("dcpop"),
+            // sha3: f.has("sha3"),
+            // sm3: f.has("sm3"),
+            // sm4: f.has("sm4"),
+            asimddp: f.has("asimddp"),
+            // sha512: f.has("sha512"),
+            sve: f.has("sve"),
+        }
+    }
+}
+
+impl AtHwcap {
+    /// Initializes the cache from the feature -bits.
+    ///
+    /// The features are enabled approximately like in LLVM host feature detection:
+    /// https://github.com/llvm-mirror/llvm/blob/master/lib/Support/Host.cpp#L1273
+    fn cache(self) -> cache::Initializer {
+        let mut value = cache::Initializer::default();
+        {
+            let mut enable_feature = |f, enable| {
+                if enable {
+                    value.set(f as u32);
+                }
+            };
+
+            enable_feature(Feature::fp, self.fp);
+            // Half-float support requires float support
+            enable_feature(Feature::fp16, self.fp && self.fphp);
+            enable_feature(Feature::pmull, self.pmull);
+            enable_feature(Feature::crc, self.crc32);
+            enable_feature(Feature::lse, self.atomics);
+            enable_feature(Feature::rcpc, self.lrcpc);
+
+            // SIMD support requires float support - if half-floats are
+            // supported, it also requires half-float support:
+            let asimd = self.fp && self.asimd && (!self.fphp | self.asimdhp);
+            enable_feature(Feature::asimd, asimd);
+            // SIMD extensions require SIMD support:
+            enable_feature(Feature::rdm, self.asimdrdm && asimd);
+            enable_feature(Feature::dotprod, self.asimddp && asimd);
+            enable_feature(Feature::sve, self.sve && asimd);
+
+            // Crypto is specified as AES + PMULL + SHA1 + SHA2 per LLVM/hosts.cpp
+            enable_feature(Feature::crypto, self.aes && self.pmull && self.sha1 && self.sha2);
+        }
+        value
+    }
+}
+//! Parses /proc/cpuinfo
+#![cfg_attr(not(target_arch = "arm"), allow(dead_code))]
+
+extern crate std;
+use self::std::{prelude::v1::*, fs::File, io, io::Read};
+
+/// cpuinfo
+pub(crate) struct CpuInfo {
+    raw: String,
+}
+
+impl CpuInfo {
+    /// Reads /proc/cpuinfo into CpuInfo.
+    pub(crate) fn new() -> Result<Self, io::Error> {
+        let mut file = File::open("/proc/cpuinfo")?;
+        let mut cpui = Self { raw: String::new() };
+        file.read_to_string(&mut cpui.raw)?;
+        Ok(cpui)
+    }
+    /// Returns the value of the cpuinfo `field`.
+    pub(crate) fn field(&self, field: &str) -> CpuInfoField {
+        for l in self.raw.lines() {
+            if l.trim().starts_with(field) {
+                return CpuInfoField::new(l.split(": ").nth(1));
+            }
+        }
+        CpuInfoField(None)
+    }
+
+    /// Returns the `raw` contents of `/proc/cpuinfo`
+    #[cfg(test)]
+    fn raw(&self) -> &String {
+        &self.raw
+    }
+
+    #[cfg(test)]
+    fn from_str(other: &str) -> Result<Self, ::std::io::Error> {
+        Ok(Self {
+            raw: String::from(other),
+        })
+    }
+}
+
+/// Field of cpuinfo
+#[derive(Debug)]
+pub(crate) struct CpuInfoField<'a>(Option<&'a str>);
+
+impl<'a> PartialEq<&'a str> for CpuInfoField<'a> {
+    fn eq(&self, other: &&'a str) -> bool {
+        match self.0 {
+            None => other.is_empty(),
+            Some(f) => f == other.trim(),
+        }
+    }
+}
+
+impl<'a> CpuInfoField<'a> {
+    pub(crate) fn new<'b>(v: Option<&'b str>) -> CpuInfoField<'b> {
+        match v {
+            None => CpuInfoField::<'b>(None),
+            Some(f) => CpuInfoField::<'b>(Some(f.trim())),
+        }
+    }
+    /// Does the field exist?
+    #[cfg(test)]
+    pub(crate) fn exists(&self) -> bool {
+        self.0.is_some()
+    }
+    /// Does the field contain `other`?
+    pub(crate) fn has(&self, other: &str) -> bool {
+        match self.0 {
+            None => other.is_empty(),
+            Some(f) => {
+                let other = other.trim();
+                for v in f.split(' ') {
+                    if v == other {
+                        return true;
+                    }
+                }
+                false
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn raw_dump() {
+        let cpuinfo = CpuInfo::new().unwrap();
+        if cpuinfo.field("vendor_id") == "GenuineIntel" {
+            assert!(cpuinfo.field("flags").exists());
+            assert!(!cpuinfo.field("vendor33_id").exists());
+            assert!(cpuinfo.field("flags").has("sse"));
+            assert!(!cpuinfo.field("flags").has("avx314"));
+        }
+        println!("{}", cpuinfo.raw());
+    }
+
+    const CORE_DUO_T6500: &str = r"processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 23
+model name      : Intel(R) Core(TM)2 Duo CPU     T6500  @ 2.10GHz
+stepping        : 10
+microcode       : 0xa0b
+cpu MHz         : 1600.000
+cache size      : 2048 KB
+physical id     : 0
+siblings        : 2
+core id         : 0
+cpu cores       : 2
+apicid          : 0
+initial apicid  : 0
+fdiv_bug        : no
+hlt_bug         : no
+f00f_bug        : no
+coma_bug        : no
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm sse4_1 xsave lahf_lm dtherm
+bogomips        : 4190.43
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 36 bits physical, 48 bits virtual
+power management:
+";
+
+    #[test]
+    fn core_duo_t6500() {
+        let cpuinfo = CpuInfo::from_str(CORE_DUO_T6500).unwrap();
+        assert_eq!(cpuinfo.field("vendor_id"), "GenuineIntel");
+        assert_eq!(cpuinfo.field("cpu family"), "6");
+        assert_eq!(cpuinfo.field("model"), "23");
+        assert_eq!(
+            cpuinfo.field("model name"),
+            "Intel(R) Core(TM)2 Duo CPU     T6500  @ 2.10GHz"
+        );
+        assert_eq!(
+            cpuinfo.field("flags"),
+            "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe nx lm constant_tsc arch_perfmon pebs bts aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm sse4_1 xsave lahf_lm dtherm"
+        );
+        assert!(cpuinfo.field("flags").has("fpu"));
+        assert!(cpuinfo.field("flags").has("dtherm"));
+        assert!(cpuinfo.field("flags").has("sse2"));
+        assert!(!cpuinfo.field("flags").has("avx"));
+    }
+
+    const ARM_CORTEX_A53: &str =
+        r"Processor   : AArch64 Processor rev 3 (aarch64)
+        processor   : 0
+        processor   : 1
+        processor   : 2
+        processor   : 3
+        processor   : 4
+        processor   : 5
+        processor   : 6
+        processor   : 7
+        Features    : fp asimd evtstrm aes pmull sha1 sha2 crc32
+        CPU implementer : 0x41
+        CPU architecture: AArch64
+        CPU variant : 0x0
+        CPU part    : 0xd03
+        CPU revision    : 3
+
+        Hardware    : HiKey Development Board
+        ";
+
+    #[test]
+    fn arm_cortex_a53() {
+        let cpuinfo = CpuInfo::from_str(ARM_CORTEX_A53).unwrap();
+        assert_eq!(
+            cpuinfo.field("Processor"),
+            "AArch64 Processor rev 3 (aarch64)"
+        );
+        assert_eq!(
+            cpuinfo.field("Features"),
+            "fp asimd evtstrm aes pmull sha1 sha2 crc32"
+        );
+        assert!(cpuinfo.field("Features").has("pmull"));
+        assert!(!cpuinfo.field("Features").has("neon"));
+        assert!(cpuinfo.field("Features").has("asimd"));
+    }
+
+    const ARM_CORTEX_A57: &str = r"Processor	: Cortex A57 Processor rev 1 (aarch64)
+processor	: 0
+processor	: 1
+processor	: 2
+processor	: 3
+Features	: fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x1
+CPU part	: 0xd07
+CPU revision	: 1";
+
+    #[test]
+    fn arm_cortex_a57() {
+        let cpuinfo = CpuInfo::from_str(ARM_CORTEX_A57).unwrap();
+        assert_eq!(
+            cpuinfo.field("Processor"),
+            "Cortex A57 Processor rev 1 (aarch64)"
+        );
+        assert_eq!(
+            cpuinfo.field("Features"),
+            "fp asimd aes pmull sha1 sha2 crc32 wp half thumb fastmult vfp edsp neon vfpv3 tlsi vfpv4 idiva idivt"
+        );
+        assert!(cpuinfo.field("Features").has("pmull"));
+        assert!(cpuinfo.field("Features").has("neon"));
+        assert!(cpuinfo.field("Features").has("asimd"));
+    }
+
+    const POWER8E_POWERKVM: &str = r"processor       : 0
+cpu             : POWER8E (raw), altivec supported
+clock           : 3425.000000MHz
+revision        : 2.1 (pvr 004b 0201)
+
+processor       : 1
+cpu             : POWER8E (raw), altivec supported
+clock           : 3425.000000MHz
+revision        : 2.1 (pvr 004b 0201)
+
+processor       : 2
+cpu             : POWER8E (raw), altivec supported
+clock           : 3425.000000MHz
+revision        : 2.1 (pvr 004b 0201)
+
+processor       : 3
+cpu             : POWER8E (raw), altivec supported
+clock           : 3425.000000MHz
+revision        : 2.1 (pvr 004b 0201)
+
+timebase        : 512000000
+platform        : pSeries
+model           : IBM pSeries (emulated by qemu)
+machine         : CHRP IBM pSeries (emulated by qemu)";
+
+    #[test]
+    fn power8_powerkvm() {
+        let cpuinfo = CpuInfo::from_str(POWER8E_POWERKVM).unwrap();
+        assert_eq!(cpuinfo.field("cpu"), "POWER8E (raw), altivec supported");
+
+        assert!(cpuinfo.field("cpu").has("altivec"));
+    }
+
+    const POWER5P: &str = r"processor       : 0
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 1
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 2
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 3
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 4
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 5
+cpu             : POWER5+ (gs)
+clock           : 1900.098000MHz
+revision        : 2.1 (pvr 003b 0201)
+
+processor       : 6

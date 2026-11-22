@@ -171,7 +171,7 @@ def generate_diff_svg(stacks_a, total_a, stacks_b, total_b, title="Differential 
     <!-- Header -->
     <text x="10" y="25" font-family="sans-serif" font-size="16" font-weight="bold" fill="#0f172a">{safe_title}</text>
     <text x="10" y="42" font-family="sans-serif" font-size="11" fill="#64748b">
-        Red = Slower in Candidate (&Delta; &gt; 0) | Blue = Faster in Candidate (&Delta; &lt; 0) | Neutral = Unchanged
+        Red = Slower in Candidate (&#916; &gt; 0) | Blue = Faster in Candidate (&#916; &lt; 0) | Neutral = Unchanged
     </text>
 
     <!-- Legend -->

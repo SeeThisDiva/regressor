@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 regex = { path = "../regex" }
+regex-lite = { path = "../regex/regex-lite" }
 
 [profile.release]
 debug = true

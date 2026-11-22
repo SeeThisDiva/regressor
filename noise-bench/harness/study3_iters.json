@@ -1,0 +1,6 @@
+{
+  "compile_moderate": {
+    "iters": 400,
+    "warmup": 50
+  }
+}

@@ -2,15 +2,45 @@
 //!
 //! Usage:
 //!   noise-bench [bench_name] [iters] [warmup] [inject_ns] [--pmu | --format=raw|csv|json]
+//!   noise-bench --list-benchmarks
 //!
-//! Benchmarks:
-//!   compile_moderate   Regex::new() compilation cost
-//!   find_iter_userid   find_iter() scan across a 2,000-line synthetic log haystack
-//!   is_match_status    500x batched is_match() early-exit scan
+//! Benchmarks include the 3 legacy study benchmarks (`find_iter_userid`,
+//! `is_match_status`, `compile_moderate`) plus 22 benchmarks derived from
+//! `BurntSushi/rebar`.
+
+mod rebar;
 
 use regex::Regex;
 use std::hint::black_box;
 use std::time::Instant;
+
+pub const BENCHMARKS: &[&str] = &[
+    "find_iter_userid",
+    "is_match_status",
+    "compile_moderate",
+    "rebar_curated_01_literal_sherlock_en",
+    "rebar_curated_01_literal_sherlock_casei_en",
+    "rebar_curated_02_literal_alternate_sherlock_en",
+    "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "rebar_curated_03_date_unicode",
+    "rebar_curated_04_ruff_noqa_real",
+    "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "rebar_curated_05_lexer_veryl_single",
+    "rebar_curated_05_lexer_veryl_regexset",
+    "rebar_curated_06_cloudflare_redos_long",
+    "rebar_curated_08_words_all_russian",
+    "rebar_curated_09_aws_keys_quick",
+    "rebar_curated_10_bounded_repeat_letters_ru",
+    "rebar_curated_10_bounded_repeat_context",
+    "rebar_curated_12_dictionary_single",
+    "rebar_opt_onepass_first_three_words_en",
+    "rebar_opt_backtrack_words_en",
+    "rebar_opt_reverse_suffix_holmes",
+    "rebar_opt_reverse_inner_email",
+    "rebar_reported_i988_sql_injection_compile",
+    "rebar_unicode_compile_one_letter",
+    "rebar_wild_rustsec_cargo_audit_bytes",
+];
 
 #[derive(Debug, Clone, Copy)]
 pub struct Measurement {
@@ -35,7 +65,7 @@ pub fn read_tsc_ticks() -> u64 {
 }
 
 #[inline(always)]
-fn busy_wait_ns(inject_ns: u64) {
+pub(crate) fn busy_wait_ns(inject_ns: u64) {
     if inject_ns == 0 {
         return;
     }
@@ -48,7 +78,7 @@ fn busy_wait_ns(inject_ns: u64) {
 /// Times `iters` executions of `body`, capturing wall-clock nanoseconds and RDTSC ticks.
 /// `body` returns its live result so any Drop happens after timing ends.
 #[inline(always)]
-fn measure_iterations<R, F: FnMut() -> R>(iters: u32, mut body: F) -> Vec<Measurement> {
+pub(crate) fn measure_iterations<R, F: FnMut() -> R>(iters: u32, mut body: F) -> Vec<Measurement> {
     (0..iters)
         .map(|_| {
             let c0 = read_tsc_ticks();
@@ -122,9 +152,8 @@ fn run_bench(bench_name: &str, iters: u32, inject_ns: u64) -> Result<Vec<Measure
         "compile_moderate" => Ok(bench_compile(iters, inject_ns)),
         "find_iter_userid" => Ok(bench_find_all(iters, inject_ns)),
         "is_match_status" => Ok(bench_is_match(iters, inject_ns)),
-        other => Err(format!(
-            "unknown bench: {other} (expected compile_moderate, find_iter_userid, or is_match_status)"
-        )),
+        other => rebar::run_rebar_bench(other, iters, inject_ns)
+            .ok_or_else(|| format!("unknown bench: {other} (run with --list-benchmarks)")),
     }
 }
 
@@ -137,23 +166,35 @@ fn parse_pos_int<T: std::str::FromStr>(raw: Option<&&str>, default: T, name: &st
     }
 }
 
+fn print_benchmarks() {
+    for name in BENCHMARKS {
+        println!("{name}");
+    }
+}
+
 fn print_usage() {
     eprintln!(
         "Usage: noise-bench [bench_name] [iters] [warmup] [inject_ns] [--pmu | --format=raw|csv|json]\n\
+         \x20      noise-bench --list-benchmarks\n\
          \n\
-         Benchmarks (default: find_iter_userid):\n\
-         \x20 compile_moderate   Regex::new() compilation cost\n\
-         \x20 find_iter_userid   find_iter() across a 2,000-line haystack\n\
-         \x20 is_match_status    500x batched is_match() early-exit scan\n\
+         Defaults: bench=find_iter_userid, iters=2000, warmup=200, inject_ns=0, --format=raw\n\
          \n\
-         Defaults: iters=2000, warmup=200, inject_ns=0, --format=raw"
+         Benchmarks ({}):",
+        BENCHMARKS.len()
     );
+    for name in BENCHMARKS {
+        eprintln!("  {name}");
+    }
 }
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     if args.iter().any(|a| a == "-h" || a == "--help") {
         print_usage();
+        return;
+    }
+    if args.iter().any(|a| a == "--list-benchmarks" || a == "list-benchmarks") {
+        print_benchmarks();
         return;
     }
 
