@@ -28,7 +28,9 @@ pytest -p no:cacheprovider
 sh scripts/verify.sh
 ```
 
-On Windows without Git Bash, run `ruff check .` and `pytest -p no:cacheprovider` directly. Always use a temporary `--db` path when testing CLI commands locally so `regressor.db` is not left in your working tree.
+On Windows without Git Bash, run `ruff check .` and `pytest -p no:cacheprovider` directly. The test suite covers core statistics, SQLite/API hardening, the 25-benchmark suite ([`tests/test_benchsuite.py`](tests/test_benchsuite.py)), container/CI workflows ([`tests/test_platform_ci.py`](tests/test_platform_ci.py)), publishable summary reporting ([`tests/test_summary_reporting.py`](tests/test_summary_reporting.py)), and 25-benchmark dashboard scaling ([`tests/test_dashboard_scaling.py`](tests/test_dashboard_scaling.py)). Always use a temporary `--db` path when testing CLI commands locally so `regressor.db` is not left in your working tree.
+
+When preparing an upstream regression report after confirming a finding with `compare-interleaved` and [`noise-bench/analyze/win_profile.py`](noise-bench/analyze/win_profile.py), scaffold a standalone two-revision Cargo reproduction from [`reports/upstream/repro-template/`](reports/upstream/repro-template/) via [`noise-bench/analyze/stamp_repro.py`](noise-bench/analyze/stamp_repro.py).
 
 ## Adding a New Benchmark Adapter
 
