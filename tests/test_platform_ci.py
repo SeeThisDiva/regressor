@@ -260,6 +260,47 @@ def test_continuous_workflow_is_opt_in_and_least_privilege():
     assert "scripts/continuous_collect.py" in collect_runs
 
 
+def test_tests_workflow_builds_rust_binary_on_linux_from_dockerfile():
+    dockerfile_text = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    m_rust = re.search(r"^FROM\s+rust:([0-9]+\.[0-9]+(?:\.[0-9]+)?)-", dockerfile_text, flags=re.MULTILINE)
+    m_sha = re.search(r"^ARG\s+REGEX_SHA=([0-9a-f]{40})\b", dockerfile_text, flags=re.MULTILINE)
+    assert m_rust is not None and m_sha is not None
+
+    wf_text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+    assert m_sha.group(1) not in wf_text, "tests.yml must read REGEX_SHA from Dockerfile, not hardcode it"
+    assert m_rust.group(1) not in wf_text, "tests.yml must read Rust version from Dockerfile, not hardcode it"
+
+    data = yaml.safe_load(wf_text)
+    steps = data["jobs"]["pytest"]["steps"]
+
+    df_step = next(s for s in steps if s.get("id") == "dockerfile")
+    assert df_step["if"] == "runner.os == 'Linux'"
+    assert "Dockerfile" in df_step["run"]
+    assert "REGEX_SHA" in df_step["run"]
+
+    rust_step = next(s for s in steps if str(s.get("uses", "")).startswith("dtolnay/rust-toolchain@"))
+    assert rust_step["if"] == "runner.os == 'Linux'"
+    assert rust_step["with"]["toolchain"] == "${{ steps.dockerfile.outputs.rust_version }}"
+
+    clone_step = next(s for s in steps if "git clone" in str(s.get("run", "")))
+    assert clone_step["if"] == "runner.os == 'Linux'"
+    assert "https://github.com/rust-lang/regex.git ./regex" in clone_step["run"]
+    assert clone_step["env"]["REGEX_SHA"] == "${{ steps.dockerfile.outputs.regex_sha }}"
+
+    cache_step = next(s for s in steps if str(s.get("uses", "")).startswith("actions/cache@"))
+    assert cache_step["if"] == "runner.os == 'Linux'"
+    assert "~/.cargo/registry/" in cache_step["with"]["path"]
+    assert "noise-bench/target/" in cache_step["with"]["path"]
+
+    build_step = next(s for s in steps if "cargo build" in str(s.get("run", "")))
+    assert build_step["if"] == "runner.os == 'Linux'"
+    assert "cargo build --release --manifest-path noise-bench/Cargo.toml" in build_step["run"]
+
+    pytest_step = next(s for s in steps if "pytest " in str(s.get("run", "")))
+    assert "runner.os == 'Linux'" in pytest_step["env"]["REQUIRE_RUST_BINARY"]
+    assert "'1'" in pytest_step["env"]["REQUIRE_RUST_BINARY"]
+
+
 # ---------------------------------------------------------------------------
 # 3. Shell Scripts Lint & Dry-Run Checks
 # ---------------------------------------------------------------------------

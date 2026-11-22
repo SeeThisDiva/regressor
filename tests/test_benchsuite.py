@@ -143,10 +143,29 @@ def test_build_isolated_syncs_src_haystacks_and_cargo_lock(tmp_path: Path, monke
     assert (wt_bench / "src" / "main.rs").stat().st_mtime_ns == recorded
 
 
+def _require_or_skip_rust_binary(bin_path: Path) -> None:
+    """Fail when `REQUIRE_RUST_BINARY=1` and `bin_path` is absent; otherwise skip."""
+    if bin_path.exists():
+        return
+    if os.environ.get("REQUIRE_RUST_BINARY") == "1":
+        pytest.fail(f"REQUIRE_RUST_BINARY=1 is set, but {bin_path} is missing")
+    pytest.skip("noise-bench release binary not built")
+
+
+def test_require_rust_binary_env_var_fails_instead_of_skipping(tmp_path: Path, monkeypatch):
+    missing_bin = tmp_path / "missing-noise-bench"
+    monkeypatch.setenv("REQUIRE_RUST_BINARY", "1")
+    with pytest.raises(pytest.fail.Exception, match="REQUIRE_RUST_BINARY=1 is set"):
+        _require_or_skip_rust_binary(missing_bin)
+
+    monkeypatch.delenv("REQUIRE_RUST_BINARY", raising=False)
+    with pytest.raises(pytest.skip.Exception, match="noise-bench release binary not built"):
+        _require_or_skip_rust_binary(missing_bin)
+
+
 def test_rust_harness_binary_lists_and_runs_all_benchmarks():
     adapter = RegexAdapter()
-    if not adapter.bin_path.exists():
-        pytest.skip("noise-bench release binary not built")
+    _require_or_skip_rust_binary(adapter.bin_path)
 
     bin_benches = adapter.query_binary_benchmarks()
     assert bin_benches == adapter.list_benchmarks()
