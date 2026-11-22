@@ -171,3 +171,7 @@ def test_docs_match_calibrated_layout_floor_section(layout_floor_result: Dict[st
     assert "Calibrated layout floor (post hoc)" in readme
     assert f"{oof['after_fpr_pct']:.2f}%" in readme
     assert oof_ci in readme
+    assert "22/24 = 91.67%" in readme
+    assert "[74.15%, 97.68%]" in readme
+    assert "16/18 = 88.89%" in readme
+    assert "[67.20%, 96.90%]" in readme
