@@ -13,7 +13,6 @@ import gzip
 import json
 import math
 import platform
-import re
 import sys
 import tomllib
 from pathlib import Path
@@ -41,6 +40,16 @@ from core.db import Database, resolve_commit_pair
 from core.detector import bh_fdr_correct, compare_benchmark_runs, compare_distributions
 from core.interleaved import run_interleaved
 from core.models import ProjectConfig
+from core.report import (
+    compute_project_summary,
+    compute_summary_from_records,
+    discover_flamegraphs,
+    format_summary_text,
+    load_project_noise_floor_multiplier,
+    load_triage_entries,
+    render_summary_markdown,
+    validate_project_name,
+)
 from core.samples import read_sample_median
 from core.series_detector import detect_series_changepoints_edivisive, rolling_baseline_compare
 from core.session import (
@@ -56,7 +65,7 @@ ADAPTER_REGISTRY = {
     "PyMicroAdapter": PyMicroAdapter,
 }
 
-_SAFE_PROJECT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
+_validate_project_name = validate_project_name
 
 _COMMIT_EXPORT_FIELDS = (
     "sha",
@@ -77,16 +86,9 @@ _COMMIT_EXPORT_FIELDS = (
 # ---------------------------------------------------------------------------
 
 
-def _validate_project_name(project_name: str) -> str:
-    """Reject empty names or path-traversal sequences before resolving project files."""
-    if not project_name or ".." in project_name or not _SAFE_PROJECT_RE.match(project_name):
-        raise ValueError(f"Invalid project name: {project_name!r}")
-    return project_name
-
-
 def _resolve_project_file(project_name: str, suffix: str) -> Path:
     """Resolve `projects/<project_name><suffix>` safely inside the projects directory."""
-    _validate_project_name(project_name)
+    validate_project_name(project_name)
     projects_dir = (ROOT_DIR / "projects").resolve()
     path = (projects_dir / f"{project_name}{suffix}").resolve()
     if path.parent != projects_dir:
@@ -131,18 +133,14 @@ def _project_benchmarks(db: Database, proj_id: int, name: str) -> List[str]:
 
 def _project_noise_floor_multiplier(name: str) -> float:
     """Return configured noise-floor multiplier from `projects/<name>.toml` (default 3.0)."""
-    cfg = _try_load_project_config(name)
-    return cfg.noise_floor_multiplier if cfg else 3.0
+    return load_project_noise_floor_multiplier(name)
 
 
 def _load_triage(name: str) -> Dict[tuple, tuple]:
     """Load optional human triage annotations from `projects/<name>.triage.json`."""
-    path = _resolve_project_file(name, ".triage.json")
-    if not path.exists():
-        return {}
     return {
         (t["benchmark"], t["commit"]): (t["note"], t["status"])
-        for t in json.loads(path.read_text(encoding="utf-8"))
+        for t in load_triage_entries(name)
     }
 
 
@@ -457,13 +455,37 @@ def _compute_batch_comparisons(
                 "base_commit_id": base_commit["id"],
                 "cand_commit_id": cand_commit["id"],
                 "base_sha": base_commit["short_sha"],
+                "base_full_sha": base_commit["sha"],
                 "cand_sha": cand_commit["short_sha"],
+                "cand_full_sha": cand_commit["sha"],
                 "cand_subject": cand_commit["subject"],
                 "benchmark": bench,
                 "session_gap_min": gap_min,
             })
             comparisons.append(res)
     return comparisons
+
+
+def _lookup_triage_note(
+    triage_notes: Dict[tuple, tuple],
+    benchmark: str,
+    cand_sha: str,
+    cand_full_sha: str = "",
+) -> Tuple[str, str]:
+    """Match a triage `(note, status)` tuple by exact short SHA or prefix."""
+    direct = triage_notes.get((benchmark, cand_sha[:7])) or triage_notes.get((benchmark, cand_sha))
+    if direct is not None:
+        return direct
+    for (tb, tsha), val in triage_notes.items():
+        if tb != benchmark or not tsha:
+            continue
+        if (
+            cand_sha.startswith(tsha)
+            or cand_full_sha.startswith(tsha)
+            or (len(cand_sha) >= 4 and tsha.startswith(cand_sha))
+        ):
+            return val
+    return ("", "unreviewed")
 
 
 def _persist_batch_comparisons(
@@ -476,7 +498,9 @@ def _persist_batch_comparisons(
     n_flags = 0
     n_flags_fdr = 0
     for c in comparisons:
-        note, status = triage_notes.get((c["benchmark"], c["cand_sha"][:7]), ("", "unreviewed"))
+        note, status = _lookup_triage_note(
+            triage_notes, c["benchmark"], c["cand_sha"], c.get("cand_full_sha", "")
+        )
         if c["verdict"] == "flag":
             n_flags += 1
             if c["fdr_significant"]:
@@ -936,6 +960,71 @@ def cmd_serve(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_summary(args: argparse.Namespace) -> int:
+    """Compute publishable numbers from DB (or a study archive) + triage JSON."""
+    _validate_project_name(args.project)
+    study_arg = getattr(args, "study", None)
+    if study_arg:
+        from server.app import _discover_studies, _load_archive_dataset
+
+        data_dir = ROOT_DIR / "data"
+        projects_dir = ROOT_DIR / "projects"
+        assets_dir = ROOT_DIR / "assets" / "flamegraphs"
+        studies = {s["id"]: s for s in _discover_studies(data_dir)}
+        if study_arg in studies:
+            meta = studies[study_arg]
+        else:
+            candidate = Path(study_arg)
+            if not candidate.is_file():
+                print(f"Error: Study '{study_arg}' not found.", file=sys.stderr)
+                return 1
+            meta = {"id": candidate.stem, "path": str(candidate), "default_fdr": "by"}
+        fdr = getattr(args, "fdr", None) or meta["default_fdr"]
+        ds = _load_archive_dataset(meta, fdr, projects_dir)
+        if ds["project"] != args.project:
+            print(f"Error: Study '{study_arg}' is for project '{ds['project']}', not '{args.project}'.", file=sys.stderr)
+            return 1
+        summary = compute_summary_from_records(
+            project=args.project,
+            commits=ds["commits"],
+            comparisons=ds["comparisons"],
+            triage_entries=load_triage_entries(args.project, projects_dir=projects_dir, assets_dir=assets_dir),
+            benchmarks=ds["benchmarks"],
+            flamegraphs=discover_flamegraphs(assets_dir=assets_dir),
+            study=meta["id"],
+        )
+    else:
+        db, proj_id = _require_project(args.db, args.project, init_hint=True)
+        if proj_id is None:
+            return 1
+        summary = compute_project_summary(db, args.project)
+
+    if args.markdown:
+        out_path = Path(args.markdown)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(render_summary_markdown(summary), encoding="utf-8")
+
+    if args.json:
+        print(json.dumps(summary, indent=2))
+    else:
+        print(format_summary_text(summary), end="")
+        if args.markdown:
+            print(f"[regressor] Wrote summary markdown -> {args.markdown}")
+    return 0
+
+
+def cmd_export_site(args: argparse.Namespace) -> int:
+    """Export a self-contained static dashboard bundle for GitHub Pages / static hosting."""
+    from server.app import export_static_site
+
+    info = export_static_site(Path(args.out_dir), db_path=args.db)
+    print(
+        f"[regressor] Exported static site to {info['out_dir']} "
+        f"({info['studies']} studies, {info['flamegraphs']} flamegraphs, {info['files_written']} files)"
+    )
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # CLI Argument Validation & Parser Configuration
 # ---------------------------------------------------------------------------
@@ -1237,6 +1326,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_srv.add_argument("--port", type=positive_int, default=8000, help="HTTP port to bind on localhost (default: %(default)s)")
 
+    p_sum = subparsers.add_parser(
+        "summary",
+        help="Compute publishable summary numbers (commits, flags, FP rate + Wilson CI, issues)",
+        description="Compute publishable numbers from DB + triage JSON in text, JSON, and/or Markdown.",
+    )
+    p_sum.add_argument("project", default="regex", nargs="?", help="Project name (default: %(default)s)")
+    p_sum.add_argument("--json", action="store_true", help="Print machine-readable summary JSON to stdout")
+    p_sum.add_argument("--markdown", help="Write Markdown summary report to file")
+    p_sum.add_argument("--study", help="Optional study ID (study1/study2/study3) or .json.gz archive path")
+    p_sum.add_argument("--fdr", choices=("bh", "by"), help="FDR method when summarizing a --study archive")
+
+    p_site = subparsers.add_parser(
+        "export-site",
+        help="Export a static dashboard site (HTML/JS/JSON/SVGs) for GitHub Pages",
+        description="Export a self-contained static dashboard bundle to a target directory.",
+    )
+    p_site.add_argument("out_dir", nargs="?", default="site", help="Output directory (default: %(default)s)")
+
     return parser
 
 
@@ -1263,6 +1370,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         "changepoint": cmd_changepoint,
         "bisect": cmd_bisect,
         "serve": cmd_serve,
+        "summary": cmd_summary,
+        "export-site": cmd_export_site,
     }
     try:
         return commands[args.command](args)

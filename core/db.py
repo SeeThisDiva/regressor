@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS comparisons (
   verdict TEXT,
   fdr_significant BOOLEAN,
   resolution_note TEXT,
-  resolution_status TEXT,  -- 'unreviewed' | 'confirmed' | 'false_positive'
+  resolution_status TEXT,  -- 'unreviewed' | 'confirmed' | 'false_positive' | 'layout_artifact'
   canary_status TEXT DEFAULT 'OK',
   pmu_status TEXT DEFAULT 'UNAVAILABLE',
   FOREIGN KEY(project_id) REFERENCES projects(id),
@@ -534,7 +534,9 @@ class Database:
                 """
                 SELECT c.*,
                        b.short_sha AS base_sha,
+                       b.sha AS base_full_sha,
                        k.short_sha AS cand_sha,
+                       k.sha AS cand_full_sha,
                        k.subject AS cand_subject
                 FROM comparisons c
                 JOIN commits b ON c.base_commit_id = b.id

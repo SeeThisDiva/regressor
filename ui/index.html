@@ -10,6 +10,7 @@
   :root {
     --bg: #14120F;
     --bg-panel: #1A1712;
+    --bg-card: #171410;
     --hairline: #332E26;
     --hairline-light: #4A4237;
     --text: #EDE8DF;
@@ -19,56 +20,142 @@
     --moss-dim: rgba(122, 148, 113, 0.14);
     --amber: #C99A3E;
     --amber-dim: rgba(201, 154, 62, 0.16);
-    --crimson: #C25D4E;
-    --crimson-dim: rgba(194, 93, 78, 0.16);
+    --crimson: #D95E4E;
+    --crimson-dim: rgba(217, 94, 78, 0.18);
+    --slate: #6897BB;
+    --slate-dim: rgba(104, 151, 187, 0.16);
+    --violet: #A584C7;
+    --violet-dim: rgba(165, 132, 199, 0.16);
     --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, monospace;
     --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--mono); }
   body { padding-bottom: 100px; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-  /* === Masthead & Summary Statline === */
-  header.masthead { border-bottom: 1px solid var(--hairline); padding: 48px 0 32px; }
-  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  /* === Masthead & Publishable Summary Statline === */
+  header.masthead { border-bottom: 1px solid var(--hairline); padding: 40px 0 28px; }
+  .top-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .top-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
   .eyebrow .repo { color: var(--moss); font-weight: 600; }
-  .proj-select {
+  .proj-select, .filter-input {
     background: var(--bg-panel); color: var(--text); border: 1px solid var(--hairline);
-    padding: 4px 10px; font-family: var(--mono); font-size: 11px; border-radius: 2px;
-    outline: none; cursor: pointer;
+    padding: 5px 10px; font-family: var(--mono); font-size: 11px; border-radius: 2px;
+    outline: none;
   }
-  .proj-select:focus { border-color: var(--amber); }
+  .proj-select { cursor: pointer; }
+  .proj-select:focus, .filter-input:focus { border-color: var(--amber); }
 
   h1.hero {
-    font-family: var(--serif); font-weight: 400; font-size: 58px; line-height: 1.05;
+    font-family: var(--serif); font-weight: 400; font-size: 52px; line-height: 1.06;
     margin: 0 0 8px; color: var(--text); letter-spacing: -0.01em;
   }
-  .hero-sub { font-family: var(--mono); font-size: 14px; color: var(--text-dim); margin-bottom: 28px; }
-  .statline { display: flex; flex-wrap: wrap; border-top: 1px solid var(--hairline); }
-  .stat { flex: 1; min-width: 130px; padding: 16px 20px 0 0; border-right: 1px solid var(--hairline); }
+  .hero-sub { font-family: var(--mono); font-size: 13px; color: var(--text-dim); margin-bottom: 24px; line-height: 1.5; }
+  .statline {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
+  }
+  .stat { padding: 14px 16px 14px 0; border-right: 1px solid var(--hairline); padding-left: 12px; }
+  .stat:first-child { padding-left: 0; }
   .stat:last-child { border-right: none; }
-  .stat .n { font-family: var(--serif); font-size: 28px; color: var(--text); }
+  .stat .n { font-family: var(--serif); font-size: 26px; color: var(--text); line-height: 1.15; }
   .stat .n.amber { color: var(--amber); }
   .stat .n.moss { color: var(--moss); }
+  .stat .n.crimson { color: var(--crimson); }
+  .stat .n.slate { color: var(--slate); }
+  .stat .n.violet { color: var(--violet); }
   .stat .l { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 4px; }
+  .stat .sub { font-size: 10px; color: var(--text-dim); margin-top: 3px; }
 
-  /* === Benchmark Time-Series Panels === */
-  section.panel { margin-top: 44px; }
-  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-  .panel-title { font-family: var(--serif); font-size: 21px; color: var(--text); }
-  .panel-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 14px; }
-  .chart-box {
-    background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px;
-    padding: 18px 18px 10px; position: relative; height: 260px;
+  .issues-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding-top: 14px; font-size: 11px; color: var(--text-dim);
   }
-  .legend-row { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 10px; font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.02em; }
+  .issue-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 8px; border-radius: 2px; border: 1px solid rgba(217, 94, 78, 0.45);
+    background: var(--crimson-dim); color: var(--text); font-size: 11px;
+  }
+  .issue-pill:hover { border-color: var(--crimson); text-decoration: none; }
+
+  /* === Benchmark Explorer (Toolbar, Focus Chart & Small Multiples) === */
+  section.explorer { margin-top: 36px; }
+  .explorer-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+  .panel-title { font-family: var(--serif); font-size: 22px; color: var(--text); }
+  .panel-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 14px; line-height: 1.5; }
+  .bench-count { font-size: 11px; color: var(--text-dim); }
+
+  .bench-toolbar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px;
+    padding: 10px 12px; margin-bottom: 12px;
+  }
+  .bench-toolbar .filter-input { min-width: 220px; flex: 1; }
+  .bench-toolbar .picker-select { min-width: 230px; max-width: 340px; }
+  .view-toggle { display: inline-flex; border: 1px solid var(--hairline); border-radius: 2px; overflow: hidden; }
+  .view-btn {
+    background: var(--bg); color: var(--text-dim); border: none; border-right: 1px solid var(--hairline);
+    padding: 5px 10px; font-family: var(--mono); font-size: 10.5px; cursor: pointer;
+  }
+  .view-btn:last-child { border-right: none; }
+  .view-btn.active { background: var(--hairline); color: var(--text); font-weight: 600; }
+
+  .legend-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 10px 0 18px; font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.02em; }
   .legend-row .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
   .sw.moss { background: var(--moss); }
+  .sw.crimson { background: var(--crimson); box-shadow: 0 0 0 3px var(--crimson-dim); }
+  .sw.violet { background: var(--violet); box-shadow: 0 0 0 3px var(--violet-dim); }
+  .sw.slate { background: var(--slate); box-shadow: 0 0 0 3px var(--slate-dim); }
   .sw.amber { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
   .sw.band { background: var(--moss-dim); border: 1px solid var(--moss); border-radius: 2px; width: 12px; height: 8px; }
+  .sw.ci-band { background: rgba(122, 148, 113, 0.28); border: 1px dashed var(--moss); border-radius: 2px; width: 12px; height: 8px; }
   .sw.brk { background: var(--moss); border: 1.5px solid #E8DFC8; border-radius: 1px; width: 7px; height: 7px; transform: rotate(45deg); }
+
+  .focus-panel {
+    background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px;
+    padding: 16px 18px 14px; margin-bottom: 22px;
+  }
+  .focus-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .focus-title { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--text); }
+  .focus-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 11px; color: var(--text-dim); }
+  .focus-chart-box { position: relative; height: 265px; }
+  .focus-artifacts {
+    margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hairline);
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 11px; color: var(--text-dim);
+  }
+
+  .small-multiples-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(335px, 1fr)); gap: 14px;
+  }
+  .sm-card {
+    background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px;
+    padding: 12px 14px 10px; display: flex; flex-direction: column; gap: 6px;
+    transition: border-color 0.15s;
+  }
+  .sm-card.active { border-color: var(--amber); }
+  .sm-card.has-confirmed { border-color: rgba(217, 94, 78, 0.55); }
+  .sm-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .sm-name {
+    font-size: 12px; font-weight: 600; color: var(--text); word-break: break-word;
+    background: none; border: none; padding: 0; font-family: var(--mono); text-align: left; cursor: pointer;
+  }
+  .sm-name:hover { color: var(--amber); text-decoration: underline; }
+  .sm-sub { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-faint); }
+  .sm-chart-box { position: relative; height: 145px; }
+  .sm-foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px;
+    border-top: 1px solid var(--hairline); padding-top: 7px; font-size: 10px; color: var(--text-dim);
+  }
+  .sm-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .link-btn {
+    background: none; border: 1px solid var(--hairline); color: var(--text-dim);
+    padding: 2px 7px; font-family: var(--mono); font-size: 10px; border-radius: 2px; cursor: pointer;
+  }
+  .link-btn:hover { border-color: var(--amber); color: var(--text); }
 
   /* === Banners & Badges === */
   .session-banner {
@@ -79,18 +166,21 @@
   .session-banner code { font-family: var(--mono); color: var(--text); }
   .error-banner {
     display: none; margin-top: 14px; padding: 10px 12px; font-size: 11.5px; line-height: 1.4;
-    color: var(--crimson); border: 1px solid rgba(194, 93, 78, 0.45); border-radius: 2px; background: var(--crimson-dim);
+    color: var(--crimson); border: 1px solid rgba(217, 94, 78, 0.45); border-radius: 2px; background: var(--crimson-dim);
   }
   .badge {
     display: inline-block; font-size: 9.5px; letter-spacing: 0.04em; padding: 2px 7px;
-    border-radius: 2px; border: 1px solid var(--hairline); text-transform: uppercase;
+    border-radius: 2px; border: 1px solid var(--hairline); text-transform: uppercase; white-space: nowrap;
   }
-  .badge.fp { color: var(--moss); border-color: rgba(122, 148, 113, 0.3); background: var(--moss-dim); }
-  .badge.flag { color: var(--amber); border-color: rgba(201, 154, 62, 0.3); background: var(--amber-dim); }
+  .badge.confirmed { color: var(--crimson); border-color: rgba(217, 94, 78, 0.45); background: var(--crimson-dim); }
+  .badge.fp { color: var(--slate); border-color: rgba(104, 151, 187, 0.4); background: var(--slate-dim); }
+  .badge.layout { color: var(--violet); border-color: rgba(165, 132, 199, 0.45); background: var(--violet-dim); }
+  .badge.flag { color: var(--amber); border-color: rgba(201, 154, 62, 0.35); background: var(--amber-dim); }
+  .badge.clean { color: var(--moss); border-color: rgba(122, 148, 113, 0.35); background: var(--moss-dim); }
   .badge.ok { color: var(--text-dim); }
 
   /* === Ad-Hoc Pairwise Comparison === */
-  section.compare-tool { margin-top: 56px; background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px; padding: 24px; }
+  section.compare-tool { margin-top: 48px; background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px; padding: 24px; }
   .tool-title { font-family: var(--serif); font-size: 20px; color: var(--text); margin-bottom: 6px; }
   .tool-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 18px; }
   .compare-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
@@ -107,28 +197,29 @@
   }
   .btn:hover { background: var(--moss); color: var(--bg); border-color: var(--moss); }
   .compare-results { margin-top: 20px; border-top: 1px solid var(--hairline); padding-top: 16px; display: none; }
-  .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 12px; }
-  .cmp-card { background: var(--bg); border: 1px solid var(--hairline); padding: 14px; border-radius: 2px; }
-  .cmp-card-bench { font-size: 12px; color: var(--text); font-weight: 600; margin-bottom: 8px; }
-  .cmp-card-shift { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; }
+  .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 12px; }
+  .cmp-card { background: var(--bg); border: 1px solid var(--hairline); padding: 12px; border-radius: 2px; }
+  .cmp-card-bench { font-size: 11.5px; color: var(--text); font-weight: 600; margin-bottom: 6px; word-break: break-word; }
+  .cmp-card-shift { font-family: var(--serif); font-size: 22px; margin-bottom: 4px; }
   .cmp-card-shift.flag { color: var(--amber); }
   .cmp-card-shift.ok { color: var(--moss); }
-  .cmp-card-meta { font-size: 10.5px; color: var(--text-faint); line-height: 1.6; }
+  .cmp-card-meta { font-size: 10.5px; color: var(--text-faint); line-height: 1.55; }
 
   /* === Differential Flamegraphs === */
-  section.flamegraphs { margin-top: 56px; }
-  .flame-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--hairline); margin-bottom: 16px; }
+  section.flamegraphs { margin-top: 48px; }
+  .flame-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 4px; }
+  .flame-tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--hairline); margin-bottom: 16px; }
   .flame-tab {
-    padding: 8px 16px; background: none; border: none; border-bottom: 2px solid transparent;
+    padding: 8px 14px; background: none; border: none; border-bottom: 2px solid transparent;
     color: var(--text-dim); font-family: var(--mono); font-size: 11px; cursor: pointer;
   }
   .flame-tab.active { color: var(--text); border-bottom: 2px solid var(--amber); font-weight: 600; }
   .flame-container { background: var(--bg-panel); border: 1px solid var(--hairline); border-radius: 2px; padding: 12px; text-align: center; }
-  .flame-frame { width: 100%; height: 580px; border: none; background: var(--bg); }
-  .flame-caption { font-size: 11px; color: var(--text-faint); margin-top: 10px; text-align: left; line-height: 1.6; }
+  .flame-frame { width: 100%; height: 540px; border: none; background: var(--bg); }
+  .flame-caption { font-size: 11px; color: var(--text-faint); margin-top: 10px; text-align: left; line-height: 1.6; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
 
   /* === Investigation Triage Log === */
-  section.log { margin-top: 56px; }
+  section.log { margin-top: 48px; }
   .log-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
   .log-desc { font-size: 11px; color: var(--text-faint); margin-bottom: 18px; }
   table.log-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -139,11 +230,13 @@
   table.log-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--hairline); vertical-align: top; color: var(--text-dim); }
   table.log-table td.sha { color: var(--amber); white-space: nowrap; cursor: pointer; }
   table.log-table td.sha:hover { text-decoration: underline; }
-  table.log-table td.bench { color: var(--text); white-space: nowrap; }
+  table.log-table td.bench { color: var(--text); white-space: nowrap; cursor: pointer; }
+  table.log-table td.bench:hover { color: var(--amber); text-decoration: underline; }
   table.log-table td.shift { font-family: var(--mono); font-weight: 600; }
   table.log-table td.shift.pos { color: var(--crimson); }
   table.log-table td.shift.neg { color: var(--moss); }
-  .triage-note { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+  .triage-note { font-size: 11px; color: var(--text-faint); margin-top: 5px; line-height: 1.45; }
+  .triage-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; font-size: 10.5px; }
   .empty-state { text-align: center; color: var(--text-faint); padding: 24px; font-size: 12px; }
 
   /* === Commit Drill-Down Modal & Footer === */
@@ -153,7 +246,7 @@
   }
   .modal-card {
     background: var(--bg-panel); border: 1px solid var(--hairline-light); border-radius: 3px;
-    max-width: 760px; width: 90%; max-height: 88vh; overflow-y: auto; padding: 28px;
+    max-width: 780px; width: 92%; max-height: 88vh; overflow-y: auto; padding: 28px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   }
   .modal-head {
@@ -167,7 +260,7 @@
   .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; font-size: 11.5px; }
   .meta-item .lbl { font-size: 9.5px; text-transform: uppercase; color: var(--text-faint); letter-spacing: 0.05em; margin-bottom: 2px; }
   .meta-item .val { color: var(--text); font-family: var(--mono); }
-  .modal-bench-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .modal-bench-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
   .modal-chart-box { height: 200px; margin-bottom: 20px; }
   .rep-header { margin-bottom: 4px; }
   .rep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 6px; font-size: 10px; margin-top: 8px; }
@@ -180,27 +273,80 @@
 <body>
 <div class="wrap">
 
-  <!-- Masthead -->
+  <!-- Masthead & Publishable Summary Panel -->
   <header class="masthead">
     <div class="top-bar">
       <div class="eyebrow">performance ledger &nbsp;·&nbsp; <span class="repo" id="active-repo">–</span> &nbsp;·&nbsp; continuous detection</div>
-      <div>
+      <div class="top-controls">
+        <select class="proj-select" id="study-selector" aria-label="Select study dataset"></select>
         <select class="proj-select" id="project-selector" aria-label="Select project"></select>
       </div>
     </div>
     <h1 class="hero" id="hero-headline">Loading…</h1>
-    <div class="hero-sub" id="hero-subline">Fetching project telemetry from SQLite</div>
+    <div class="hero-sub" id="hero-subline">Fetching project telemetry and publishable summary…</div>
     <div class="statline">
-      <div class="stat"><div class="n" id="stat-commits">–</div><div class="l">commits analyzed</div></div>
-      <div class="stat"><div class="n" id="stat-comparisons">–</div><div class="l">pairwise comparisons</div></div>
-      <div class="stat"><div class="n amber" id="stat-flags">–</div><div class="l">flagged (pre &amp; post FDR)</div></div>
-      <div class="stat"><div class="n moss" id="stat-confirmed">–</div><div class="l">confirmed real</div></div>
-      <div class="stat"><div class="n" id="stat-triage">–</div><div class="l">investigated &amp; explained</div></div>
+      <div class="stat"><div class="n" id="stat-commits">–</div><div class="l">commits analyzed</div><div class="sub" id="stat-benchmarks-sub">–</div></div>
+      <div class="stat"><div class="n" id="stat-comparisons">–</div><div class="l">comparisons</div></div>
+      <div class="stat"><div class="n amber" id="stat-flags">–</div><div class="l">flagged (post-FDR)</div><div class="sub" id="stat-prefdr-sub">–</div></div>
+      <div class="stat"><div class="n crimson" id="stat-confirmed">–</div><div class="l">confirmed real</div></div>
+      <div class="stat"><div class="n slate" id="stat-fp">–</div><div class="l">false positives</div></div>
+      <div class="stat"><div class="n" id="stat-fp-rate">–</div><div class="l">FP rate (FP/flagged)</div><div class="sub" id="stat-fp-ci">Wilson 95% CI: –</div></div>
+      <div class="stat"><div class="n violet" id="stat-layout">–</div><div class="l">layout artifacts</div></div>
+      <div class="stat"><div class="n" id="stat-triage">–</div><div class="l">triaged / flagged</div></div>
     </div>
+    <div class="issues-bar" id="upstream-issues-bar"></div>
   </header>
 
-  <!-- Benchmark Time-Series Charts -->
-  <div id="panels-container"></div>
+  <!-- Benchmark Explorer: Picker, Focus Chart & Small Multiples Grid -->
+  <section class="explorer">
+    <div class="explorer-head">
+      <div class="panel-title">per-benchmark performance over time</div>
+      <div class="bench-count" id="bench-showing-count">0 benchmarks</div>
+    </div>
+    <div class="panel-desc">Median latency across independent process runs with p10–p90 dispersion and 95% median CI bands. Flagged points are colored by human triage status; click any point to inspect the run histogram.</div>
+
+    <div class="bench-toolbar">
+      <input class="filter-input" type="search" id="bench-search" placeholder="Filter benchmarks (e.g. rebar, compile, unicode)…" aria-label="Filter benchmarks">
+      <select class="proj-select" id="bench-status-filter" aria-label="Filter benchmarks by triage status">
+        <option value="all">Status: All benchmarks</option>
+        <option value="flagged">Flagged only</option>
+        <option value="confirmed">Confirmed real</option>
+        <option value="layout_artifact">Layout artifact</option>
+        <option value="false_positive">False positive</option>
+        <option value="unreviewed">Unreviewed</option>
+      </select>
+      <select class="proj-select picker-select" id="benchmark-picker" aria-label="Pick benchmark"></select>
+      <div class="view-toggle" role="group" aria-label="Chart layout mode">
+        <button class="view-btn active" type="button" id="view-both-btn" data-view="both">Focus + Grid</button>
+        <button class="view-btn" type="button" id="view-grid-btn" data-view="grid">Grid Only</button>
+        <button class="view-btn" type="button" id="view-focus-btn" data-view="focus">Focus Only</button>
+      </div>
+    </div>
+
+    <div class="legend-row">
+      <span><span class="sw moss"></span>normal</span>
+      <span><span class="sw crimson"></span>confirmed</span>
+      <span><span class="sw violet"></span>layout artifact</span>
+      <span><span class="sw slate"></span>false positive</span>
+      <span><span class="sw amber"></span>unreviewed flag</span>
+      <span><span class="sw band"></span>p10–p90 dispersion</span>
+      <span><span class="sw ci-band"></span>95% median CI</span>
+      <span><span class="sw brk"></span>session break (&gt;<span id="legend-break-min">15</span> min gap)</span>
+    </div>
+
+    <div class="focus-panel" id="focus-panel">
+      <div class="focus-head">
+        <div class="focus-title" id="focus-title">–</div>
+        <div class="focus-meta" id="focus-meta"></div>
+      </div>
+      <div class="focus-chart-box">
+        <canvas id="focus-chart-canvas"></canvas>
+      </div>
+      <div class="focus-artifacts" id="focus-artifacts"></div>
+    </div>
+
+    <div class="small-multiples-grid" id="small-multiples-grid"></div>
+  </section>
 
   <!-- Ad-Hoc Pairwise Comparison Tool -->
   <section class="compare-tool">
@@ -226,21 +372,18 @@
     </div>
   </section>
 
-  <!-- Differential Flamegraphs (shown for the regex baseline study) -->
+  <!-- Differential Flamegraphs -->
   <section class="flamegraphs" id="flamegraph-section">
-    <div class="panel-head">
+    <div class="flame-head">
       <div class="panel-title">differential profile inspection</div>
+      <a id="flame-open-link" href="/flamegraphs/flamegraph_diff.svg" target="_blank" rel="noopener noreferrer">Open SVG in new tab ↗</a>
     </div>
-    <div class="panel-desc">Software cpu-clock sampling profiles (perf record -e cpu-clock; no hardware counters) from a re-measurement of 16d47c5 -&gt; 0a446ec. The original +12.13% wall-clock flag did not reproduce: total sampled CPU time differed by +0.3%.</div>
-    <div class="flame-tabs">
-      <button class="flame-tab active" type="button" data-flame="diff">Differential Flamegraph (Δ)</button>
-      <button class="flame-tab" type="button" data-flame="candidate">Candidate Commit (0a446ec)</button>
-      <button class="flame-tab" type="button" data-flame="parent">Parent Commit (16d47c5)</button>
-    </div>
+    <div class="panel-desc" id="flame-section-desc">Flamegraph SVGs discovered in assets/flamegraphs/. Click any tab or link from a flagged transition to inspect it here.</div>
+    <div class="flame-tabs" id="flame-tabs"></div>
     <div class="flame-container">
       <iframe class="flame-frame" id="flame-iframe" src="/flamegraphs/flamegraph_diff.svg" title="Differential flamegraph"></iframe>
       <div class="flame-caption" id="flame-caption-text">
-        <b>Differential profile:</b> red = more sampled time in the candidate, blue = less. No function shows a large change. This shows the slowdown did not reproduce on a second measurement; it does not establish what caused the original shift.
+        <span><b>Differential profile:</b> red = more sampled time in the candidate, blue = less.</span>
       </div>
     </div>
   </section>
@@ -248,7 +391,7 @@
   <!-- Investigation Triage Log -->
   <section class="log">
     <div class="log-title">investigation log</div>
-    <div class="log-desc">Every flag raised by the detector, with the human triage note. Hardware counters were not available for this dataset; the legacy runs had no canary.</div>
+    <div class="log-desc">Every post-FDR flag raised by the detector, overlaid with human triage status from projects/&lt;project&gt;.triage.json, flamegraph SVGs, and upstream issue links.</div>
     <table class="log-table">
       <thead>
         <tr>
@@ -258,7 +401,7 @@
           <th>p-value</th>
           <th>Noise Floor</th>
           <th>Gap before run</th>
-          <th>Resolution</th>
+          <th>Resolution &amp; Artifacts</th>
         </tr>
       </thead>
       <tbody id="log-body"></tbody>
@@ -268,8 +411,8 @@
   <footer>
     <b>Method:</b> Non-parametric Mann-Whitney U test per benchmark per adjacent commit pair on independent per-run medians.
     Effect size estimated via Hodges-Lehmann difference estimator. Flagged only if statistically significant (p &lt; α) and
-    the shift exceeds 3× the benchmark's own measured noise floor (CV), followed by Benjamini-Hochberg False Discovery Rate correction across the entire batch (α=0.05).<br>
-    <b>Limits:</b> All 5 flags in the bundled regex dataset were judged false positives by a human. Comparisons that span a long gap between runs are confounded by host drift; interleaved A/B re-measurement is the fix.
+    the shift exceeds 3× the benchmark's own measured noise floor (CV), followed by Benjamini-Hochberg / Benjamini-Yekutieli False Discovery Rate correction across the batch (α=0.05).<br>
+    <b>Limits:</b> Sequential runs spanning a session break (&gt;15 min) are confounded by host drift; LTO binary-layout reordering can shift hot loops without instruction changes. Re-measure candidates with interleaved A/B + instruction ablation before filing upstream.
   </footer>
 
 </div>
@@ -300,13 +443,14 @@
     <div class="modal-chart-box">
       <canvas id="modal-hist-canvas"></canvas>
     </div>
-    <div class="eyebrow rep-header" id="m-rep-header">Independent Process Invocations (ns)</div>
+    <div class="eyebrow rep-header" id="m-rep-header">Independent Process Invocations</div>
     <div class="rep-grid" id="m-rep-grid"></div>
   </div>
 </div>
 
 <script>
 // === Section 1: Constants & Application State ===
+const IS_STATIC = Boolean(window.__REGRESSOR_STATIC__);
 const THEME = {
   bg: "#14120F",
   panel: "#1A1712",
@@ -314,35 +458,35 @@ const THEME = {
   grid: "#221E18",
   faint: "#635B4C",
   moss: "#7A9471",
-  mossFill: "rgba(122, 148, 113, 0.12)",
+  mossFill: "rgba(122, 148, 113, 0.10)",
+  ciFill: "rgba(122, 148, 113, 0.24)",
   mossHistFill: "rgba(122, 148, 113, 0.4)",
   amber: "#C99A3E",
+  crimson: "#D95E4E",
+  slate: "#6897BB",
+  violet: "#A584C7",
   diamondBorder: "#E8DFC8",
 };
 
-const FLAMEGRAPHS = {
-  diff: {
-    src: "/flamegraphs/flamegraph_diff.svg",
-    lead: "Differential profile:",
-    body: " red = more sampled time in the candidate, blue = less. No function shows a large change. This shows the slowdown did not reproduce on a second measurement; it does not establish what caused the original shift.",
-  },
-  candidate: {
-    src: "/flamegraphs/flamegraph_candidate_0a446ec.svg",
-    lead: "Candidate profile (0a446ec):",
-    body: " software cpu-clock samples during the re-measurement run.",
-  },
-  parent: {
-    src: "/flamegraphs/flamegraph_parent_16d47c5.svg",
-    lead: "Parent profile (16d47c5):",
-    body: " software cpu-clock samples during the re-measurement run.",
-  },
+const KNOWN_FLAME_DESCRIPTIONS = {
+  "flamegraph_diff.svg": "Differential profile (16d47c5 -> 0a446ec): red = more sampled time in candidate, blue = less. +0.3% sampled delta; wall-clock spike did not reproduce.",
+  "flamegraph_candidate_0a446ec.svg": "Candidate profile (0a446ec): software cpu-clock samples during re-measurement.",
+  "flamegraph_parent_16d47c5.svg": "Parent profile (16d47c5): software cpu-clock samples during re-measurement.",
+  "flamegraph_diff_8f5d947.svg": "Differential profile (977feeb -> 8f5d947): same-hash ablation showed +0.08% wall-clock for captures_disabled() vs +3.27% LTO binary-layout shift.",
 };
 
+let studiesList = [];
+let currentStudy = "db";
 let currentProject = "regex";
 let projectMeta = {};
 let seriesData = null;
+let summaryData = null;
 let projectComparisons = [];
-let charts = {};
+let availableFlamegraphs = [];
+let selectedBenchmark = null;
+let viewMode = "both"; // 'both' | 'grid' | 'focus'
+let focusChart = null;
+let gridCharts = {};
 let modalChart = null;
 let modalDistributionData = null;
 
@@ -380,6 +524,28 @@ function el(tag, opts = {}, ...children) {
   return node;
 }
 
+function safeExternalUrl(url) {
+  if (typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (!trimmed || /\s/.test(trimmed)) return null;
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return parsed.href;
+    }
+  } catch (_e) {
+    return null;
+  }
+  return null;
+}
+
+function resolveFlameUrl(fg) {
+  if (!fg) return null;
+  const name = String(fg.filename || "").replace(/^.*\//, "");
+  if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*\.svg$/.test(name)) return null;
+  return IS_STATIC ? `flamegraphs/${name}` : `/flamegraphs/${name}`;
+}
+
 function populateSelect(selectEl, items, selectedValue) {
   selectEl.replaceChildren();
   items.forEach(({ value, label }) => {
@@ -387,6 +553,15 @@ function populateSelect(selectEl, items, selectedValue) {
     if (selectedValue !== undefined && value === selectedValue) opt.selected = true;
     selectEl.appendChild(opt);
   });
+}
+
+function statusBadgeVariant(status) {
+  if (status === "confirmed") return "confirmed";
+  if (status === "false_positive") return "fp";
+  if (status === "layout_artifact") return "layout";
+  if (status === "clean") return "clean";
+  if (status === "ok") return "ok";
+  return "flag";
 }
 
 function createBadge(label, variant, title) {
@@ -397,7 +572,23 @@ function createBadge(label, variant, title) {
   });
 }
 
-// 201.3 -> "3h 21m", 4.2 -> "4 min"
+function statusPointColor(pt) {
+  if (!pt.flagged) {
+    return pt.triage_status === "layout_artifact" ? THEME.violet : THEME.moss;
+  }
+  if (pt.triage_status === "confirmed") return THEME.crimson;
+  if (pt.triage_status === "layout_artifact") return THEME.violet;
+  if (pt.triage_status === "false_positive") return THEME.slate;
+  return THEME.amber;
+}
+
+function statusPointRadius(pt, compact = false) {
+  if (pt.flagged) return compact ? 4.5 : 6.5;
+  if (pt.triage_status === "layout_artifact") return compact ? 4 : 5.5;
+  if (pt.session_break) return compact ? 4 : 5;
+  return compact ? 2 : 3.2;
+}
+
 function formatGap(min) {
   if (min == null) return "–";
   const m = Math.round(min);
@@ -407,12 +598,20 @@ function formatGap(min) {
   return `${h}h ${String(r).padStart(2, "0")}m`;
 }
 
-function formatUs(ns, digits = 1) {
-  return `${(Number(ns) / 1000).toFixed(digits)}µs`;
+function formatDurationNs(ns, digits = 1) {
+  if (ns == null) return "–";
+  const v = Number(ns);
+  if (!Number.isFinite(v)) return "–";
+  if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(digits)}ms`;
+  if (Math.abs(v) >= 1000) return `${(v / 1000).toFixed(digits)}µs`;
+  return `${Math.round(v)}ns`;
 }
 
 function formatAxisDuration(ns) {
-  return Math.abs(ns) >= 1000 ? `${(ns / 1000).toFixed(0)}µs` : `${Math.round(ns)}ns`;
+  const v = Number(ns);
+  if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}ms`;
+  if (Math.abs(v) >= 1000) return `${(v / 1000).toFixed(0)}µs`;
+  return `${Math.round(v)}ns`;
 }
 
 function formatShiftPct(pct) {
@@ -435,9 +634,20 @@ function getFlaggedComparisons(comparisons) {
   return comparisons.filter((c) => c.verdict === "flag" && c.fdr_significant);
 }
 
-// === Section 3: Network & Data Loading ===
+// === Section 3: Network & Static Export Data Loading ===
+function studyQuery(withPrefix = "?") {
+  return currentStudy && currentStudy !== "db" ? `${withPrefix}study=${encodeURIComponent(currentStudy)}` : "";
+}
+
 async function fetchJson(url, options = {}) {
-  const res = await fetch(url, options);
+  let targetUrl = url;
+  if (IS_STATIC) {
+    if (options.method === "POST") {
+      throw new Error("Live Mann-Whitney ad-hoc comparison requires running `regressor serve`.");
+    }
+    targetUrl = mapStaticApiUrl(url);
+  }
+  const res = await fetch(targetUrl, options);
   const payload = await res.json().catch(() => null);
   if (!res.ok) {
     const detail = payload && payload.detail ? payload.detail : `Request failed (${res.status})`;
@@ -446,8 +656,44 @@ async function fetchJson(url, options = {}) {
   return payload;
 }
 
+function mapStaticApiUrl(url) {
+  const parsed = new URL(url, "http://localhost");
+  const path = parsed.pathname;
+  const study = parsed.searchParams.get("study") || currentStudy || "db";
+  if (path === "/api/studies") return "api/studies.json";
+  if (path === "/api/projects") return "api/projects.json";
+  if (path === "/api/flamegraphs") return "api/flamegraphs.json";
+
+  const projMatch = path.match(/^\/api\/projects\/([^/]+)\/(series|comparisons|summary)$/);
+  if (projMatch) {
+    return `api/data/${encodeURIComponent(study)}/${projMatch[1]}/${projMatch[2]}.json`;
+  }
+  const distMatch = path.match(/^\/api\/commits\/([^/]+)\/distribution$/);
+  if (distMatch) {
+    const proj = parsed.searchParams.get("project") || currentProject;
+    return `api/data/${encodeURIComponent(study)}/${encodeURIComponent(proj)}/distributions/${distMatch[1]}.json`;
+  }
+  return url;
+}
+
 function wireEventListeners() {
+  $("study-selector").addEventListener("change", (e) => switchStudy(e.target.value));
   $("project-selector").addEventListener("change", (e) => switchProject(e.target.value));
+  $("bench-search").addEventListener("input", () => renderBenchmarkExplorer());
+  $("bench-status-filter").addEventListener("change", () => renderBenchmarkExplorer());
+  $("benchmark-picker").addEventListener("change", (e) => {
+    selectedBenchmark = e.target.value;
+    renderFocusBenchmark();
+    highlightActiveCard();
+  });
+  document.querySelectorAll(".view-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      viewMode = btn.dataset.view;
+      document.querySelectorAll(".view-btn").forEach((b) => b.classList.toggle("active", b === btn));
+      applyViewMode();
+    });
+  });
+
   $("cmp-run-btn").addEventListener("click", runAdHocCompare);
   $("m-bench-select").addEventListener("change", (e) => renderModalBenchmark(e.target.value));
   $("m-close-btn").addEventListener("click", closeModal);
@@ -457,26 +703,47 @@ function wireEventListeners() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && $("drill-modal").style.display === "flex") closeModal();
   });
-  document.querySelectorAll(".flame-tab").forEach((btn) => {
-    btn.addEventListener("click", () => showFlame(btn.dataset.flame, btn));
-  });
 }
 
 async function init() {
   wireEventListeners();
-  await loadProjects();
+  await Promise.all([loadStudies(), loadProjects(), loadFlamegraphs()]);
+
   const names = Object.keys(projectMeta);
-  if (names.length === 0) {
+  const fallback = studiesList.find((s) => s.id !== "db");
+  if (names.length === 0 && !fallback) {
     $("hero-headline").textContent = "No projects recorded";
     $("hero-subline").textContent = "Run `regressor init` and `regressor import-data` to populate the database.";
-    updateFlameSectionVisibility("");
+    updateFlameSectionVisibility();
     return;
   }
-  if (!projectMeta[currentProject]) {
-    currentProject = names[0];
+
+  if (names.length === 0 && fallback) {
+    currentStudy = fallback.id;
+    $("study-selector").value = currentStudy;
+    currentProject = (fallback.projects && fallback.projects[0]) || "regex";
+    populateSelect(
+      $("project-selector"),
+      [{ value: currentProject, label: `${currentProject} (${currentStudy})` }],
+      currentProject,
+    );
+  } else {
+    if (!projectMeta[currentProject]) currentProject = names[0];
+    $("project-selector").value = currentProject;
   }
-  $("project-selector").value = currentProject;
+
   await switchProject(currentProject);
+}
+
+async function loadStudies() {
+  try {
+    studiesList = await fetchJson("/api/studies");
+    const items = studiesList.map((s) => ({ value: s.id, label: s.label }));
+    if (items.length === 0) items.push({ value: "db", label: "Active Database (SQLite)" });
+    populateSelect($("study-selector"), items, currentStudy);
+  } catch (err) {
+    console.error("Failed to load studies:", err);
+  }
 }
 
 async function loadProjects() {
@@ -493,188 +760,503 @@ async function loadProjects() {
   }
 }
 
-function updateFlameSectionVisibility(projectName) {
+async function loadFlamegraphs() {
+  try {
+    availableFlamegraphs = await fetchJson("/api/flamegraphs");
+  } catch (_err) {
+    availableFlamegraphs = [];
+  }
+}
+
+async function switchStudy(studyId) {
+  currentStudy = studyId || "db";
+  if (currentStudy === "db") {
+    const names = Object.keys(projectMeta);
+    if (names.length > 0) {
+      if (!projectMeta[currentProject]) currentProject = names[0];
+      populateSelect(
+        $("project-selector"),
+        names.map((n) => ({ value: n, label: `${n} (${formatRepoSlug(projectMeta[n], n)})` })),
+        currentProject,
+      );
+    }
+  } else {
+    const studyObj = studiesList.find((s) => s.id === currentStudy);
+    const studyProj = (studyObj && studyObj.projects && studyObj.projects[0]) || "regex";
+    currentProject = studyProj;
+    populateSelect($("project-selector"), [{ value: studyProj, label: `${studyProj} (${currentStudy})` }], studyProj);
+  }
+  await switchProject(currentProject);
+}
+
+function updateFlameSectionVisibility() {
   const flameSection = $("flamegraph-section");
-  if (flameSection) {
-    flameSection.style.display = projectName === "regex" ? "block" : "none";
+  if (!flameSection) return;
+  const fgs = (summaryData && summaryData.available_flamegraphs) || availableFlamegraphs;
+  if (currentProject === "regex" && fgs.length > 0) {
+    flameSection.style.display = "block";
+    renderFlamegraphTabs(fgs);
+  } else {
+    flameSection.style.display = "none";
   }
 }
 
 async function switchProject(name) {
   currentProject = name;
   $("active-repo").textContent = formatRepoSlug(projectMeta[name], name);
-  updateFlameSectionVisibility(name);
   $("cmp-results").style.display = "none";
   $("cmp-error").style.display = "none";
+  selectedBenchmark = null;
   await loadProjectData(name);
 }
 
 async function loadProjectData(proj) {
   const encoded = encodeURIComponent(proj);
+  const qs = studyQuery("?");
   try {
-    const [series, comparisons] = await Promise.all([
-      fetchJson(`/api/projects/${encoded}/series`),
-      fetchJson(`/api/projects/${encoded}/comparisons`),
+    const [series, comparisons, summary] = await Promise.all([
+      fetchJson(`/api/projects/${encoded}/series${qs}`),
+      fetchJson(`/api/projects/${encoded}/comparisons${qs}`),
+      fetchJson(`/api/projects/${encoded}/summary${qs}`),
     ]);
     seriesData = series;
     projectComparisons = comparisons;
+    summaryData = summary;
+    $("legend-break-min").textContent = String(series.session_break_min ?? 15);
 
     updateMasthead();
-    renderCharts();
+    updateFlameSectionVisibility();
+    renderBenchmarkExplorer();
     renderComparisonsLog();
     populateCompareDropdowns();
   } catch (err) {
     console.error("Error loading project data:", err);
-    $("panels-container").replaceChildren(
+    $("small-multiples-grid").replaceChildren(
       el("div", { className: "empty-state", text: `Failed to load telemetry for '${proj}': ${err.message}` })
     );
   }
 }
 
-// === Section 4: Masthead & Chart Rendering ===
+// === Section 4: Masthead & Publishable Summary ===
 function updateMasthead() {
+  const sum = summaryData || {};
   const flags = getFlaggedComparisons(projectComparisons);
-  const confirmed = projectComparisons.filter((c) => c.resolution_status === "confirmed");
-  const reviewed = flags.filter((c) => c.resolution_status && c.resolution_status !== "unreviewed");
+  const commitsN = sum.commits_analyzed ?? seriesData.total_commits ?? 0;
+  const cmpN = sum.comparisons ?? projectComparisons.length;
+  const flaggedN = sum.regressions_flagged ?? flags.length;
+  const preFdrN = sum.flagged_pre_fdr ?? flaggedN;
+  const confirmedN = sum.confirmed_real ?? 0;
+  const fpN = sum.false_positives ?? 0;
+  const layoutN = sum.layout_artifacts ?? 0;
+  const unreviewedN = sum.unreviewed ?? 0;
+  const triagedN = Math.max(0, flaggedN - unreviewedN);
+  const benchesN = sum.benchmarks_count ?? (seriesData.benchmarks ? seriesData.benchmarks.length : 0);
 
-  $("stat-commits").textContent = seriesData.total_commits;
-  $("stat-comparisons").textContent = projectComparisons.length;
-  $("stat-flags").textContent = flags.length;
-  $("stat-confirmed").textContent = confirmed.length;
-  $("stat-triage").textContent = `${reviewed.length}/${flags.length}`;
+  $("stat-commits").textContent = String(commitsN);
+  $("stat-benchmarks-sub").textContent = `${benchesN} benchmark${benchesN === 1 ? "" : "s"}`;
+  $("stat-comparisons").textContent = String(cmpN);
+  $("stat-flags").textContent = String(flaggedN);
+  $("stat-prefdr-sub").textContent = `pre-FDR: ${preFdrN}`;
+  $("stat-confirmed").textContent = String(confirmedN);
+  $("stat-confirmed").className = `n ${confirmedN > 0 ? "crimson" : "moss"}`;
+  $("stat-fp").textContent = String(fpN);
+  $("stat-layout").textContent = String(layoutN);
+  $("stat-triage").textContent = `${triagedN}/${flaggedN}`;
 
-  $("hero-headline").textContent = `${confirmed.length} confirmed regressions`;
-  $("hero-subline").textContent = `out of ${projectComparisons.length} statistical comparisons across ${seriesData.total_commits} source-touching commits`;
+  if (flaggedN > 0 && sum.fp_rate_pct != null) {
+    const [ciLo, ciHi] = sum.fp_rate_wilson_ci95_pct || [0, 100];
+    $("stat-fp-rate").textContent = `${Number(sum.fp_rate_pct).toFixed(1)}%`;
+    $("stat-fp-ci").textContent = `Wilson 95% CI [${Number(ciLo).toFixed(1)}%, ${Number(ciHi).toFixed(1)}%]`;
+  } else {
+    $("stat-fp-rate").textContent = "—";
+    $("stat-fp-ci").textContent = "Wilson 95% CI: N/A (0 flagged)";
+  }
+
+  const regWord = confirmedN === 1 ? "regression" : "regressions";
+  $("hero-headline").textContent = `${confirmedN} confirmed ${regWord}`;
+  const studyTag = currentStudy === "db" ? "active SQLite DB" : currentStudy;
+  $("hero-subline").textContent =
+    `${studyTag} · ${commitsN} commits × ${benchesN} benchmarks (${cmpN} comparisons) · ${flaggedN} flagged, ${fpN} false positives, ${layoutN} layout artifacts`;
+
+  const issuesBar = $("upstream-issues-bar");
+  issuesBar.replaceChildren();
+  const issues = sum.upstream_issues || [];
+  if (issues.length === 0) {
+    issuesBar.appendChild(el("span", { text: "Upstream issues: none filed (0 confirmed regressions)." }));
+  } else {
+    issuesBar.appendChild(el("span", { text: `Upstream issues (${issues.length}):` }));
+    issues.forEach((item) => {
+      const safeUrl = safeExternalUrl(item.issue_url);
+      if (!safeUrl) return;
+      issuesBar.appendChild(el("a", {
+        className: "issue-pill",
+        text: `${item.commit} · ${item.benchmark} ↗`,
+        attrs: { href: safeUrl, target: "_blank", rel: "noopener noreferrer", title: item.note || safeUrl },
+      }));
+    });
+  }
 }
 
-function baseChartOptions(yTickCallback, tooltipCallbacks) {
-  const tickFont = { family: "monospace", size: 10 };
+// === Section 5: Benchmark Picker, Focus Chart & Small Multiples ===
+function applyViewMode() {
+  const focusPanel = $("focus-panel");
+  const grid = $("small-multiples-grid");
+  focusPanel.style.display = viewMode === "grid" ? "none" : "block";
+  grid.style.display = viewMode === "focus" ? "none" : "grid";
+}
+
+function matchesBenchmarkFilter(bench, query, statusFilter) {
+  if (query && !bench.toLowerCase().includes(query)) return false;
+  if (statusFilter === "all") return true;
+  const stats = (seriesData.benchmark_stats || {})[bench] || {};
+  if (statusFilter === "flagged") return (stats.flagged_count || 0) > 0;
+  if (statusFilter === "confirmed") return (stats.confirmed_count || 0) > 0;
+  if (statusFilter === "layout_artifact") return (stats.layout_artifact_count || 0) > 0;
+  if (statusFilter === "false_positive") return (stats.false_positive_count || 0) > 0;
+  if (statusFilter === "unreviewed") return (stats.unreviewed_count || 0) > 0;
+  return true;
+}
+
+function getFilteredBenchmarks() {
+  if (!seriesData || !seriesData.benchmarks) return [];
+  const query = ($("bench-search").value || "").trim().toLowerCase();
+  const statusFilter = $("bench-status-filter").value || "all";
+  return seriesData.benchmarks.filter(
+    (b) => (seriesData.series[b] || []).length > 0 && matchesBenchmarkFilter(b, query, statusFilter)
+  );
+}
+
+function renderBenchmarkExplorer() {
+  const filtered = getFilteredBenchmarks();
+  const allNonEmpty = (seriesData.benchmarks || []).filter((b) => (seriesData.series[b] || []).length > 0);
+  $("bench-showing-count").textContent = `showing ${filtered.length} of ${allNonEmpty.length} benchmarks`;
+
+  const picker = $("benchmark-picker");
+  const statsMap = seriesData.benchmark_stats || {};
+  const pickerItems = filtered.map((b) => {
+    const st = statsMap[b] || {};
+    const flagTag = st.flagged_count ? ` [${st.flagged_count} flag${st.flagged_count > 1 ? "s" : ""}]` : "";
+    return { value: b, label: `${b}${flagTag}` };
+  });
+
+  if (filtered.length > 0 && !filtered.includes(selectedBenchmark)) {
+    const preferred = filtered.find((b) => (statsMap[b] || {}).confirmed_count > 0)
+      || filtered.find((b) => (statsMap[b] || {}).flagged_count > 0)
+      || filtered[0];
+    selectedBenchmark = preferred;
+  } else if (filtered.length === 0) {
+    selectedBenchmark = null;
+  }
+  populateSelect(picker, pickerItems, selectedBenchmark || undefined);
+
+  applyViewMode();
+  renderFocusBenchmark();
+  renderSmallMultiples(filtered);
+}
+
+function baseChartOptions(yTickCallback, tooltipCallbacks, { compact = false } = {}) {
+  const tickFont = { family: "monospace", size: compact ? 9 : 10 };
   return {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     plugins: {
       legend: { display: false },
       tooltip: {
         backgroundColor: THEME.panel,
         borderColor: THEME.hairline,
         borderWidth: 1,
-        titleFont: { family: "monospace", size: 12 },
-        bodyFont: { family: "monospace", size: 11 },
+        titleFont: { family: "monospace", size: 11 },
+        bodyFont: { family: "monospace", size: 10.5 },
         callbacks: tooltipCallbacks,
       },
     },
     scales: {
       x: {
         grid: { color: THEME.grid },
-        ticks: { color: THEME.faint, font: tickFont },
+        ticks: compact
+          ? { display: false }
+          : { color: THEME.faint, font: tickFont, maxRotation: 45, autoSkip: true, maxTicksLimit: 18 },
       },
       y: {
         grid: { color: THEME.grid },
-        ticks: { color: THEME.faint, font: tickFont, callback: yTickCallback },
+        ticks: { color: THEME.faint, font: tickFont, maxTicksLimit: compact ? 4 : 6, callback: yTickCallback },
       },
     },
   };
 }
 
-function buildLegendRow(breakThresholdMin) {
-  return el("div", { className: "legend-row" },
-    el("span", {}, el("span", { className: "sw moss" }), "median"),
-    el("span", {}, el("span", { className: "sw band" }), "p10–p90 band (noise floor)"),
-    el("span", {}, el("span", { className: "sw amber" }), "flagged by detector"),
-    el("span", {}, el("span", { className: "sw brk" }), `session break (>${breakThresholdMin} min gap before run)`),
-  );
+function buildChartDatasets(pts, { compact = false } = {}) {
+  return [
+    {
+      label: "p90",
+      data: pts.map((p) => p.p90_ns),
+      borderColor: "transparent",
+      backgroundColor: THEME.mossFill,
+      pointRadius: 0,
+      fill: "+1",
+      tension: 0.1,
+    },
+    {
+      label: "p10",
+      data: pts.map((p) => p.p10_ns),
+      borderColor: "transparent",
+      pointRadius: 0,
+      fill: false,
+      tension: 0.1,
+    },
+    {
+      label: "CI95 High",
+      data: pts.map((p) => p.ci95_high_ns ?? p.p90_ns),
+      borderColor: "transparent",
+      backgroundColor: THEME.ciFill,
+      pointRadius: 0,
+      fill: "+1",
+      tension: 0.1,
+    },
+    {
+      label: "CI95 Low",
+      data: pts.map((p) => p.ci95_low_ns ?? p.p10_ns),
+      borderColor: "transparent",
+      pointRadius: 0,
+      fill: false,
+      tension: 0.1,
+    },
+    {
+      label: "Median",
+      data: pts.map((p) => p.median_ns),
+      borderColor: THEME.moss,
+      borderWidth: compact ? 1.25 : 1.75,
+      pointBackgroundColor: pts.map((p) => statusPointColor(p)),
+      pointBorderColor: pts.map((p) => (p.session_break ? THEME.diamondBorder : THEME.bg)),
+      pointBorderWidth: compact ? 1.2 : 1.5,
+      pointStyle: pts.map((p) => (p.session_break ? "rectRot" : "circle")),
+      pointRadius: pts.map((p) => statusPointRadius(p, compact)),
+      pointHoverRadius: pts.map((p) => (p.flagged ? 8 : 5.5)),
+      tension: 0.1,
+    },
+  ];
 }
 
-function renderCharts() {
-  const container = $("panels-container");
-  container.replaceChildren();
-
-  Object.values(charts).forEach((c) => c.destroy());
-  charts = {};
-
-  const breakMin = seriesData.session_break_min ?? 15;
-  seriesData.benchmarks.forEach((bench, benchIdx) => {
-    const pts = seriesData.series[bench] || [];
-    if (pts.length === 0) return;
-
-    const canvas = el("canvas", { attrs: { id: `chart-idx-${benchIdx}` } });
-    const panel = el("section", { className: "panel" },
-      el("div", { className: "panel-head" }, el("div", { className: "panel-title", text: bench })),
-      el("div", { className: "panel-desc", text: "Median and p10–p90 dispersion across independent runs · Click any point to inspect distribution" }),
-      el("div", { className: "chart-box" }, canvas),
-      buildLegendRow(breakMin),
-    );
-    container.appendChild(panel);
-
-    const options = baseChartOptions(formatAxisDuration, {
-      title: (items) => {
-        const p = pts[items[0].dataIndex];
-        return `${p.sha} · ${p.date}`;
-      },
-      label: (item) => {
-        const p = pts[item.dataIndex];
-        const flagStr = p.flagged ? " [FLAGGED REGRESSION]" : "";
-        const lines = [
-          `Median: ${p.median_ns.toLocaleString()} ns${flagStr}`,
-          `Noise Band: ${p.p10_ns.toLocaleString()} - ${p.p90_ns.toLocaleString()} ns`,
-        ];
-        if (p.session_gap_min != null) {
-          const brkTag = p.session_break ? " [SESSION BREAK — environment-confounded]" : "";
-          lines.push(`Gap before run: ${formatGap(p.session_gap_min)}${brkTag}`);
-        }
-        lines.push(`Subject: ${(p.subject || "").substring(0, 45)}...`);
-        return lines;
-      },
-    });
-    options.onClick = (_evt, elements) => {
-      if (elements.length > 0) {
-        openDrillModal(pts[elements[0].index].sha, bench);
+function buildTooltipCallbacks(pts) {
+  return {
+    title: (items) => {
+      const p = pts[items[0].dataIndex];
+      return `${p.sha} · ${p.date}`;
+    },
+    label: (item) => {
+      const p = pts[item.dataIndex];
+      const statusTag = p.triage_status ? ` [${p.triage_status.toUpperCase()}]` : (p.flagged ? " [FLAGGED]" : "");
+      const lines = [
+        `Median: ${formatDurationNs(p.median_ns, 2)} (${p.median_ns.toLocaleString()} ns)${statusTag}`,
+        `95% Median CI: ${formatDurationNs(p.ci95_low_ns ?? p.p10_ns, 2)} – ${formatDurationNs(p.ci95_high_ns ?? p.p90_ns, 2)}`,
+        `p10–p90 Band: ${formatDurationNs(p.p10_ns, 2)} – ${formatDurationNs(p.p90_ns, 2)} (CV ${Number(p.cv_pct ?? 0).toFixed(2)}%)`,
+      ];
+      if (p.session_gap_min != null) {
+        const brkTag = p.session_break ? " [SESSION BREAK]" : "";
+        lines.push(`Gap before run: ${formatGap(p.session_gap_min)}${brkTag}`);
       }
-    };
+      if (p.triage_note) {
+        lines.push(`Triage: ${p.triage_note.substring(0, 75)}${p.triage_note.length > 75 ? "…" : ""}`);
+      }
+      lines.push(`Subject: ${(p.subject || "").substring(0, 55)}`);
+      return lines;
+    },
+  };
+}
 
-    charts[bench] = new Chart(canvas.getContext("2d"), {
+function renderFocusBenchmark() {
+  if (focusChart) {
+    focusChart.destroy();
+    focusChart = null;
+  }
+  const panel = $("focus-panel");
+  if (!selectedBenchmark || !seriesData || !(seriesData.series[selectedBenchmark] || []).length) {
+    $("focus-title").textContent = "No matching benchmark";
+    $("focus-meta").replaceChildren();
+    $("focus-artifacts").replaceChildren(el("span", { text: "Adjust filter or select a benchmark to inspect." }));
+    return;
+  }
+  if (viewMode !== "grid") panel.style.display = "block";
+
+  const bench = selectedBenchmark;
+  const pts = seriesData.series[bench];
+  const st = (seriesData.benchmark_stats || {})[bench] || {};
+  $("focus-title").textContent = bench;
+
+  const metaEl = $("focus-meta");
+  metaEl.replaceChildren(
+    el("span", { text: `Latest: ${formatDurationNs(st.latest_median_ns, 2)} (CV ${Number(st.latest_cv_pct ?? 0).toFixed(2)}%)` }),
+    el("span", { text: `· ${pts.length} commits` }),
+  );
+  if (st.confirmed_count) metaEl.appendChild(createBadge(`${st.confirmed_count} confirmed`, "confirmed"));
+  if (st.layout_artifact_count) metaEl.appendChild(createBadge(`${st.layout_artifact_count} layout`, "layout"));
+  if (st.false_positive_count) metaEl.appendChild(createBadge(`${st.false_positive_count} FP`, "fp"));
+  if (st.unreviewed_count) metaEl.appendChild(createBadge(`${st.unreviewed_count} unreviewed`, "flag"));
+  if (!st.flagged_count) metaEl.appendChild(createBadge("clean", "clean"));
+
+  const options = baseChartOptions(formatAxisDuration, buildTooltipCallbacks(pts), { compact: false });
+  options.onClick = (_evt, elements) => {
+    if (elements.length > 0) openDrillModal(pts[elements[0].index].sha, bench);
+  };
+  focusChart = new Chart($("focus-chart-canvas").getContext("2d"), {
+    type: "line",
+    data: { labels: pts.map((p) => p.sha), datasets: buildChartDatasets(pts, { compact: false }) },
+    options,
+  });
+
+  const artEl = $("focus-artifacts");
+  artEl.replaceChildren();
+  const benchFlags = projectComparisons.filter(
+    (c) => c.benchmark === bench && c.verdict === "flag" && c.fdr_significant
+  );
+  if (benchFlags.length === 0 && (st.flamegraphs || []).length === 0 && (st.issue_urls || []).length === 0) {
+    artEl.appendChild(el("span", { text: "No flagged transitions or linked artifacts on this benchmark." }));
+    return;
+  }
+
+  benchFlags.forEach((c) => {
+    const chip = el("span", { className: "sm-links" },
+      createBadge(`${c.cand_sha} ${formatShiftPct(c.shift_pct)} (${c.resolution_status})`, statusBadgeVariant(c.resolution_status)),
+    );
+    (c.flamegraphs || []).forEach((fg) => {
+      const url = resolveFlameUrl(fg);
+      if (!url) return;
+      chip.appendChild(el("button", {
+        className: "link-btn",
+        text: fg.filename,
+        attrs: { type: "button" },
+        on: { click: () => selectFlamegraphByName(fg.filename, true) },
+      }));
+    });
+    const safeUrl = safeExternalUrl(c.issue_url);
+    if (safeUrl) {
+      chip.appendChild(el("a", {
+        className: "issue-pill",
+        text: "Issue ↗",
+        attrs: { href: safeUrl, target: "_blank", rel: "noopener noreferrer" },
+      }));
+    }
+    artEl.appendChild(chip);
+  });
+
+  (st.flamegraphs || []).forEach((fg) => {
+    if (benchFlags.some((c) => (c.flamegraphs || []).some((x) => x.filename === fg.filename))) return;
+    artEl.appendChild(el("button", {
+      className: "link-btn",
+      text: fg.filename,
+      attrs: { type: "button" },
+      on: { click: () => selectFlamegraphByName(fg.filename, true) },
+    }));
+  });
+}
+
+function cardSummaryBadge(st) {
+  if (st.confirmed_count > 0) return createBadge(`${st.confirmed_count} confirmed`, "confirmed");
+  if (st.unreviewed_count > 0) return createBadge(`${st.unreviewed_count} unreviewed`, "flag");
+  if (st.layout_artifact_count > 0) return createBadge(`${st.layout_artifact_count} layout`, "layout");
+  if (st.false_positive_count > 0) return createBadge(`${st.false_positive_count} FP`, "fp");
+  return createBadge("clean", "clean");
+}
+
+function renderSmallMultiples(benches) {
+  const grid = $("small-multiples-grid");
+  Object.values(gridCharts).forEach((c) => c.destroy());
+  gridCharts = {};
+  grid.replaceChildren();
+
+  if (benches.length === 0) {
+    grid.appendChild(el("div", { className: "empty-state", text: "No benchmarks match the active filter." }));
+    return;
+  }
+
+  const statsMap = seriesData.benchmark_stats || {};
+  benches.forEach((bench, idx) => {
+    const pts = seriesData.series[bench] || [];
+    const st = statsMap[bench] || {};
+    const canvas = el("canvas", { attrs: { id: `sm-chart-${idx}` } });
+
+    const linksBox = el("div", { className: "sm-links" });
+    (st.flamegraphs || []).slice(0, 2).forEach((fg) => {
+      linksBox.appendChild(el("button", {
+        className: "link-btn",
+        text: "Flamegraph",
+        attrs: { type: "button", title: fg.filename },
+        on: { click: () => selectFlamegraphByName(fg.filename, true) },
+      }));
+    });
+    (st.issue_urls || []).forEach((url) => {
+      const safeUrl = safeExternalUrl(url);
+      if (!safeUrl) return;
+      linksBox.appendChild(el("a", {
+        className: "issue-pill",
+        text: "Issue ↗",
+        attrs: { href: safeUrl, target: "_blank", rel: "noopener noreferrer" },
+      }));
+    });
+
+    const card = el("article", {
+      className: `sm-card${bench === selectedBenchmark ? " active" : ""}${st.confirmed_count ? " has-confirmed" : ""}`,
+      attrs: { "data-bench": bench },
+    },
+      el("div", { className: "sm-card-head" },
+        el("button", {
+          className: "sm-name",
+          text: bench,
+          attrs: { type: "button", title: "Focus this benchmark" },
+          on: { click: () => focusBenchmark(bench) },
+        }),
+        cardSummaryBadge(st),
+      ),
+      el("div", { className: "sm-sub" },
+        el("span", { text: `med ${formatDurationNs(st.latest_median_ns, 1)} · CV ${Number(st.latest_cv_pct ?? 0).toFixed(2)}%` }),
+        el("span", { text: `${pts.length} commits` }),
+      ),
+      el("div", { className: "sm-chart-box" }, canvas),
+      el("div", { className: "sm-foot" },
+        el("button", {
+          className: "link-btn",
+          text: "Focus",
+          attrs: { type: "button" },
+          on: { click: () => focusBenchmark(bench) },
+        }),
+        linksBox,
+      ),
+    );
+    grid.appendChild(card);
+
+    const options = baseChartOptions(formatAxisDuration, buildTooltipCallbacks(pts), { compact: true });
+    options.onClick = (_evt, elements) => {
+      if (elements.length > 0) openDrillModal(pts[elements[0].index].sha, bench);
+    };
+    gridCharts[bench] = new Chart(canvas.getContext("2d"), {
       type: "line",
-      data: {
-        labels: pts.map((p) => p.sha),
-        datasets: [
-          {
-            label: "p90",
-            data: pts.map((p) => p.p90_ns),
-            borderColor: "transparent",
-            backgroundColor: THEME.mossFill,
-            pointRadius: 0,
-            fill: "+1",
-            tension: 0.1,
-          },
-          {
-            label: "p10",
-            data: pts.map((p) => p.p10_ns),
-            borderColor: "transparent",
-            pointRadius: 0,
-            fill: false,
-            tension: 0.1,
-          },
-          {
-            label: "Median",
-            data: pts.map((p) => p.median_ns),
-            borderColor: THEME.moss,
-            borderWidth: 1.5,
-            pointBackgroundColor: pts.map((p) => (p.flagged ? THEME.amber : THEME.moss)),
-            pointBorderColor: pts.map((p) => (p.session_break ? THEME.diamondBorder : THEME.bg)),
-            pointBorderWidth: 1.5,
-            pointStyle: pts.map((p) => (p.session_break ? "rectRot" : "circle")),
-            pointRadius: pts.map((p) => (p.flagged ? 6 : (p.session_break ? 5 : 3.5))),
-            pointHoverRadius: pts.map((p) => (p.flagged ? 8 : 6)),
-            tension: 0.1,
-          },
-        ],
-      },
+      data: { labels: pts.map((p) => p.sha), datasets: buildChartDatasets(pts, { compact: true }) },
       options,
     });
   });
 }
 
-// === Section 5: Ad-Hoc Pairwise Comparison ===
+function focusBenchmark(bench) {
+  selectedBenchmark = bench;
+  $("benchmark-picker").value = bench;
+  if (viewMode === "grid") {
+    viewMode = "both";
+    document.querySelectorAll(".view-btn").forEach((b) => b.classList.toggle("active", b.dataset.view === "both"));
+    applyViewMode();
+  }
+  renderFocusBenchmark();
+  highlightActiveCard();
+  $("focus-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function highlightActiveCard() {
+  document.querySelectorAll(".sm-card").forEach((card) => {
+    card.classList.toggle("active", card.dataset.bench === selectedBenchmark);
+  });
+}
+
+// === Section 6: Ad-Hoc Pairwise Comparison ===
 function populateCompareDropdowns() {
   const baseSel = $("cmp-base");
   const candSel = $("cmp-cand");
@@ -706,14 +1288,12 @@ async function runAdHocCompare() {
   if (!baseSha || !candSha) return;
 
   try {
+    const body = { project: currentProject, base_sha: baseSha, cand_sha: candSha };
+    if (currentStudy && currentStudy !== "db") body.study = currentStudy;
     const data = await fetchJson("/api/compare", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        project: currentProject,
-        base_sha: baseSha,
-        cand_sha: candSha,
-      }),
+      body: JSON.stringify(body),
     });
     renderCompareResults(data);
   } catch (err) {
@@ -736,7 +1316,13 @@ function renderCompareResults(data) {
     return;
   }
 
-  data.comparisons.forEach((c) => {
+  const ordered = [...data.comparisons].sort((a, b) => {
+    const af = a.verdict === "flag" ? 0 : 1;
+    const bf = b.verdict === "flag" ? 0 : 1;
+    return af - bf || Math.abs(b.shift_pct) - Math.abs(a.shift_pct);
+  });
+
+  ordered.forEach((c) => {
     const isFlag = c.verdict === "flag";
     const card = el("div", { className: "cmp-card" },
       el("div", { className: "cmp-card-bench", text: c.benchmark }),
@@ -754,7 +1340,51 @@ function renderCompareResults(data) {
   box.style.display = "block";
 }
 
-// === Section 6: Investigation Triage Log & Flamegraph Tabs ===
+// === Section 7: Investigation Triage Log & Flamegraph Tabs ===
+function renderFlamegraphTabs(fgs) {
+  const tabsEl = $("flame-tabs");
+  tabsEl.replaceChildren();
+  if (!fgs || fgs.length === 0) return;
+
+  const preferred = fgs.find((f) => f.filename === "flamegraph_diff.svg") || fgs[0];
+  fgs.forEach((fg) => {
+    const btn = el("button", {
+      className: `flame-tab${fg.filename === preferred.filename ? " active" : ""}`,
+      text: fg.filename.replace(/\.svg$/, "").replace(/_/g, " "),
+      attrs: { type: "button", "data-filename": fg.filename },
+      on: { click: () => showFlame(fg, btn) },
+    });
+    tabsEl.appendChild(btn);
+  });
+  showFlame(preferred);
+}
+
+function selectFlamegraphByName(filename, scrollIntoView = false) {
+  const fgs = (summaryData && summaryData.available_flamegraphs) || availableFlamegraphs;
+  const fg = fgs.find((f) => f.filename === filename);
+  if (!fg) return;
+  const section = $("flamegraph-section");
+  if (section) section.style.display = "block";
+  const tabBtn = Array.from(document.querySelectorAll(".flame-tab")).find((b) => b.dataset.filename === filename);
+  showFlame(fg, tabBtn || null);
+  if (scrollIntoView && section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function showFlame(fg, activeBtn = null) {
+  const url = resolveFlameUrl(fg);
+  if (!url) return;
+  document.querySelectorAll(".flame-tab").forEach((t) => {
+    t.classList.toggle("active", activeBtn ? t === activeBtn : t.dataset.filename === fg.filename);
+  });
+  $("flame-iframe").src = url;
+  $("flame-open-link").href = url;
+  const desc = KNOWN_FLAME_DESCRIPTIONS[fg.filename]
+    || `Differential or sampling flamegraph (${fg.filename}).`;
+  $("flame-caption-text").replaceChildren(el("span", {}, el("b", { text: `${fg.filename}: ` }), desc));
+}
+
 function renderComparisonsLog() {
   const tbody = $("log-body");
   tbody.replaceChildren();
@@ -777,6 +1407,26 @@ function renderComparisonsLog() {
           c.session_break ? "Session break: environment-confounded" : "Same measurement session",
         ));
 
+    const linksRow = el("div", { className: "triage-links" });
+    (c.flamegraphs || []).forEach((fg) => {
+      const url = resolveFlameUrl(fg);
+      if (!url) return;
+      linksRow.appendChild(el("button", {
+        className: "link-btn",
+        text: fg.filename,
+        attrs: { type: "button" },
+        on: { click: () => selectFlamegraphByName(fg.filename, true) },
+      }));
+    });
+    const safeIssue = safeExternalUrl(c.issue_url);
+    if (safeIssue) {
+      linksRow.appendChild(el("a", {
+        className: "issue-pill",
+        text: "Upstream Issue ↗",
+        attrs: { href: safeIssue, target: "_blank", rel: "noopener noreferrer" },
+      }));
+    }
+
     const tr = el("tr", {},
       el("td", {
         className: "sha",
@@ -784,30 +1434,27 @@ function renderComparisonsLog() {
         attrs: { title: "Inspect Commit Distribution" },
         on: { click: () => openDrillModal(c.cand_sha, c.benchmark) },
       }),
-      el("td", { className: "bench", text: c.benchmark }),
+      el("td", {
+        className: "bench",
+        text: c.benchmark,
+        attrs: { title: "Focus benchmark chart" },
+        on: { click: () => focusBenchmark(c.benchmark) },
+      }),
       el("td", { className: `shift ${shiftClass}`, text: formatShiftPct(c.shift_pct) }),
       el("td", { text: Number(c.p_value).toExponential(2) }),
       el("td", { text: `${Number(c.noise_floor_pct).toFixed(2)}%` }),
       gapCell,
       el("td", {},
-        createBadge(c.resolution_status, c.resolution_status === "false_positive" ? "fp" : "flag"),
+        createBadge(c.resolution_status, statusBadgeVariant(c.resolution_status)),
         el("div", { className: "triage-note", text: c.resolution_note || "" }),
+        linksRow.childNodes.length > 0 ? linksRow : null,
       ),
     );
     tbody.appendChild(tr);
   });
 }
 
-function showFlame(type, btn) {
-  const cfg = FLAMEGRAPHS[type];
-  if (!cfg) return;
-  document.querySelectorAll(".flame-tab").forEach((t) => t.classList.remove("active"));
-  btn.classList.add("active");
-  $("flame-iframe").src = cfg.src;
-  $("flame-caption-text").replaceChildren(el("b", { text: cfg.lead }), cfg.body);
-}
-
-// === Section 7: Commit Drill-Down Modal ===
+// === Section 8: Commit Drill-Down Modal ===
 function renderModalSessionContext(session) {
   const s = session || {};
   const gapEl = $("m-gap");
@@ -853,12 +1500,13 @@ function renderModalBenchmark(benchName) {
         return `${b.bin_start_ns.toLocaleString()} - ${b.bin_end_ns.toLocaleString()} ns`;
       },
     },
+    { compact: false },
   );
 
   modalChart = new Chart($("modal-hist-canvas").getContext("2d"), {
     type: "bar",
     data: {
-      labels: hBins.map((b) => `${(b.bin_start_ns / 1000).toFixed(1)}k`),
+      labels: hBins.map((b) => formatDurationNs(b.bin_start_ns, 1)),
       datasets: [{
         label: "Run Count",
         data: hBins.map((b) => b.count),
@@ -871,18 +1519,19 @@ function renderModalBenchmark(benchName) {
   });
 
   $("m-rep-header").textContent =
-    `${bData.rep_medians.length} Independent Process Invocations · ${benchName} (median ${formatUs(bData.median_ns)}, CV ${bData.cv_pct.toFixed(2)}%)`;
+    `${bData.rep_medians.length} Independent Process Invocations · ${benchName} (median ${formatDurationNs(bData.median_ns, 2)}, CV ${bData.cv_pct.toFixed(2)}%)`;
 
   const grid = $("m-rep-grid");
   grid.replaceChildren(
-    ...bData.rep_medians.map((val) => el("div", { className: "rep-cell", text: formatUs(val) }))
+    ...bData.rep_medians.map((val) => el("div", { className: "rep-cell", text: formatDurationNs(val, 1) }))
   );
 }
 
 async function openDrillModal(sha, preferredBench = null) {
   try {
+    const studySuffix = studyQuery("&");
     const data = await fetchJson(
-      `/api/commits/${encodeURIComponent(sha)}/distribution?project=${encodeURIComponent(currentProject)}`
+      `/api/commits/${encodeURIComponent(sha)}/distribution?project=${encodeURIComponent(currentProject)}${studySuffix}`
     );
     modalDistributionData = data;
 
