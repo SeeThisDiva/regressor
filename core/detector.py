@@ -207,6 +207,7 @@ def compare_distributions(
     noise_floor_multiplier: float = 3.0,
     canary_shifted: bool = False,
     adjust_autocorr: bool = False,
+    min_noise_floor_pct: float = 0.0,
 ) -> Dict[str, Any]:
     """Compare baseline vs candidate distributions of independent per-run medians.
 
@@ -214,7 +215,9 @@ def compare_distributions(
     and takes ``max(mw_p_value, block_bootstrap_p_value)``. Under strong AR(1)
     autocorrelation, the block bootstrap only partially mitigates rank-sum optimism;
     the 3x CV noise-floor gate and interleaved A/B re-measurement remain primary
-    defenses against false flags.
+    defenses against false flags. ``min_noise_floor_pct`` optionally enforces a
+    calibrated cross-build minimum noise floor (in percent) without altering
+    default behavior when left at ``0.0``.
     """
     baseline = np.asarray(baseline, dtype=np.float64)
     candidate = np.asarray(candidate, dtype=np.float64)
@@ -238,7 +241,7 @@ def compare_distributions(
         block_p = block_bootstrap_p_value(baseline, candidate)
         p_value = max(p_value, block_p)
 
-    noise_floor_pct = 100.0 * baseline_cv * noise_floor_multiplier
+    noise_floor_pct = max(100.0 * baseline_cv * noise_floor_multiplier, float(min_noise_floor_pct))
     statistically_significant = bool(p_value < alpha)
     exceeds_noise_floor = bool(abs(shift_pct) > noise_floor_pct)
     verdict, attribution, resolution_note = _classify_verdict(

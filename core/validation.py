@@ -42,6 +42,7 @@ def validate_adapter_synthetic(
     reps: int = 25,
     iters: int = 1000,
     warmup: int = 100,
+    min_noise_floor_pct: float = 0.0,
 ) -> SyntheticValidationResult:
     """Execute the 3-point synthetic injection validation test on an adapter."""
     print(f"\n[Synthetic Validation] Testing adapter '{adapter.__class__.__name__}' on benchmark '{bench_name}'...")
@@ -60,7 +61,7 @@ def validate_adapter_synthetic(
 
     print("  Collecting baseline B (0ns injection, true negative check)...")
     base_b = _collect_medians(adapter, bench_name, reps, iters, warmup)
-    tn_res = compare_distributions(base_a, base_b)
+    tn_res = compare_distributions(base_a, base_b, min_noise_floor_pct=min_noise_floor_pct)
     tn_ok = tn_res["verdict"] == "ok"
     print(
         f"  -> True Negative: shift={tn_res['shift_pct']:+.2f}%, "
@@ -70,7 +71,7 @@ def validate_adapter_synthetic(
     large_inject_ns = max(int(base_median_ns * 0.08), 200)
     print(f"  Collecting large injection (+{large_inject_ns:,} ns, ~8% target)...")
     large_inj = _collect_medians(adapter, bench_name, reps, iters, warmup, inject_ns=large_inject_ns)
-    large_res = compare_distributions(base_a, large_inj)
+    large_res = compare_distributions(base_a, large_inj, min_noise_floor_pct=min_noise_floor_pct)
     large_flagged = large_res["verdict"] == "flag"
     print(
         f"  -> Large Injection: shift={large_res['shift_pct']:+.2f}%, "
@@ -80,7 +81,7 @@ def validate_adapter_synthetic(
     small_inject_ns = max(int(base_median_ns * 0.01), 25)
     print(f"  Collecting small injection (+{small_inject_ns:,} ns, ~1% target)...")
     small_inj = _collect_medians(adapter, bench_name, reps, iters, warmup, inject_ns=small_inject_ns)
-    small_res = compare_distributions(base_a, small_inj)
+    small_res = compare_distributions(base_a, small_inj, min_noise_floor_pct=min_noise_floor_pct)
     small_target_pct = 100.0 * small_inject_ns / base_median_ns
     small_detectable = bool(
         small_res["noise_floor_pct"] < small_target_pct

@@ -82,6 +82,32 @@ Commit [`64ad0b6`](../reports/upstream/64ad0b6/ISSUE.md) (*"automata: fix bug in
 
 Every sequential flag in Studies 1 and 2 traced to environmental noise, non-reproducing jitter, or LTO binary-layout reordering (`+0.08%` isolated check on `8f5d947`, $p=0.804$), so **0 issues were filed** on Studies 1–2 as a deliberate anti-noise discipline. For Study 3's single confirmed regression at `64ad0b6`, an actionable upstream issue draft with root-cause mitigation note, differential flamegraph, and self-contained two-revision Cargo repro has been prepared at [`../reports/upstream/64ad0b6/ISSUE.md`](../reports/upstream/64ad0b6/ISSUE.md) and [`../reports/upstream/64ad0b6/repro/`](../reports/upstream/64ad0b6/repro/) (**drafted, pending filing**).
 
+## Calibrated layout floor (post hoc)
+
+Study 3's published metrics above (`1,250` comparisons, `371` flags, `328` false positives = `88.4%` `[84.75%, 91.28%]`, `42` layout artifacts, `1` confirmed, `0` unreviewed) remain unchanged. Post hoc, [`core/layout_floor.py`](../core/layout_floor.py) tests whether calibrating a per-benchmark minimum noise floor from null-control builds cuts cross-build false positives offline using only `data/regex_study3_history.json.gz`.
+
+- **Split & calibration rule**: The `29` null-control commits (`18` Cargo/version/dependency bumps, `7` doc/comment/changelog commits, `4` CI/ignore/test-only commits) are split into two disjoint halves with fixed seed `42` (`14` and `15` commits). On each calibration half, we compute per-benchmark `layout_floor = 3 * SD` (`ddof=1` across signed calibration shifts) and run `compare_distributions(..., min_noise_floor_pct=layout_floor)` + BY-FDR (`alpha=0.05`) strictly on the held-out null commits plus the `21` non-null commits, then swap halves (calibration commits are never evaluated).
+
+| Evaluation slice | Flags (before -> after) | Held-out null FPR (before -> after) | Triaged FP / flagged (after) | `64ad0b6` flagged (floor) | `+8%` `validate_adapter_synthetic` |
+|---|---:|---|---|---|---|
+| Fold A (`900` comps: `15` held-out nulls + `21` non-nulls) | `267 -> 24` | `114/375` (`30.40%`, CI `[25.96%, 35.23%]`) -> `10/375` (`2.67%`, CI `[1.45%, 4.84%]`) | `22/24` (`91.67%`, CI `[74.15%, 97.68%]`; `1` confirmed, `1` layout) | Yes (`+94.38%`, floor `0.421%`) | `24/25 -> 14/25` |
+| Fold B (`875` comps: `14` held-out nulls + `21` non-nulls) | `256 -> 18` | `103/350` (`29.43%`, CI `[24.90%, 34.41%]`) -> `2/350` (`0.57%`, CI `[0.16%, 2.06%]`) | `16/18` (`88.89%`, CI `[67.20%, 96.90%]`; `1` confirmed, `1` layout) | Yes (`+94.38%`, floor `1.177%`) | `24/25 -> 11/25` |
+| Combined out-of-fold nulls (`725` comps) | N/A | `217/725` (`29.93%`, CI `[26.71%, 33.36%]`) -> `12/725` (`1.66%`, CI `[0.95%, 2.87%]`) | N/A | Yes in both folds | N/A |
+
+- **Held-out cross-build injection sensitivity (`725` held-out null pairs across both folds)**:
+
+| Injected slowdown | Detected before (`3x CV` only) | Detected after (`max(3x CV, layout_floor)`) |
+|---:|---:|---:|
+| `+5.0%` | `562/725` (`77.5%`) | `233/725` (`32.1%`) |
+| `+8.0%` | `617/725` (`85.1%`) | `346/725` (`47.7%`) |
+| `+10.0%` | `645/725` (`89.0%`) | `417/725` (`57.5%`) |
+| `+15.0%` | `686/725` (`94.6%`) | `531/725` (`73.2%`) |
+| `+20.0%` | `700/725` (`96.6%`) | `581/725` (`80.1%`) |
+| `+50.0%` | `719/725` (`99.2%`) | `693/725` (`95.6%`) |
+| `+95.0%` | `723/725` (`99.7%`) | `723/725` (`99.7%`) |
+
+- **What this shows**: Calibrating `3 * SD` on held-out null commits cuts total alerts by more than 90% (`267 -> 24` in Fold A, `256 -> 18` in Fold B) and lowers out-of-fold null-control FPR from `29.93%` to `1.66%` (Wilson 95% CI `[0.95%, 2.87%]`) while keeping `64ad0b6` (`+94.38%`) flagged in both folds (calibrated floors `0.421%` and `1.177%`). The trade-off is lower sensitivity to moderate `+5%` to `+15%` single-build shifts on layout-sensitive benchmarks (`+8%` `validate_adapter_synthetic` drops from `24/25` to `14/25` and `11/25`; held-out `+8%` injection drops from `85.1%` to `47.7%`), and FP/flagged remains high (`88.89%`–`91.67%`) because only one confirmed slowdown exists in the 50 transitions and host-drift commit `30390ec` causes 9–10 of the remaining flags.
+
 ## Known limitation of this run
 
 Study 1 ran on a single shared vCPU sandbox with no `cpufreq` governor access and no CPU pinning. Re-measuring the 50-rep baseline on local hardware (Intel Alder Lake, High Priority) reduced `find_iter_userid` CV by 10× (`10.54%` → `1.03%`). Note that in the `20260813T150528_baseline` sandbox run, `is_match_status` was measured before `IS_MATCH_BATCH = 500` batching was added (`mean = 49.76 ns`), whereas Study 1 and Study 2 batched 500× (`9.4–25 µs`):
