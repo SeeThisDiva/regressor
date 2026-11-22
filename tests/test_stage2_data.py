@@ -129,5 +129,9 @@ def test_original_study_reproduces_from_portable_data(tmp_path, monkeypatch, cap
 
 def test_triage_notes_are_data_not_code():
     notes = regressor._load_triage("regex")
-    assert len(notes) == 5 and notes[("compile_moderate", "0a446ec")][1] == "false_positive"
+    assert len(notes) >= 5
+    assert notes[("compile_moderate", "0a446ec")][1] == "false_positive"
+    assert notes[("find_iter_userid", "16d47c5")][1] == "false_positive"
+    for bench in ("compile_moderate", "find_iter_userid", "is_match_status"):
+        assert notes[(bench, "dd96592")][1] == "false_positive"
     assert regressor._load_triage("no-such-project") == {}

@@ -28,5 +28,2250 @@
     "commit": "dd96592",
     "status": "false_positive",
     "note": "Same 3h21m gap as compile_moderate on this commit; all 3 benches shifted together."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 2 +3.029% flag on `automata: reject dense DFA start states that are match states` (deserialization-only). Pinned 30-pair interleaved (7b96fdc->468fc64) gave -1.02% [-1.15%, -0.87%] (canary -3.46% SUSPECT; LTO layout/env artifact)."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Study 2 +5.332% flag on `automata: fix indentation` (whitespace-only). Pinned 30-pair interleaved (f9b0ab1->e018953) gave -0.40% [-1.33%, +0.54%], p=0.382 (canary -0.13% OK)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "80b9d14",
+    "status": "false_positive",
+    "note": "Study 2 +6.267% flag on `api: add Regex::is_match_with`. Pinned 30-pair interleaved (a1e367b->80b9d14) gave -0.36% [-0.52%, -0.22%] (canary -0.04% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 +0.41% flag (p=3.03e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 -5.45% flag (p=3.33e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 +0.21% flag (p=2.44e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 -1.28% flag (p=6.70e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 -0.56% flag (p=1.44e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "6a81006",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: exclude development scripts and fuzzing data`, no library code change); Study 3 -3.36% flag (p=3.23e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 +2.73% flag (p=3.27e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 -0.40% flag (p=2.06e-03, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "0c07fae",
+    "status": "layout_artifact",
+    "note": "Null-control version/changelog bump (`regex-lite-0.1.9`); +15.97% Study 3 vs +1.73% [+1.52%, +1.94%] interleaved (canary +1.74% OK), with static insn diff delta=+1 ICF alias swap (65,239->65,240 insns)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 +6.06% flag (p=3.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 -2.18% flag (p=3.36e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 -4.32% flag (p=3.52e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 +4.61% flag (p=4.06e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 +2.75% flag (p=4.81e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 -1.01% flag (p=3.37e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 -1.48% flag (p=1.68e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Study 3 +5.25% flag (p=3.28e-06) on `regex-lite-0.1.9`; 30-pair pinned compare-interleaved gave +0.97% [+0.74%, +1.19%] (p=6.34e-06, verdict=ok, canary +1.74% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Study 3 +9.85% flag (p=3.11e-07) on `regex-lite-0.1.9`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.15%] (p=3.84e-02, verdict=ok, canary +1.74% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Study 3 +6.00% flag (p=2.78e-06) on `regex-lite-0.1.9`; 30-pair pinned compare-interleaved gave +0.17% [+0.17%, +0.33%] (p=1.75e-04, verdict=ok, canary +1.74% OK)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "0c07fae",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-lite-0.1.9`, no library code change); Study 3 +3.44% flag (p=2.09e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -1.29% flag (p=3.27e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "is_match_status",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 +27.13% flag (p=2.85e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -12.56% flag (p=1.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -12.16% flag (p=3.33e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 +0.63% flag (p=2.28e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 +2.10% flag (p=3.37e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -4.50% flag (p=3.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 +0.95% flag (p=3.36e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 +3.42% flag (p=3.33e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -4.11% flag (p=3.17e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -9.51% flag (p=3.11e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -5.99% flag (p=2.17e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "a3433f6",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.9`, no library code change); Study 3 -3.32% flag (p=2.06e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "is_match_status",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 -22.87% flag (p=2.47e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +1.93% flag (p=2.59e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +14.29% flag (p=3.32e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +2.60% flag (p=3.29e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +0.52% flag (p=7.32e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 -0.73% flag (p=7.11e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 -1.99% flag (p=4.20e-04, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +5.91% flag (p=3.16e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "5e195de",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.14`, no library code change); Study 3 +0.67% flag (p=1.12e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -0.40% flag (p=1.45e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -4.61% flag (p=2.82e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -8.59% flag (p=3.31e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -1.90% flag (p=3.38e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -7.18% flag (p=1.92e-04, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -5.79% flag (p=3.38e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 +11.89% flag (p=3.16e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 -5.59% flag (p=3.31e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 +0.60% flag (p=1.29e-07, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "b028e4f",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.3`, no library code change); Study 3 +3.33% flag (p=2.05e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 +0.41% flag (p=1.24e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 +2.84% flag (p=2.93e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 +0.84% flag (p=1.01e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 +7.03% flag (p=3.38e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_single",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 -4.57% flag (p=3.38e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 -10.06% flag (p=3.16e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 -0.60% flag (p=8.27e-08, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 -1.61% flag (p=2.26e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "2aaa18d",
+    "status": "false_positive",
+    "note": "Null-control commit (`rure-0.2.5`, no library code change); Study 3 +0.57% flag (p=2.97e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 -0.40% flag (p=1.08e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 +1.66% flag (p=3.11e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 -8.16% flag (p=3.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 -1.04% flag (p=9.37e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 +1.27% flag (p=3.31e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 -8.77% flag (p=3.25e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 +14.61% flag (p=3.20e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 -1.22% flag (p=6.59e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "d8761c0",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: also include `benches``, no library code change); Study 3 +0.30% flag (p=2.26e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "c4865a0",
+    "status": "false_positive",
+    "note": "Study 3 +1.16% flag (p=3.27e-06) on `syntax: fix negation handling in HIR translation`; 30-pair pinned compare-interleaved gave -3.47% [-3.73%, -3.19%] (p=1.86e-09, verdict=flag, canary -5.28% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "c4865a0",
+    "status": "false_positive",
+    "note": "Study 3 +0.61% flag (p=1.12e-06) on `syntax: fix negation handling in HIR translation`; 30-pair pinned compare-interleaved gave -0.50% [-0.60%, -0.40%] (p=1.41e-06, verdict=ok, canary -5.28% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "c4865a0",
+    "status": "false_positive",
+    "note": "Study 3 +0.84% flag (p=2.15e-06) on `syntax: fix negation handling in HIR translation`; 30-pair pinned compare-interleaved gave +0.00% [-0.10%, +0.00%] (p=8.03e-01, verdict=ok, canary -5.28% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "c4865a0",
+    "status": "false_positive",
+    "note": "Study 3 -5.27% flag (p=3.21e-06) on `syntax: fix negation handling in HIR translation`; 30-pair pinned compare-interleaved gave +0.21% [+0.00%, +0.50%] (p=5.32e-02, verdict=ok, canary -5.28% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "c4865a0",
+    "status": "false_positive",
+    "note": "Study 3 -0.38% flag (p=9.06e-03) on `syntax: fix negation handling in HIR translation`; 30-pair pinned compare-interleaved gave +1.24% [+1.05%, +1.33%] (p=3.12e-06, verdict=flag, canary -5.28% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 -2.17% flag (p=2.56e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 -1.13% flag (p=4.98e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 +5.95% flag (p=3.28e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 -6.34% flag (p=3.39e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_single",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 +1.55% flag (p=4.09e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 +1.03% flag (p=3.95e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 -7.44% flag (p=2.98e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "839d16b",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.10`, no library code change); Study 3 -2.96% flag (p=3.34e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 -2.20% flag (p=3.28e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +15.51% flag (p=8.45e-07, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +7.60% flag (p=3.31e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +1.54% flag (p=3.32e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 -7.34% flag (p=3.29e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +2.05% flag (p=2.75e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +5.40% flag (p=3.39e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_single",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 -1.29% flag (p=1.39e-03, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +13.40% flag (p=3.07e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +1.26% flag (p=4.01e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +10.51% flag (p=5.00e-07, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +3.97% flag (p=2.28e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "2c7b172",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify unsupported Anchored::Pattern searches`, no library code change); Study 3 +3.04% flag (p=2.37e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 +1.37% flag (p=5.94e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -12.71% flag (p=7.09e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -6.44% flag (p=3.38e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -2.49% flag (p=3.25e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -9.51% flag (p=2.78e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -4.46% flag (p=2.47e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "a7f2ff6",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: clarify regex-lite word boundaries`, no library code change); Study 3 -2.77% flag (p=1.86e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "9825c74",
+    "status": "false_positive",
+    "note": "Study 3 +0.51% flag (p=8.99e-06) on `syntax: avoid re-canonicalizing the entire IntervalSet on push (#1308)`; 30-pair pinned compare-interleaved gave -0.14% [-0.24%, -0.05%] (p=4.46e-03, verdict=ok, canary +1.41% OK)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "9825c74",
+    "status": "layout_artifact",
+    "note": "PR #1308 compile-time `IntervalSet::push` optimization does not execute during runtime search; +1.81% [+1.71%, +2.00%] interleaved LTO shift while compile benchmarks showed no regression (-0.03% / -0.71%)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +1.65% flag (p=2.10e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +1.63% flag (p=7.22e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +9.14% flag (p=3.38e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +1.24% flag (p=2.11e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +2.29% flag (p=3.17e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "d709000",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.12.4`, no library code change); Study 3 +1.67% flag (p=2.32e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 -1.90% flag (p=2.67e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 +5.56% flag (p=3.29e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 -7.65% flag (p=3.25e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 +2.27% flag (p=3.27e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 -1.31% flag (p=5.10e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "1401679",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-syntax-0.8.11`, no library code change); Study 3 -0.75% flag (p=1.13e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "7b89cf0",
+    "status": "false_positive",
+    "note": "Null-control commit (`deps: update to regex-syntax 0.8.11`, no library code change); Study 3 +0.41% flag (p=1.65e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "7b89cf0",
+    "status": "false_positive",
+    "note": "Null-control commit (`deps: update to regex-syntax 0.8.11`, no library code change); Study 3 -7.49% flag (p=3.28e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "7b89cf0",
+    "status": "false_positive",
+    "note": "Null-control commit (`deps: update to regex-syntax 0.8.11`, no library code change); Study 3 +0.63% flag (p=2.01e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "7b96fdc",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.4`, no library code change); Study 3 +2.52% flag (p=6.64e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "7b96fdc",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.4`, no library code change); Study 3 -6.50% flag (p=6.64e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "7b96fdc",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.4`, no library code change); Study 3 -6.05% flag (p=3.37e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "7b96fdc",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.4`, no library code change); Study 3 +11.85% flag (p=3.23e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "7b96fdc",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.12.4`, no library code change); Study 3 -2.50% flag (p=3.15e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -4.76% flag (p=4.14e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave -0.71% [-1.36%, +0.01%] (p=7.67e-02, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -0.60% flag (p=3.52e-05) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.00% [-0.05%, +0.10%] (p=1.70e-01, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "468fc64",
+    "status": "layout_artifact",
+    "note": "`DFA::from_bytes` deserialization check only; Study 3 -1.65% vs +1.25% [+1.10%, +1.39%] interleaved LTO alignment shift."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -0.83% flag (p=1.74e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.00% [-0.10%, +0.10%] (p=8.83e-01, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -2.54% flag (p=3.36e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave -0.39% [-0.53%, -0.22%] (p=7.73e-04, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 +7.15% flag (p=3.38e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.02% [-0.15%, +0.17%] (p=7.87e-01, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "468fc64",
+    "status": "layout_artifact",
+    "note": "`DFA::from_bytes` deserialization check only; Study 3 -11.17% flipped to +8.90% [+8.66%, +9.03%] interleaved despite static insn delta=+1 ICF swap (65,212->65,213 insns)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -0.93% flag (p=2.25e-05) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave -0.03% [-0.22%, +0.14%] (p=6.85e-01, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 +3.40% flag (p=3.27e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.18% [+0.00%, +0.32%] (p=3.24e-02, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 +0.60% flag (p=1.03e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.30% [+0.00%, +0.45%] (p=6.28e-03, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "468fc64",
+    "status": "false_positive",
+    "note": "Study 3 -0.75% flag (p=2.34e-06) on `automata: reject dense DFA start states that are match states`; 30-pair pinned compare-interleaved gave +0.38% [+0.28%, +0.57%] (p=1.76e-04, verdict=ok, canary -3.46% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "0858006",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: add AI policy for contributors`, no library code change); Study 3 +1.40% flag (p=2.46e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "0858006",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: add AI policy for contributors`, no library code change); Study 3 -0.95% flag (p=5.31e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "0858006",
+    "status": "false_positive",
+    "note": "Null-control commit (`docs: add AI policy for contributors`, no library code change); Study 3 -0.60% flag (p=3.69e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 +0.61% flag (p=1.48e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 -1.94% flag (p=2.47e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 +0.63% flag (p=1.93e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 +0.77% flag (p=3.33e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 -1.73% flag (p=3.27e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 +4.86% flag (p=3.32e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "b9d2cf7",
+    "status": "false_positive",
+    "note": "Null-control commit (`github: add FUNDING link`, no library code change); Study 3 +0.60% flag (p=4.64e-07, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 +7.91% flag (p=4.14e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 +3.96% flag (p=2.28e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 -9.10% flag (p=4.73e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 -1.32% flag (p=3.33e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 +10.06% flag (p=3.35e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 +12.66% flag (p=3.26e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 -2.43% flag (p=3.14e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 -2.44% flag (p=3.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "c420333",
+    "status": "false_positive",
+    "note": "Null-control commit (`automata: disable miri on a couple doc tests`, no library code change); Study 3 -0.60% flag (p=1.97e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "e358341",
+    "status": "false_positive",
+    "note": "Study 3 -6.78% flag (p=6.15e-06) on `api: add `regex!` macro for lazy compilation`; 30-pair pinned compare-interleaved gave -0.05% [-0.80%, +0.89%] (p=9.35e-01, verdict=ok, canary -7.02% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "e358341",
+    "status": "false_positive",
+    "note": "Study 3 +6.07% flag (p=3.36e-06) on `api: add `regex!` macro for lazy compilation`; 30-pair pinned compare-interleaved gave -0.55% [-0.99%, -0.15%] (p=1.07e-02, verdict=ok, canary -7.02% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "e358341",
+    "status": "layout_artifact",
+    "note": "Adds unused `regex!` lazy macro; -2.90% Study 3 / -6.60% [-6.73%, -6.44%] interleaved cross-build LTO alignment shift."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "e358341",
+    "status": "false_positive",
+    "note": "Study 3 +0.68% flag (p=3.68e-06) on `api: add `regex!` macro for lazy compilation`; 30-pair pinned compare-interleaved gave -0.03% [-0.11%, +0.06%] (p=4.82e-01, verdict=ok, canary -7.02% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "e358341",
+    "status": "false_positive",
+    "note": "Study 3 +1.63% flag (p=3.24e-06) on `api: add `regex!` macro for lazy compilation`; 30-pair pinned compare-interleaved gave -0.24% [-0.33%, -0.08%] (p=1.69e-02, verdict=ok, canary -7.02% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 -0.60% flag (p=1.99e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 -5.96% flag (p=2.65e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 -12.84% flag (p=4.11e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 -1.04% flag (p=9.08e-07, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 -6.42% flag (p=3.39e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 +0.80% flag (p=3.27e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "7d941a9",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.15`, no library code change); Study 3 +0.90% flag (p=3.27e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "926af2e",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.0`, no library code change); Study 3 +9.52% flag (p=3.02e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "926af2e",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.0`, no library code change); Study 3 +6.32% flag (p=2.83e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "926af2e",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.0`, no library code change); Study 3 +7.69% flag (p=3.39e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "926af2e",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.0`, no library code change); Study 3 -0.30% flag (p=1.10e-03, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 -8.03% flag (p=3.25e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 +0.63% flag (p=4.49e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 -0.62% flag (p=4.37e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 -1.12% flag (p=3.95e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 +1.50% flag (p=1.90e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "677e075",
+    "status": "false_positive",
+    "note": "Null-control commit (`ignore: whitelist .github directory`, no library code change); Study 3 -0.75% flag (p=3.43e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 -4.34% flag (p=2.43e-06) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave +3.38% [+3.23%, +3.52%] (p=2.73e-05, verdict=flag, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 +12.50% flag (p=3.26e-06) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave +1.26% [+0.90%, +1.74%] (p=2.61e-04, verdict=flag, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 -12.64% flag (p=3.18e-06) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave -0.33% [-0.62%, -0.08%] (p=1.79e-02, verdict=ok, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 +2.26% flag (p=3.31e-06) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave +2.69% [+2.50%, +2.87%] (p=1.73e-06, verdict=flag, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 +1.93% flag (p=3.17e-06) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave -0.19% [-0.45%, +0.00%] (p=4.75e-02, verdict=ok, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "6c44a0f",
+    "status": "false_positive",
+    "note": "Study 3 +0.60% flag (p=1.29e-07) on `automata: DRY up Thompson configuration`; 30-pair pinned compare-interleaved gave -0.30% [-0.60%, -0.15%] (p=1.08e-02, verdict=ok, canary +10.37% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "f9b0ab1",
+    "status": "false_positive",
+    "note": "Study 3 -0.60% flag (p=1.34e-06) on `automata: add tests for confirming the regex engine choice`; 30-pair pinned compare-interleaved gave +0.10% [+0.00%, +0.10%] (p=1.10e-03, verdict=ok, canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "f9b0ab1",
+    "status": "layout_artifact",
+    "note": "Adds `PrefilterI::name()` helper and engine tests (`delta=0` static insns 65,146->65,146); Study 3 +2.27% vs -4.20% interleaved (canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "f9b0ab1",
+    "status": "false_positive",
+    "note": "Study 3 -0.83% flag (p=1.15e-06) on `automata: add tests for confirming the regex engine choice`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.10%] (p=1.05e-01, verdict=ok, canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "f9b0ab1",
+    "status": "layout_artifact",
+    "note": "Engine-choice unit test commit (`delta=0` static insns 65,146->65,146 in `run_rebar_bench`); Study 3 -4.09% vs -10.70% interleaved (canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "f9b0ab1",
+    "status": "false_positive",
+    "note": "Study 3 -1.70% flag (p=3.37e-06) on `automata: add tests for confirming the regex engine choice`; 30-pair pinned compare-interleaved gave +0.13% [-0.09%, +0.34%] (p=2.14e-01, verdict=ok, canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "f9b0ab1",
+    "status": "layout_artifact",
+    "note": "Engine-choice unit test commit (`delta=0` static insns 65,146->65,146); Study 3 +3.01% vs +10.63% [+10.49%, +10.82%] interleaved (canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "f9b0ab1",
+    "status": "layout_artifact",
+    "note": "Engine-choice unit test commit (`delta=0` static insns 65,146->65,146); Study 3 -1.75% vs -2.59% interleaved (canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "f9b0ab1",
+    "status": "false_positive",
+    "note": "Study 3 -0.60% flag (p=1.97e-07) on `automata: add tests for confirming the regex engine choice`; 30-pair pinned compare-interleaved gave +0.45% [+0.30%, +0.60%] (p=2.56e-04, verdict=ok, canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "f9b0ab1",
+    "status": "layout_artifact",
+    "note": "Engine-choice unit test commit (`delta=0` static insns 65,146->65,146); Study 3 -1.00% flipped to +2.19% [+2.02%, +2.36%] interleaved (canary +0.24% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: fix indentation` (`f9b0ab1->e018953` Study 3 +0.41%, p=1.95e-06; canary within/vs-prev OK/OK). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "e018953",
+    "status": "layout_artifact",
+    "note": "Whitespace/indentation-only commit; Study 3 -7.02% flipped to +7.66% [+7.22%, +8.22%] interleaved (canary -0.13% OK), static insn diff delta=+1 ICF swap (65,146->65,147 insns)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: fix indentation` (`f9b0ab1->e018953` Study 3 +0.84%, p=1.48e-06; canary within/vs-prev OK/OK). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Study 3 +3.43% flag (p=1.09e-05) on `automata: fix indentation`; 30-pair pinned compare-interleaved gave +0.18% [+0.10%, +0.27%] (p=1.38e-03, verdict=ok, canary -0.13% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: fix indentation` (`f9b0ab1->e018953` Study 3 +1.90%, p=3.26e-06; canary within/vs-prev OK/OK). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "e018953",
+    "status": "layout_artifact",
+    "note": "Whitespace/indentation-only commit; Study 3 -4.08% flipped to +3.18% [+2.96%, +3.44%] interleaved (canary -0.13% OK), static insn diff delta=+1 ICF swap."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: fix indentation` (`f9b0ab1->e018953` Study 3 +0.60%, p=4.51e-07; canary within/vs-prev OK/OK). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: fix indentation` (`f9b0ab1->e018953` Study 3 +1.01%, p=2.75e-06; canary within/vs-prev OK/OK). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_reported_i988_sql_injection_compile",
+    "commit": "e018953",
+    "status": "false_positive",
+    "note": "Study 3 +2.95% flag (p=3.39e-06) on `automata: fix indentation`; 30-pair pinned compare-interleaved gave -0.29% [-0.58%, -0.05%] (p=3.10e-02, verdict=ok, canary -0.13% OK)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 -0.56% flag (p=1.59e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 +8.11% flag (p=3.32e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 -0.62% flag (p=1.78e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 -0.97% flag (p=3.33e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 -1.69% flag (p=4.79e-05, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "5524f02",
+    "status": "false_positive",
+    "note": "Null-control commit (`test: add regression tests for failed reverse suffix/inner optimizations`, no library code change); Study 3 -0.60% flag (p=1.41e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 +3.25% flag (p=3.29e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave -0.36% [-0.56%, -0.16%] (p=8.61e-04, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 +1.94% flag (p=2.87e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave +0.00% [-0.12%, +0.00%] (p=9.15e-01, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 +1.93% flag (p=3.36e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave +0.33% [+0.16%, +0.49%] (p=3.80e-04, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 -4.88% flag (p=5.61e-05) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave +0.15% [-0.15%, +0.37%] (p=2.06e-01, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 -7.56% flag (p=3.37e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave -0.09% [-0.30%, +0.18%] (p=5.04e-01, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 +10.60% flag (p=2.80e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave -0.61% [-0.81%, -0.41%] (p=4.53e-04, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "8c34f41",
+    "status": "layout_artifact",
+    "note": "Non-leftmost-first ReverseSuffix guard (`MatchKind::LeftmostFirst` untouched); Study 3 -2.79% flipped to +3.33% [+3.20%, +3.47%] interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "8c34f41",
+    "status": "layout_artifact",
+    "note": "Non-leftmost-first ReverseSuffix guard (`MatchKind::LeftmostFirst` untouched); Study 3 +6.76% flipped to -2.82% interleaved."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "8c34f41",
+    "status": "false_positive",
+    "note": "Study 3 +0.76% flag (p=2.17e-06) on `automata: avoid reverse suffix optimization for non-leftmost-first`; 30-pair pinned compare-interleaved gave +0.55% [+0.37%, +0.74%] (p=2.75e-05, verdict=ok, canary +7.29% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "10afd70",
+    "status": "false_positive",
+    "note": "Study 3 -2.18% flag (p=3.25e-06) on `automata: expose the extracted literals for inner literal extraction`; 30-pair pinned compare-interleaved gave +0.24% [+0.04%, +0.40%] (p=3.23e-02, verdict=ok, canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 -4.63% flipped to +2.12% interleaved (canary +0.03% OK), reversed -1.94% at `821a8eb`."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; +9.05% Study 3 / +7.60% interleaved (canary +0.03% OK), reversed -6.88% at `821a8eb`."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 +8.70% flipped to -6.30% interleaved (canary +0.03% OK), reversed +7.00% at `821a8eb`."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 +8.53% flipped to -7.46% interleaved (canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_single",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 +0.65% flipped to -1.89% interleaved (canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 -11.05% flipped to +10.60% interleaved (canary +0.03% OK), immediately mirrored -9.64% at `821a8eb`."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "10afd70",
+    "status": "layout_artifact",
+    "note": "Compile-time literal extraction refactor; Study 3 +1.67% flipped to -3.28% interleaved (canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "10afd70",
+    "status": "false_positive",
+    "note": "Study 3 -5.53% flag (p=3.27e-06) on `automata: expose the extracted literals for inner literal extraction`; 30-pair pinned compare-interleaved gave -0.71% [-0.94%, -0.52%] (p=7.69e-06, verdict=ok, canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "10afd70",
+    "status": "false_positive",
+    "note": "Study 3 +1.33% flag (p=2.07e-06) on `automata: expose the extracted literals for inner literal extraction`; 30-pair pinned compare-interleaved gave +0.33% [+0.17%, +0.33%] (p=2.17e-05, verdict=ok, canary +0.03% OK)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "10afd70",
+    "status": "false_positive",
+    "note": "Study 3 -0.94% flag (p=8.86e-06) on `automata: expose the extracted literals for inner literal extraction`; 30-pair pinned compare-interleaved gave +0.48% [+0.38%, +0.67%] (p=9.68e-05, verdict=ok, canary +0.03% OK)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "821a8eb",
+    "status": "false_positive",
+    "note": "Study 3 -1.27% flag (p=3.14e-06) on `automata: refactor reverse suffix/inner search slightly`; 30-pair pinned compare-interleaved gave -0.39% [-0.56%, -0.18%] (p=2.45e-03, verdict=ok, canary -0.34% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "821a8eb",
+    "status": "layout_artifact",
+    "note": "No-behavior-change `strategy.rs` refactor (`delta=0` static insns 65,238->65,238); Study 3 +4.01% flipped to -1.94% interleaved (canary -0.34% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "821a8eb",
+    "status": "layout_artifact",
+    "note": "No-behavior-change `strategy.rs` refactor (`delta=0` static insns 65,238->65,238); -12.85% Study 3 / -6.88% interleaved mirroring `10afd70` +7.60%."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "821a8eb",
+    "status": "layout_artifact",
+    "note": "No-behavior-change `strategy.rs` refactor (`delta=0` static insns 65,238->65,238); Study 3 -9.64% flipped to +7.00% interleaved mirroring `10afd70` -6.30%."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "821a8eb",
+    "status": "layout_artifact",
+    "note": "No-behavior-change `strategy.rs` refactor (`delta=0` static insns 65,238->65,238); Study 3 +15.56% flipped to -9.64% interleaved mirroring `10afd70` +10.60%."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "821a8eb",
+    "status": "false_positive",
+    "note": "Study 3 -2.83% flag (p=1.09e-05) on `automata: refactor reverse suffix/inner search slightly`; 30-pair pinned compare-interleaved gave +0.39% [+0.31%, +0.46%] (p=2.61e-08, verdict=ok, canary -0.34% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "821a8eb",
+    "status": "false_positive",
+    "note": "Study 3 -0.99% flag (p=6.45e-06) on `automata: refactor reverse suffix/inner search slightly`; 30-pair pinned compare-interleaved gave +0.17% [-0.17%, +0.33%] (p=3.00e-01, verdict=ok, canary -0.34% OK)."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Study 3 +11.51% flag (p=2.33e-05) on `automata: formatting tweaks`; 30-pair pinned compare-interleaved gave +0.24% [-0.56%, +1.28%] (p=6.12e-01, verdict=ok, canary -6.41% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +2.01%, p=3.26e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 -1.93%, p=5.31e-05; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +17.76%, p=3.37e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Study 3 +20.39% flag (p=3.33e-06) on `automata: formatting tweaks`; 30-pair pinned compare-interleaved gave +1.06% [+0.90%, +1.25%] (p=5.78e-05, verdict=flag, canary -6.41% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +12.20%, p=5.52e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +5.09%, p=1.76e-05; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_single",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +9.85%, p=3.38e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +0.16%, p=7.88e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +0.56%, p=5.42e-03; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Study 3 -11.18% flag (p=5.49e-05) on `automata: formatting tweaks`; 30-pair pinned compare-interleaved gave +0.16% [+0.00%, +0.37%] (p=2.46e-02, verdict=ok, canary -6.41% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +9.48%, p=2.12e-05; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +13.43%, p=3.38e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_12_dictionary_single",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +1.74%, p=5.60e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +4.72%, p=3.96e-05; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +10.00%, p=2.44e-03; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +1.33%, p=1.75e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_reported_i988_sql_injection_compile",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Host/environment noise on `automata: formatting tweaks` (`821a8eb->30390ec` Study 3 +15.61%, p=7.48e-06; canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Tested benches on this transition vanished under 30-pair interleaved."
+  },
+  {
+    "benchmark": "rebar_unicode_compile_one_letter",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Study 3 +21.35% flag (p=3.39e-06) on `automata: formatting tweaks`; 30-pair pinned compare-interleaved gave -0.48% [-1.70%, +0.74%] (p=4.40e-01, verdict=ok, canary -6.41% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "30390ec",
+    "status": "false_positive",
+    "note": "Study 3 +12.71% flag (p=7.54e-06) on `automata: formatting tweaks`; 30-pair pinned compare-interleaved gave +0.38% [+0.19%, +0.48%] (p=7.88e-04, verdict=ok, canary -6.41% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "fa91c31",
+    "status": "false_positive",
+    "note": "Study 3 -0.98% flag (p=2.81e-04) on `automata: fix a bug caught by Codex review`; 30-pair pinned compare-interleaved gave +0.64% [+0.48%, +0.81%] (p=7.97e-05, verdict=ok, canary -0.10% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "64ad0b6",
+    "status": "false_positive",
+    "note": "Study 3 +0.61% flag (p=1.26e-06) on `automata: fix bug in reverse suffix/inner optimization`; 30-pair pinned compare-interleaved gave +0.61% [+0.51%, +0.61%] (p=1.24e-06, verdict=ok, canary +8.40% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "64ad0b6",
+    "status": "false_positive",
+    "note": "Study 3 +0.53% flag (p=5.06e-06) on `automata: fix bug in reverse suffix/inner optimization`; 30-pair pinned compare-interleaved gave +0.63% [+0.52%, +0.63%] (p=2.26e-06, verdict=ok, canary +8.40% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "64ad0b6",
+    "status": "layout_artifact",
+    "note": "Unrelated `RegexSet` runtime (`find_overlapping_fwd`) faster in Study 3 (-11.36%) and interleaved (-7.10% [-7.33%, -6.88%]); `64ad0b6` static delta is in compile-time `reverse_suffix`/`prefix`."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "64ad0b6",
+    "status": "confirmed",
+    "flamegraph": "flamegraph_diff_64ad0b6.svg",
+    "note": "Confirmed real regression (+94.38% in Study 3, p=1.86e-07; E-Divisive changepoint +94.84% p=0.005). 30-pair pinned compare-interleaved (fa91c31->64ad0b6): +94.69% [+94.69%, +94.69%], p=1.01e-07 (64,000.0 ns -> 124,600.0 ns), persisting identically to year-window head 3d79fe9 (+94.69%, canary -2.66% OK). Sample flamegraph shows `ReverseInner::search` (2,168/2,225 = 97.4% samples) replaced by `Core::search` (`hybrid::search::find_fwd` 2,382 + `find_rev` 1,877 = 4,259/4,330 = 98.4% samples) because `reverse_inner::has_no_earlier_match` conservatively rejects `.*.*=.*` (`prefix::hir_can_contain_literal` finds `.` can consume `=`)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "64ad0b6",
+    "status": "layout_artifact",
+    "note": "Non-regression speedup (-4.50% Study 3 / -1.14% interleaved); not a regression."
+  },
+  {
+    "benchmark": "rebar_unicode_compile_one_letter",
+    "commit": "64ad0b6",
+    "status": "false_positive",
+    "note": "Study 3 -12.32% flag (p=3.39e-06) on `automata: fix bug in reverse suffix/inner optimization`; 30-pair pinned compare-interleaved gave +0.24% [-1.15%, +1.90%] (p=7.15e-01, verdict=ok, canary +8.40% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 -0.88% flag (p=6.98e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Study 3 +6.54% flag (p=3.35e-06) on `changelog: 1.13.1`; 30-pair pinned compare-interleaved gave +0.19% [-0.11%, +0.71%] (p=2.67e-01, verdict=ok, canary +1.78% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Study 3 +8.62% flag (p=3.39e-06) on `changelog: 1.13.1`; 30-pair pinned compare-interleaved gave -0.09% [-0.35%, +0.17%] (p=5.29e-01, verdict=ok, canary +1.78% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Study 3 -9.11% flag (p=5.52e-05) on `changelog: 1.13.1`; 30-pair pinned compare-interleaved gave +0.04% [-0.12%, +0.20%] (p=3.91e-01, verdict=ok, canary +1.78% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 +0.34% flag (p=5.43e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 -1.98% flag (p=8.33e-04, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 +4.24% flag (p=2.77e-03, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 +0.30% flag (p=2.24e-03, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: 1.13.1`, no library code change); Study 3 -1.63% flag (p=6.42e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_reported_i988_sql_injection_compile",
+    "commit": "75fcb96",
+    "status": "false_positive",
+    "note": "Study 3 +5.49% flag (p=7.46e-06) on `changelog: 1.13.1`; 30-pair pinned compare-interleaved gave +0.02% [-0.37%, +0.50%] (p=9.19e-01, verdict=ok, canary +1.78% OK)."
+  },
+  {
+    "benchmark": "compile_moderate",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Study 3 +10.33% flag (p=1.10e-05) on `1.13.1`; 30-pair pinned compare-interleaved gave +0.49% [-0.44%, +1.41%] (p=2.53e-01, verdict=ok, canary +3.14% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Study 3 +69.61% flag (p=3.20e-06) on `1.13.1`; 30-pair pinned compare-interleaved gave -0.10% [-0.20%, +0.04%] (p=1.43e-01, verdict=ok, canary +3.14% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Study 3 +13.91% flag (p=2.17e-04) on `1.13.1`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.10%] (p=8.66e-02, verdict=ok, canary +3.14% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Study 3 +25.75% flag (p=7.42e-06) on `1.13.1`; 30-pair pinned compare-interleaved gave +1.03% [+0.54%, +1.49%] (p=3.45e-04, verdict=flag, canary +3.14% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1`, no library code change); Study 3 +11.71% flag (p=2.07e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1`, no library code change); Study 3 +1.35% flag (p=1.04e-04, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1`, no library code change); Study 3 +3.62% flag (p=1.32e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "40e9823",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1`, no library code change); Study 3 -5.75% flag (p=3.39e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "2b52759",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1, redux`, no library code change); Study 3 -41.27% flag (p=3.27e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "2b52759",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1, redux`, no library code change); Study 3 -2.02% flag (p=3.38e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "2b52759",
+    "status": "false_positive",
+    "note": "Null-control commit (`1.13.1, redux`, no library code change); Study 3 -4.42% flag (p=3.32e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "c21ed55",
+    "status": "false_positive",
+    "note": "Study 3 -0.60% flag (p=1.01e-06) on `automata: make MAX_POOL_STACKS user configurable`; 30-pair pinned compare-interleaved gave -0.20% [-0.20%, -0.10%] (p=1.19e-03, verdict=ok, canary -0.46% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "c21ed55",
+    "status": "layout_artifact",
+    "note": "`MAX_POOL_STACKS` config change (pool init only); Study 3 +8.73% flipped to -7.39% interleaved (canary -0.46% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "c21ed55",
+    "status": "false_positive",
+    "note": "Study 3 -0.83% flag (p=2.02e-06) on `automata: make MAX_POOL_STACKS user configurable`; 30-pair pinned compare-interleaved gave +0.10% [+0.10%, +0.21%] (p=6.86e-03, verdict=ok, canary -0.46% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_tweaked_lite",
+    "commit": "c21ed55",
+    "status": "false_positive",
+    "note": "Study 3 +2.21% flag (p=4.11e-06) on `automata: make MAX_POOL_STACKS user configurable`; 30-pair pinned compare-interleaved gave +0.67% [+0.32%, +1.14%] (p=1.72e-03, verdict=ok, canary -0.46% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "c21ed55",
+    "status": "false_positive",
+    "note": "Study 3 +7.15% flag (p=3.38e-06) on `automata: make MAX_POOL_STACKS user configurable`; 30-pair pinned compare-interleaved gave +0.67% [+0.44%, +0.88%] (p=4.71e-07, verdict=ok, canary -0.46% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "c21ed55",
+    "status": "layout_artifact",
+    "note": "`MAX_POOL_STACKS` config change; +2.10% Study 3 / +10.90% [+10.58%, +11.27%] interleaved (canary -0.46% OK), while compile path `compile_moderate` improved -2.98%."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "c21ed55",
+    "status": "layout_artifact",
+    "note": "`MAX_POOL_STACKS` config change; -3.14% Study 3 / -1.36% interleaved (canary -0.46% OK), negative layout/speedup."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "3af3e27",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.17`, no library code change); Study 3 +7.43% flag (p=3.33e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "3af3e27",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.17`, no library code change); Study 3 +3.23% flag (p=3.20e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "3af3e27",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.17`, no library code change); Study 3 +0.46% flag (p=9.38e-03, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "3af3e27",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.17`, no library code change); Study 3 +3.68% flag (p=3.30e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -3.59% flag (p=2.45e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave +0.00% [-0.28%, +0.28%] (p=6.65e-01, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -12.54% flag (p=3.34e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.36% [-0.94%, +0.18%] (p=2.06e-01, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 +9.14% flag (p=3.32e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.24% [-0.43%, -0.02%] (p=3.06e-02, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -3.28% flag (p=3.38e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave +0.15% [-0.06%, +0.36%] (p=1.75e-01, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -13.09% flag (p=3.09e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.60% [-0.69%, -0.47%] (p=2.47e-06, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -2.40% flag (p=6.64e-04) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.26% [-0.42%, -0.14%] (p=1.14e-03, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 +1.45% flag (p=3.32e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave +2.20% [+1.99%, +2.37%] (p=1.86e-09, verdict=flag, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 +5.14% flag (p=3.27e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave +0.52% [+0.36%, +0.69%] (p=6.32e-05, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 +0.60% flag (p=1.86e-07) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.30% [-0.30%, -0.15%] (p=4.23e-04, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "92e0f22",
+    "status": "false_positive",
+    "note": "Study 3 -0.76% flag (p=6.17e-06) on `automata: avoid re-computing `available_parallelism``; 30-pair pinned compare-interleaved gave -0.76% [-0.85%, -0.66%] (p=5.26e-06, verdict=ok, canary +8.19% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +0.81% flag (p=1.71e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +2.01% flag (p=2.59e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +5.04% flag (p=3.35e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +0.84% flag (p=2.10e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 -0.72% flag (p=3.34e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 -0.82% flag (p=6.95e-04, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +1.58% flag (p=1.19e-05, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 -0.60% flag (p=8.27e-08, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "e6ad938",
+    "status": "false_positive",
+    "note": "Null-control commit (`regex-automata-0.4.18`, no library code change); Study 3 +1.67% flag (p=1.78e-06, canary within/vs-prev ENVIRONMENT_SUSPECT/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: fix glob typo in `workspace.package.include` setting`, no library code change); Study 3 +8.41% flag (p=3.33e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_03_date_unicode",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Study 3 +59.10% flag (p=4.94e-04) on `cargo: fix glob typo in `workspace.package.include` setting`; 30-pair pinned compare-interleaved gave +2.05% [+1.87%, +2.25%] (p=1.86e-09, verdict=flag, canary +7.66% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: fix glob typo in `workspace.package.include` setting`, no library code change); Study 3 +6.38% flag (p=3.37e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: fix glob typo in `workspace.package.include` setting`, no library code change); Study 3 +1.04% flag (p=8.78e-07, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Study 3 +9.90% flag (p=3.28e-06) on `cargo: fix glob typo in `workspace.package.include` setting`; 30-pair pinned compare-interleaved gave +1.08% [+0.86%, +1.27%] (p=4.85e-05, verdict=flag, canary +7.66% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "782152f",
+    "status": "false_positive",
+    "note": "Null-control commit (`cargo: fix glob typo in `workspace.package.include` setting`, no library code change); Study 3 +0.60% flag (p=2.52e-07, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "ada2a5a",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: update to include #1333`, no library code change); Study 3 -7.81% flag (p=3.37e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "ada2a5a",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: update to include #1333`, no library code change); Study 3 -1.03% flag (p=4.73e-04, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "ada2a5a",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: update to include #1333`, no library code change); Study 3 +2.63% flag (p=3.33e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "ada2a5a",
+    "status": "false_positive",
+    "note": "Null-control commit (`changelog: update to include #1333`, no library code change); Study 3 +1.53% flag (p=2.43e-06, canary within/vs-prev OK/OK). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "72d650c",
+    "status": "layout_artifact",
+    "note": "Replaces deprecated `std::usize::MAX` with `usize::MAX` (semantically identical); +7.81% Study 3 / +9.65% [+9.43%, +9.87%] interleaved (canary -0.22% OK)."
+  },
+  {
+    "benchmark": "rebar_reported_i988_sql_injection_compile",
+    "commit": "72d650c",
+    "status": "false_positive",
+    "note": "Study 3 +3.79% flag (p=3.08e-04) on `automata: replace uses of deprecated module integer constants`; 30-pair pinned compare-interleaved gave -0.92% [-1.98%, +0.05%] (p=8.79e-02, verdict=ok, canary -0.22% OK)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 -0.72% flag (p=6.44e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_casei_en",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +0.61% flag (p=1.88e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +14.37% flag (p=1.18e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 -8.23% flag (p=3.31e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_en",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +0.42% flag (p=2.10e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +10.83% flag (p=3.30e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +3.20% flag (p=3.36e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 -0.48% flag (p=1.33e-05, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 -10.16% flag (p=3.23e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +3.52% flag (p=3.35e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +5.08% flag (p=3.64e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +10.21% flag (p=2.79e-07, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +6.02% flag (p=1.93e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "d1d557d",
+    "status": "false_positive",
+    "note": "Null-control commit (`tests: s/std::usize::MAX/usize::MAX`, no library code change); Study 3 +4.19% flag (p=2.51e-06, canary within/vs-prev OK/ENVIRONMENT_SUSPECT). Reproducibility checks on representative null controls (6a81006->0c07fae, 64ad0b6->75fcb96, 75fcb96->40e9823) showed sequential drift and build-layout noise."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "a1e367b",
+    "status": "layout_artifact",
+    "note": "`onepass::DFA` `WhichCaptures::None` fix (not used by `Sherlock` DFA literal engine); -13.29% Study 3 / -1.45% interleaved (canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 +8.36% flag (p=3.31e-06) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave -0.05% [-0.43%, +0.36%] (p=9.09e-01, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "a1e367b",
+    "status": "layout_artifact",
+    "note": "`onepass::DFA` `WhichCaptures::None` fix; -9.63% Study 3 / -1.71% interleaved (canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 -3.83% flag (p=3.32e-06) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave -0.26% [-0.52%, -0.06%] (p=2.98e-02, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "a1e367b",
+    "status": "layout_artifact",
+    "note": "`onepass::DFA` `WhichCaptures::None` fix; Study 3 +14.66% flipped to -2.02% interleaved (canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "a1e367b",
+    "status": "layout_artifact",
+    "note": "`onepass::DFA` `WhichCaptures::None` fix (pattern uses `Core`/`Hybrid`, not `onepass`); Study 3 -2.39% flipped to +1.07% [+0.98%, +1.22%] interleaved (canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_12_dictionary_single",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 +0.20% flag (p=5.88e-06) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.03%] (p=4.52e-02, verdict=ok, canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_backtrack_words_en",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 -1.17% flag (p=5.60e-05) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave -0.57% [-0.81%, -0.39%] (p=3.75e-04, verdict=ok, canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 -4.81% flag (p=3.21e-06) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave +0.66% [+0.55%, +0.78%] (p=2.12e-06, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_inner_email",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 -9.26% flag (p=4.67e-07) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave +0.30% [+0.15%, +0.45%] (p=1.15e-02, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_reverse_suffix_holmes",
+    "commit": "a1e367b",
+    "status": "layout_artifact",
+    "note": "`onepass::DFA` `WhichCaptures::None` fix (`Holmes` uses `ReverseSuffix`); -4.73% Study 3 / -1.15% interleaved (canary -1.79% OK)."
+  },
+  {
+    "benchmark": "rebar_reported_i988_sql_injection_compile",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 +5.47% flag (p=1.33e-05) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave +0.02% [-0.41%, +0.48%] (p=8.87e-01, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_unicode_compile_one_letter",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 +8.52% flag (p=8.13e-05) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave +0.36% [-0.57%, +1.24%] (p=4.77e-01, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_wild_rustsec_cargo_audit_bytes",
+    "commit": "a1e367b",
+    "status": "false_positive",
+    "note": "Study 3 -3.66% flag (p=3.00e-06) on `automata/dfa/onepass: fix a bug when `WhichCaptures::None` is used`; 30-pair pinned compare-interleaved gave -0.09% [-0.19%, +0.09%] (p=5.47e-01, verdict=ok, canary +2.89% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "ad23cc2",
+    "status": "false_positive",
+    "note": "Study 3 -0.95% flag (p=5.07e-07) on `meta: fix off-by-one error`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.00%] (p=3.17e-01, verdict=ok, canary +1.11% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_08_words_all_russian",
+    "commit": "ad23cc2",
+    "status": "false_positive",
+    "note": "Study 3 -1.06% flag (p=3.29e-06) on `meta: fix off-by-one error`; 30-pair pinned compare-interleaved gave +0.13% [+0.04%, +0.20%] (p=8.71e-03, verdict=ok, canary +1.11% OK)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "ad23cc2",
+    "status": "false_positive",
+    "note": "Study 3 +3.19% flag (p=3.30e-06) on `meta: fix off-by-one error`; 30-pair pinned compare-interleaved gave +0.02% [-0.07%, +0.11%] (p=7.33e-01, verdict=ok, canary +1.11% OK)."
+  },
+  {
+    "benchmark": "find_iter_userid",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 +2.83% flag (p=3.19e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +7.72% [+7.46%, +7.97%] (p=1.73e-06, verdict=flag, canary +9.65% ENVIRONMENT_SUSPECT). Sample-mode wall time showed -2.1% (3.358s->3.288s) on identical `Core::search_half -> hybrid::search::find_fwd` stack with 0 search insns changed."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 -1.68% flag (p=4.95e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +0.28% [+0.14%, +0.41%] (p=5.93e-03, verdict=ok, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 +8.64% flag (p=3.29e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +1.52% [+1.24%, +1.80%] (p=1.04e-03, verdict=flag, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 +2.54% flag (p=3.37e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +0.72% [+0.32%, +1.00%] (p=8.72e-04, verdict=ok, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 -12.31% flag (p=3.30e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +2.42% [+2.31%, +2.50%] (p=1.73e-06, verdict=flag, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 -0.86% flag (p=3.29e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave -0.00% [-0.10%, +0.27%] (p=9.84e-01, verdict=ok, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "94ac45b",
+    "status": "false_positive",
+    "note": "Study 3 -3.57% flag (p=3.27e-06) on `automata: revert default pool capacity change`; 30-pair pinned compare-interleaved gave +1.92% [+1.74%, +2.03%] (p=1.86e-09, verdict=flag, canary +9.65% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_01_literal_sherlock_en",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard (literal search unchanged); Study 3 +4.00% flipped to -1.38% interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_02_literal_alternate_sherlock_casei_ru",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard; Study 3 +8.73% flipped to -6.89% interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_04_ruff_noqa_real",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard; -8.16% Study 3 / -1.26% interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_05_lexer_veryl_regexset",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard (`lift_3d79fe9_veryl` static insn delta=-1 66,121->66,120; sample mode identical `HybridEngine::try_which_overlapping_matches` 4.019s->3.873s); Study 3 -9.28% flipped to +7.34% interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_06_cloudflare_redos_long",
+    "commit": "3d79fe9",
+    "status": "false_positive",
+    "note": "Study 3 +1.36% flag (p=2.19e-06) on `syntax: don't lift alternation prefixes that can match more than one way`; 30-pair pinned compare-interleaved gave +0.00% [+0.00%, +0.00%] (p=3.17e-01, verdict=ok, canary +2.73% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_09_aws_keys_quick",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard; Study 3 +10.98% flipped to -2.60% interleaved."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_context",
+    "commit": "3d79fe9",
+    "status": "false_positive",
+    "note": "Study 3 +1.08% flag (p=3.27e-06) on `syntax: don't lift alternation prefixes that can match more than one way`; 30-pair pinned compare-interleaved gave +0.04% [-0.10%, +0.16%] (p=5.81e-01, verdict=ok, canary +2.73% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_curated_10_bounded_repeat_letters_ru",
+    "commit": "3d79fe9",
+    "status": "false_positive",
+    "note": "Study 3 +0.96% flag (p=6.08e-06) on `syntax: don't lift alternation prefixes that can match more than one way`; 30-pair pinned compare-interleaved gave -0.85% [-1.01%, -0.71%] (p=5.59e-09, verdict=ok, canary +2.73% ENVIRONMENT_SUSPECT)."
+  },
+  {
+    "benchmark": "rebar_opt_onepass_first_three_words_en",
+    "commit": "3d79fe9",
+    "status": "layout_artifact",
+    "note": "`lift_common_prefix` HIR guard; -2.50% Study 3 / -2.44% interleaved."
   }
 ]
