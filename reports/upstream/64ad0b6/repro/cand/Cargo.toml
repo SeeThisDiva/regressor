@@ -1,0 +1,16 @@
+[package]
+name = "regex-repro-cand"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "repro"
+path = "../src/main.rs"
+
+[dependencies]
+regex = { git = "https://github.com/rust-lang/regex.git", rev = "64ad0b618e043b791ed5385dd5504a436da1ddae" }
+
+[profile.release]
+debug = true
+lto = true
+codegen-units = 1

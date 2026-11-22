@@ -1,0 +1,16 @@
+[package]
+name = "regex-repro-base"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "repro"
+path = "../src/main.rs"
+
+[dependencies]
+regex = { git = "https://github.com/rust-lang/regex.git", rev = "__BASE_SHA__" }
+
+[profile.release]
+debug = true
+lto = true
+codegen-units = 1

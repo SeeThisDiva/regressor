@@ -1,0 +1,158 @@
+<svg version="1.1" width="100%" height="332" viewBox="0 0 1200 332" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;">
+    <style>
+        .func:hover rect { stroke: #000000; stroke-width: 1.5; cursor: pointer; }
+        text { user-select: none; pointer-events: none; }
+    </style>
+    <!-- Header -->
+    <text x="10" y="25" font-family="sans-serif" font-size="16" font-weight="bold" fill="#0f172a">fa91c31 vs 64ad0b6: cloudflare-redos-long (+94.69% ReverseInner fallback to Core)</text>
+    <text x="10" y="42" font-family="sans-serif" font-size="11" fill="#64748b">
+        Red = Slower in Candidate (&#916; &gt; 0) | Blue = Faster in Candidate (&#916; &lt; 0) | Neutral = Unchanged
+    </text>
+
+    <!-- Legend -->
+    <rect x="980" y="15" width="14" height="14" fill="rgb(220, 50, 50)" rx="2"/>
+    <text x="1000" y="26" font-family="sans-serif" font-size="11" fill="#334155">Hotter (+% CPU)</text>
+    <rect x="1090" y="15" width="14" height="14" fill="rgb(50, 80, 220)" rx="2"/>
+    <text x="1110" y="26" font-family="sans-serif" font-size="11" fill="#334155">Cooler (-% CPU)</text>
+
+    <!-- Flamegraph Boxes -->
+    <g id="boxes">
+        
+        <g class="func" data-info="noise_bench::main | Base: 100.00% | Cand: 99.98% | Δ: -0.02%">
+            <rect x="10.0" y="264.0" width="1179.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="276.0" fill="#334155" font-size="10" font-family="monospace">noise_bench::main</text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::run_bench | Base: 98.11% | Cand: 98.85% | Δ: +0.73%">
+            <rect x="10.0" y="246.0" width="1166.4" height="16" rx="2" fill="rgb(170, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="258.0" fill="#ffffff" font-size="10" font-family="monospace">noise_bench::run_bench</text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::run_rebar_bench | Base: 98.11% | Cand: 98.85% | Δ: +0.73%">
+            <rect x="10.0" y="228.0" width="1166.4" height="16" rx="2" fill="rgb(170, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="240.0" fill="#ffffff" font-size="10" font-family="monospace">noise_bench::rebar::run_rebar_bench</text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;noise_bench::Measurement&gt; as alloc::vec::spec_from_iter::SpecFromIter&lt;noise_bench::Measurement, core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, noise_bench::measure_iterations&lt;usize, noise_bench::rebar::count_spans_batched::{closure#0}&gt;::{closure#0}&gt;&gt;&gt;::from_iter | Base: 98.11% | Cand: 98.85% | Δ: +0.73%">
+            <rect x="10.0" y="210.0" width="1166.4" height="16" rx="2" fill="rgb(170, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="222.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;alloc::vec::Vec&lt;noise_bench::Measurement&gt; as alloc::vec::spec_from_iter::SpecFromIter&lt;noise_bench::Measurement, core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, noise_bench::measur</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::strategy::Core as regex_automata::meta::strategy::Strategy&gt;::search | Base: 0.00% | Cand: 98.45% | Δ: +98.45%">
+            <rect x="10.0" y="192.0" width="1161.7" height="16" rx="2" fill="rgb(245, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="204.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex_automata::meta::strategy::Core as regex_automata::meta::strategy::Strategy&gt;::search</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::hybrid::regex::Regex&gt;::try_search | Base: 0.00% | Cand: 98.41% | Δ: +98.41%">
+            <rect x="10.0" y="174.0" width="1161.2" height="16" rx="2" fill="rgb(245, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="186.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex_automata::hybrid::regex::Regex&gt;::try_search</text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::hybrid::search::find_fwd | Base: 0.00% | Cand: 55.06% | Δ: +55.06%">
+            <rect x="10.0" y="156.0" width="649.7" height="16" rx="2" fill="rgb(245, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="168.0" fill="#ffffff" font-size="10" font-family="monospace">regex_automata::hybrid::search::find_fwd</text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::hybrid::search::find_rev | Base: 0.00% | Cand: 43.35% | Δ: +43.35%">
+            <rect x="659.7" y="156.0" width="511.5" height="16" rx="2" fill="rgb(245, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="663.7" y="168.0" fill="#ffffff" font-size="10" font-family="monospace">regex_automata::hybrid::search::find_rev</text>
+        </g>
+        
+        <g class="func" data-info="&lt;std::time::Instant&gt;::elapsed | Base: 0.04% | Cand: 0.14% | Δ: +0.09%">
+            <rect x="1171.7" y="192.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1175.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;std::time::Instant&gt;::now | Base: 0.04% | Cand: 0.09% | Δ: +0.05%">
+            <rect x="1171.7" y="174.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1175.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="std::io::stdio::_print | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="246.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="258.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::fmt::write | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="228.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="240.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;core::io::write::default_write_fmt::Adapter&lt;std::io::stdio::StdoutLock&gt; as core::fmt::Write&gt;::write_str | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="210.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="222.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;std::io::stdio::StdoutLock as core::io::write::Write&gt;::write_all | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="192.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="204.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::io::buffered::bufwriter::BufWriter&lt;std::io::stdio::StdoutRaw&gt;&gt;::flush_buf | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="174.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="186.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::index::get_offset_len_noubcheck::&lt;u8&gt; | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="156.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="168.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="std::sys::stdio::windows::write | Base: 1.89% | Cand: 1.13% | Δ: -0.76%">
+            <rect x="1176.4" y="138.0" width="13.4" height="16" rx="2" fill="rgb(50, 80, 171)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="150.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::io::error::os_functions::set_functions | Base: 1.53% | Cand: 0.85% | Δ: -0.67%">
+            <rect x="1176.4" y="120.0" width="10.1" height="16" rx="2" fill="rgb(50, 80, 170)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="132.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="KERNELBASE.dll!GetConsoleMode | Base: 1.53% | Cand: 0.85% | Δ: -0.67%">
+            <rect x="1176.4" y="102.0" width="10.1" height="16" rx="2" fill="rgb(50, 80, 170)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="114.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="ntdll.dll!NtDeviceIoControlFile | Base: 1.53% | Cand: 0.85% | Δ: -0.67%">
+            <rect x="1176.4" y="84.0" width="10.1" height="16" rx="2" fill="rgb(50, 80, 170)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1180.4" y="96.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="ntdll.dll!NtWriteFile | Base: 0.36% | Cand: 0.28% | Δ: -0.08%">
+            <rect x="1186.5" y="120.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1190.5" y="132.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+    </g>
+
+    <!-- Dynamic Status Bar -->
+    <rect x="0" y="307" width="1200" height="25" fill="#0f172a"/>
+    <text id="status" x="10" y="324" font-family="monospace" font-size="11" fill="#f8fafc">Hover over any frame to inspect stack percentage and delta</text>
+
+    <script><![CDATA[
+        "use strict";
+        function get_params() {
+            var params = Object.create(null);
+            var paramsarr = window.location.search.substr(1).split('&');
+            for (var i = 0; i < paramsarr.length; ++i) {
+                var tmp = paramsarr[i].split("=");
+                if (!tmp[0] || !tmp[1]) continue;
+                if (tmp[0] === "__proto__" || tmp[0] === "prototype" || tmp[0] === "constructor") continue;
+                params[tmp[0]] = decodeURIComponent(tmp[1]);
+            }
+            return params;
+        }
+        var params = get_params();
+        if (params.x && /^[0-9.]+$/.test(params.x)) {
+            var match = document.querySelector('rect[x="' + params.x + '"]');
+            if (match && match.parentElement) {
+                document.getElementById('status').textContent = match.parentElement.getAttribute('data-info');
+            }
+        }
+        document.querySelectorAll('.func').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.getElementById('status').textContent = el.getAttribute('data-info');
+            });
+        });
+    ]]></script>
+</svg>

@@ -1,0 +1,1198 @@
+<svg version="1.1" width="100%" height="296" viewBox="0 0 1200 296" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;">
+    <style>
+        .func:hover rect { stroke: #000000; stroke-width: 1.5; cursor: pointer; }
+        text { user-select: none; pointer-events: none; }
+    </style>
+    <!-- Header -->
+    <text x="10" y="25" font-family="sans-serif" font-size="16" font-weight="bold" fill="#0f172a">fa91c31 vs 64ad0b6: cloudflare-redos-long (Static Instruction Attribution)</text>
+    <text x="10" y="42" font-family="sans-serif" font-size="11" fill="#64748b">
+        Red = Slower in Candidate (&#916; &gt; 0) | Blue = Faster in Candidate (&#916; &lt; 0) | Neutral = Unchanged
+    </text>
+
+    <!-- Legend -->
+    <rect x="980" y="15" width="14" height="14" fill="rgb(220, 50, 50)" rx="2"/>
+    <text x="1000" y="26" font-family="sans-serif" font-size="11" fill="#334155">Hotter (+% CPU)</text>
+    <rect x="1090" y="15" width="14" height="14" fill="rgb(50, 80, 220)" rx="2"/>
+    <text x="1110" y="26" font-family="sans-serif" font-size="11" fill="#334155">Cooler (-% CPU)</text>
+
+    <!-- Flamegraph Boxes -->
+    <g id="boxes">
+        
+        <g class="func" data-info="noise_bench::rebar::run_rebar_bench | Base: 100.00% | Cand: 100.00% | Δ: +0.00%">
+            <rect x="10.0" y="228.0" width="1180.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="240.0" fill="#334155" font-size="10" font-family="monospace">noise_bench::rebar::run_rebar_bench</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex::builders::string::RegexSetBuilder&gt;::build | Base: 70.87% | Cand: 71.28% | Δ: +0.41%">
+            <rect x="10.0" y="210.0" width="841.1" height="16" rx="2" fill="rgb(166, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="222.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex::builders::string::RegexSetBuilder&gt;::build</text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::strategy::new | Base: 37.92% | Cand: 38.79% | Δ: +0.87%">
+            <rect x="10.0" y="192.0" width="457.7" height="16" rx="2" fill="rgb(172, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="204.0" fill="#ffffff" font-size="10" font-family="monospace">regex_automata::meta::strategy::new</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::compiler::Compiler&gt;::build_many_from_hir::&lt;&amp;regex_syntax::hir::Hir&gt; | Base: 5.72% | Cand: 5.64% | Δ: -0.08%">
+            <rect x="10.0" y="174.0" width="66.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="186.0" fill="#334155" font-size="10" font-family="monospace">&lt;regex_au</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::compiler::Compiler&gt;::c_at_least | Base: 0.67% | Cand: 0.66% | Δ: -0.01%">
+            <rect x="10.0" y="156.0" width="7.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="14.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;hashbrown::raw::RawTable&lt;(alloc::sync::Arc&lt;str&gt;, regex_automata::util::primitives::SmallIndex)&gt;&gt;::reserve_rehash::&lt;hashbrown::map::make_hasher&lt;alloc::sync::Arc&lt;str&gt;, regex_automata::util::primitives::SmallIndex, std::hash::random::RandomState&gt;::{closure#0}&gt; | Base: 0.45% | Cand: 0.44% | Δ: -0.01%">
+            <rect x="17.8" y="156.0" width="5.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="21.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::nfa::Inner&gt;::add | Base: 0.28% | Cand: 0.28% | Δ: -0.00%">
+            <rect x="23.0" y="156.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="27.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::class | Base: 0.27% | Cand: 0.26% | Δ: -0.01%">
+            <rect x="26.3" y="156.0" width="3.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="30.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;core::iter::adapters::map::Map&lt;core::slice::iter::Iter&lt;&amp;regex_syntax::hir::Hir&gt;, &lt;regex_automata::nfa::thompson::compiler::Compiler&gt;::compile&lt;&amp;regex_syntax::hir::Hir&gt;::{closure#1}&gt; as core::iter::traits::iterator::Iterator&gt;::next | Base: 0.24% | Cand: 0.24% | Δ: -0.00%">
+            <rect x="29.4" y="156.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="33.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::captures::GroupInfoInner&gt;::add_first_group | Base: 0.17% | Cand: 0.17% | Δ: -0.00%">
+            <rect x="32.2" y="156.0" width="2.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="36.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::builder::Builder&gt;::add | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="34.3" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="38.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::builder::Builder&gt;::patch | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="35.5" y="156.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="39.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::Extractor&gt;::extract | Base: 3.59% | Cand: 3.54% | Δ: -0.05%">
+            <rect x="76.6" y="174.0" width="41.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="80.6" y="186.0" fill="#334155" font-size="10" font-family="monospace">&lt;rege</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::Extractor&gt;::cross | Base: 1.21% | Cand: 1.19% | Δ: -0.02%">
+            <rect x="76.6" y="156.0" width="14.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="80.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::Extractor&gt;::union | Base: 0.51% | Cand: 0.50% | Δ: -0.01%">
+            <rect x="90.6" y="156.0" width="6.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="94.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::hir::literal::Seq&gt; | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="96.6" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="100.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::hir::literal::Literal&gt; as core::clone::Clone&gt;::clone | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="97.8" y="156.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="101.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::prefilter::Choice&gt;::new::&lt;regex_syntax::hir::literal::Literal&gt; | Base: 2.74% | Cand: 2.71% | Δ: -0.04%">
+            <rect x="118.3" y="174.0" width="31.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="122.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::packed::api::Builder&gt;::build | Base: 0.99% | Cand: 0.98% | Δ: -0.01%">
+            <rect x="118.3" y="156.0" width="11.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="122.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;memchr::memmem::FinderBuilder&gt;::build_forward_with_ranker::&lt;memchr::arch::all::packedpair::DefaultFrequencyRank, [u8]&gt; | Base: 0.42% | Cand: 0.42% | Δ: -0.01%">
+            <rect x="129.9" y="156.0" width="4.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="133.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Builder&gt;::build::&lt;&amp;[regex_syntax::hir::literal::Literal], &amp;regex_syntax::hir::literal::Literal&gt; | Base: 0.37% | Cand: 0.36% | Δ: -0.01%">
+            <rect x="134.8" y="156.0" width="4.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="138.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::dfa::Builder&gt;::build_from_noncontiguous | Base: 2.30% | Cand: 2.27% | Δ: -0.03%">
+            <rect x="150.3" y="174.0" width="26.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="154.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;aho_corasick::util::primitives::PatternID&gt; as alloc::vec::spec_from_elem::SpecFromElem&gt;::from_elem::&lt;alloc::alloc::Global&gt; | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="150.3" y="156.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="154.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::dfa::Builder&gt;::finish_build_both_starts::{closure#2} | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="152.3" y="156.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="156.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::dfa::DFA&gt;::set_matches::&lt;core::iter::sources::from_fn::FromFn&lt;&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::iter_matches::{closure#0}&gt;&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="154.0" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="158.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::Seq&gt;::optimize_by_preference | Base: 1.75% | Cand: 1.72% | Δ: -0.02%">
+            <rect x="177.1" y="174.0" width="20.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="181.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::PreferenceTrie&gt;::minimize | Base: 0.22% | Cand: 0.22% | Δ: -0.00%">
+            <rect x="177.1" y="156.0" width="2.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="181.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::hir::literal::Literal&gt;&gt;::dedup_by::&lt;&lt;regex_syntax::hir::literal::Seq&gt;::dedup::{closure#0}&gt; | Base: 0.12% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="179.6" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="183.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::util::prefilter::Builder&gt;::build | Base: 1.58% | Cand: 1.56% | Δ: -0.02%">
+            <rect x="197.4" y="174.0" width="18.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="201.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;memchr::arch::all::twoway::Finder&gt;::new | Base: 0.23% | Cand: 0.23% | Δ: -0.00%">
+            <rect x="197.4" y="156.0" width="2.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="201.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::fill_failure_transitions | Base: 1.38% | Cand: 1.37% | Δ: -0.02%">
+            <rect x="215.8" y="174.0" width="16.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="219.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::QueuedSet&gt;::insert | Base: 0.55% | Cand: 0.54% | Δ: -0.01%">
+            <rect x="215.8" y="156.0" width="6.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="219.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;aho_corasick::nfa::noncontiguous::QueuedSet&gt; | Base: 0.23% | Cand: 0.22% | Δ: -0.00%">
+            <rect x="222.2" y="156.0" width="2.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="226.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::concat | Base: 1.20% | Cand: 1.19% | Δ: -0.02%">
+            <rect x="231.9" y="174.0" width="14.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="235.9" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::into_parts | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="231.9" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="235.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::build_trie::&lt;&amp;[alloc::vec::Vec&lt;u8&gt;], &amp;alloc::vec::Vec&lt;u8&gt;&gt; | Base: 1.14% | Cand: 1.13% | Δ: -0.02%">
+            <rect x="245.9" y="174.0" width="13.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="249.9" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::util::prefilter::Builder&gt;::add | Base: 0.47% | Cand: 0.46% | Δ: -0.01%">
+            <rect x="245.9" y="156.0" width="5.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="249.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::add_transition | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="251.3" y="156.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="255.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::add_match | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="253.4" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="257.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::contiguous::Builder&gt;::build_from_noncontiguous | Base: 1.09% | Cand: 1.07% | Δ: -0.02%">
+            <rect x="259.2" y="174.0" width="12.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="263.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::reverse_suffix::has_no_earlier_match | Base: 0.00% | Cand: 0.97% | Δ: +0.97%">
+            <rect x="271.8" y="174.0" width="11.4" height="16" rx="2" fill="rgb(174, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="275.8" y="186.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::reverse_suffix::strip_literal_suffix_at | Base: 0.00% | Cand: 0.78% | Δ: +0.78%">
+            <rect x="271.8" y="156.0" width="9.1" height="16" rx="2" fill="rgb(171, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="275.8" y="168.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::stable::driftsort_main::&lt;regex_syntax::hir::literal::Literal, &lt;regex_syntax::hir::literal::Literal as core::cmp::PartialOrd&gt;::lt, alloc::vec::Vec&lt;regex_syntax::hir::literal::Literal&gt;&gt; | Base: 0.68% | Cand: 0.67% | Δ: -0.01%">
+            <rect x="283.3" y="174.0" width="7.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="287.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::stable::drift::sort::&lt;regex_syntax::hir::literal::Literal, &lt;regex_syntax::hir::literal::Literal as core::cmp::PartialOrd&gt;::lt&gt; | Base: 0.58% | Cand: 0.58% | Δ: -0.01%">
+            <rect x="283.3" y="156.0" width="6.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="287.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::hybrid::dfa::Builder&gt;::build_from_nfa | Base: 0.61% | Cand: 0.60% | Δ: -0.01%">
+            <rect x="291.2" y="174.0" width="7.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="295.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::reverse_inner::flatten | Base: 0.58% | Cand: 0.55% | Δ: -0.03%">
+            <rect x="298.2" y="174.0" width="6.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="302.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::repetition | Base: 0.00% | Cand: 0.15% | Δ: +0.15%">
+            <rect x="298.2" y="156.0" width="1.8" height="16" rx="2" fill="rgb(162, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="302.2" y="168.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::shuffle | Base: 0.46% | Cand: 0.46% | Δ: -0.01%">
+            <rect x="304.7" y="174.0" width="5.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="308.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::dfa::onepass::InternalBuilder&gt;::shuffle_states | Base: 0.36% | Cand: 0.36% | Δ: -0.01%">
+            <rect x="310.1" y="174.0" width="4.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="314.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::reverse_inner::prefilter_with_literals | Base: 0.35% | Cand: 0.35% | Δ: -0.00%">
+            <rect x="314.3" y="174.0" width="4.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="318.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::strategy::Pre&lt;regex_automata::util::prefilter::memchr::Memchr&gt;&gt;::new | Base: 0.31% | Cand: 0.30% | Δ: -0.00%">
+            <rect x="318.4" y="174.0" width="3.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="322.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::captures::GroupInfo&gt;::new::&lt;[[core::option::Option&lt;&amp;str&gt;:: 1]:: 1], [core::option::Option&lt;&amp;str&gt;:: 1], &amp;str&gt; | Base: 0.24% | Cand: 0.23% | Δ: -0.00%">
+            <rect x="318.4" y="156.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="322.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::prefilter::Prefilter&gt;::from_choice | Base: 0.28% | Cand: 0.27% | Δ: -0.00%">
+            <rect x="322.0" y="174.0" width="3.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="326.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::set_anchored_start_state | Base: 0.27% | Cand: 0.27% | Δ: -0.00%">
+            <rect x="325.3" y="174.0" width="3.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="329.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::copy_matches | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="325.3" y="156.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="329.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::literal::Seq&gt;::union | Base: 0.25% | Cand: 0.24% | Δ: -0.00%">
+            <rect x="328.4" y="174.0" width="2.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="332.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::new | Base: 0.24% | Cand: 0.23% | Δ: -0.00%">
+            <rect x="331.3" y="174.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="335.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::hybrid::dfa::Builder&gt;::configure | Base: 0.24% | Cand: 0.23% | Δ: -0.00%">
+            <rect x="334.1" y="174.0" width="2.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="338.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::densify | Base: 0.21% | Cand: 0.20% | Δ: -0.00%">
+            <rect x="336.8" y="174.0" width="2.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="340.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::prefix::has_disjoint_class_separator | Base: 0.00% | Cand: 0.19% | Δ: +0.19%">
+            <rect x="339.2" y="174.0" width="2.3" height="16" rx="2" fill="rgb(162, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="343.2" y="186.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::prefix::has_disjoint_class_separator_at | Base: 0.00% | Cand: 0.10% | Δ: +0.10%">
+            <rect x="339.2" y="156.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="343.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::nfa::thompson::compiler::Compiler&gt;::new | Base: 0.19% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="341.5" y="174.0" width="2.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="345.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::wrappers::ReverseHybrid&gt;::new | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="343.7" y="174.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="347.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::meta::strategy::Core&gt; | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="345.8" y="174.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="349.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_automata::meta::prefix::hir_can_consume_byte | Base: 0.00% | Cand: 0.17% | Δ: +0.17%">
+            <rect x="347.9" y="174.0" width="2.0" height="16" rx="2" fill="rgb(162, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="351.9" y="186.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::strategy::Pre&lt;regex_automata::util::prefilter::teddy::Teddy&gt;&gt;::new | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="349.9" y="174.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="353.9" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::strategy::Pre&lt;regex_automata::util::prefilter::memmem::Memmem&gt;&gt;::new | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="351.6" y="174.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="355.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::dfa::onepass::InternalBuilder&gt;::compile_transition | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="353.3" y="174.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="357.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::meta::strategy::ReverseInner&gt; | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="354.9" y="174.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="358.9" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::nfa::thompson::builder::Builder&gt; | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="356.5" y="174.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="360.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::init_full_state | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="358.0" y="174.0" width="1.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="362.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::strategy::Pre&lt;regex_automata::util::prefilter::aho_corasick::AhoCorasick&gt;&gt;::new | Base: 0.13% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="359.5" y="174.0" width="1.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="363.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::shared::smallsort::insertion_sort_shift_left::&lt;regex_syntax::hir::literal::Literal, &lt;regex_syntax::hir::literal::Literal as core::cmp::PartialOrd&gt;::lt&gt; | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="361.0" y="174.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="365.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::sparse_set::SparseSet&gt;::resize | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="362.4" y="174.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="366.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::nfa::thompson::range_trie::RangeTrie&gt; | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="363.8" y="174.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="367.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::hir::literal::Literal&gt;&gt;::dedup_by::&lt;&lt;regex_syntax::hir::literal::Seq&gt;::dedup::{closure#0}&gt; | Base: 0.12% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="365.2" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="369.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::dfa::onepass::InternalBuilder&gt;::stack_push | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="366.5" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="370.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::dfa::onepass::InternalBuilder&gt;::add_empty_state | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="367.8" y="174.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="371.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::Compiler&gt;::close_start_state_loop_for_leftmost | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="369.0" y="174.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="373.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;aho_corasick::nfa::noncontiguous::NFA&gt;::alloc_state | Base: 0.10% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="370.2" y="174.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="374.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::dfa::onepass::InternalBuilder&gt;::add_dfa_state_for_nfa_state | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="371.4" y="174.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="375.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;aho_corasick::util::prefilter::Builder&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="372.4" y="174.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="376.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::Parser&gt;::parse | Base: 14.13% | Cand: 13.93% | Δ: -0.20%">
+            <rect x="467.7" y="192.0" width="164.4" height="16" rx="2" fill="rgb(50, 80, 162)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="471.7" y="204.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex_syntax::ast::parse:</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_escape | Base: 2.78% | Cand: 2.74% | Δ: -0.04%">
+            <rect x="467.7" y="174.0" width="32.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="471.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_unicode_class | Base: 1.20% | Cand: 1.19% | Δ: -0.02%">
+            <rect x="467.7" y="156.0" width="14.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="471.7" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::maybe_parse_special_word_boundary | Base: 0.40% | Cand: 0.39% | Δ: -0.01%">
+            <rect x="481.7" y="156.0" width="4.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="485.7" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_octal | Base: 0.19% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="486.3" y="156.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="490.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_hex | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="488.6" y="156.0" width="1.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="492.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_perl_class | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="490.1" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="494.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_set_class | Base: 2.24% | Cand: 2.21% | Δ: -0.03%">
+            <rect x="500.0" y="174.0" width="26.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="504.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_set_class_range | Base: 0.63% | Cand: 0.62% | Δ: -0.01%">
+            <rect x="500.0" y="156.0" width="7.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="504.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::pop_class | Base: 0.28% | Cand: 0.28% | Δ: -0.00%">
+            <rect x="507.2" y="156.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="511.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::push_class_open | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="510.5" y="156.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="514.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::maybe_parse_ascii_class | Base: 0.17% | Cand: 0.16% | Δ: -0.00%">
+            <rect x="512.6" y="156.0" width="1.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="516.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::push_class_op | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="514.5" y="156.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="518.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::ClassSetUnion&gt;::push | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="516.3" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="520.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::unclosed_class_error | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="517.6" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="521.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::peek | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="518.9" y="156.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="522.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_counted_repetition | Base: 1.60% | Cand: 1.57% | Δ: -0.02%">
+            <rect x="526.0" y="174.0" width="18.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="530.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_decimal | Base: 0.50% | Cand: 0.49% | Δ: -0.01%">
+            <rect x="526.0" y="156.0" width="5.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="530.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_syntax::ast::parse::specialize_err::&lt;u32&gt; | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="531.8" y="156.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="535.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::push_group | Base: 1.23% | Cand: 1.21% | Δ: -0.02%">
+            <rect x="544.6" y="174.0" width="14.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="548.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_group | Base: 0.86% | Cand: 0.85% | Δ: -0.01%">
+            <rect x="544.6" y="156.0" width="10.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="548.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::pop_group | Base: 0.89% | Cand: 0.87% | Δ: -0.01%">
+            <rect x="558.9" y="174.0" width="10.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="562.9" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSet&gt; | Base: 0.86% | Cand: 0.85% | Δ: -0.01%">
+            <rect x="569.2" y="174.0" width="10.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="573.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::ClassSet as core::ops::drop::Drop&gt;::drop | Base: 0.30% | Cand: 0.30% | Δ: -0.00%">
+            <rect x="569.2" y="156.0" width="3.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="573.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSetItem&gt; | Base: 0.21% | Cand: 0.21% | Δ: -0.00%">
+            <rect x="572.7" y="156.0" width="2.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="576.7" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::ast::ClassSetItem&gt; as core::ops::drop::Drop&gt;::drop | Base: 0.13% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="575.1" y="156.0" width="1.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="579.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::NestLimiter&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::check | Base: 0.62% | Cand: 0.61% | Δ: -0.01%">
+            <rect x="579.2" y="174.0" width="7.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="583.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::NestLimiter&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::increment_depth | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="579.2" y="156.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="583.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::Ast&gt; | Base: 0.54% | Cand: 0.53% | Δ: -0.01%">
+            <rect x="586.4" y="174.0" width="6.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="590.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::pop_group_end | Base: 0.48% | Cand: 0.47% | Δ: -0.01%">
+            <rect x="592.6" y="174.0" width="5.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="596.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::parse_uncounted_repetition | Base: 0.35% | Cand: 0.35% | Δ: -0.00%">
+            <rect x="598.2" y="174.0" width="4.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="602.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::push_alternate | Base: 0.32% | Cand: 0.32% | Δ: -0.00%">
+            <rect x="602.3" y="174.0" width="3.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="606.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::Concat&gt;::into_ast | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="602.3" y="156.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="606.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::bump_space | Base: 0.31% | Cand: 0.31% | Δ: -0.00%">
+            <rect x="606.0" y="174.0" width="3.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="610.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSetUnion&gt; | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="609.7" y="174.0" width="1.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="613.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::parse::ParserI&lt;&amp;mut regex_syntax::ast::parse::Parser&gt;&gt;::bump | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="611.4" y="174.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="615.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::Translator&gt;::translate | Base: 13.60% | Cand: 13.41% | Δ: -0.19%">
+            <rect x="632.0" y="192.0" width="158.2" height="16" rx="2" fill="rgb(50, 80, 162)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="636.0" y="204.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex_syntax::hir::trans</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI as regex_syntax::ast::visitor::Visitor&gt;::visit_post | Base: 4.96% | Cand: 4.89% | Δ: -0.07%">
+            <rect x="632.0" y="174.0" width="57.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="636.0" y="186.0" fill="#334155" font-size="10" font-family="monospace">&lt;regex_s</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::alternation | Base: 1.77% | Cand: 1.74% | Δ: -0.02%">
+            <rect x="632.0" y="156.0" width="20.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="636.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::class (.711) | Base: 0.00% | Cand: 0.17% | Δ: +0.17%">
+            <rect x="652.6" y="156.0" width="2.0" height="16" rx="2" fill="rgb(162, 50, 50)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="656.6" y="168.0" fill="#ffffff" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassBytes&gt;::negate | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="654.5" y="156.0" width="1.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="658.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::push_char | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="656.3" y="156.0" width="1.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="660.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Properties&gt;::repetition | Base: 0.12% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="658.1" y="156.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="662.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI as regex_syntax::ast::visitor::Visitor&gt;::visit_class_set_item_post | Base: 4.58% | Cand: 4.51% | Δ: -0.06%">
+            <rect x="689.8" y="174.0" width="53.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="693.8" y="186.0" fill="#334155" font-size="10" font-family="monospace">&lt;regex_</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::hir_unicode_class | Base: 1.08% | Cand: 1.06% | Δ: -0.02%">
+            <rect x="689.8" y="156.0" width="12.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="693.8" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassBytes&gt;::push | Base: 0.39% | Cand: 0.39% | Δ: -0.01%">
+            <rect x="702.3" y="156.0" width="4.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="706.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassUnicode&gt;::push | Base: 0.29% | Cand: 0.28% | Δ: -0.00%">
+            <rect x="706.9" y="156.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="710.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::hir_perl_byte_class | Base: 0.24% | Cand: 0.24% | Δ: -0.00%">
+            <rect x="710.2" y="156.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="714.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassUnicode&gt;::negate | Base: 0.20% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="713.0" y="156.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="717.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::class_literal_byte | Base: 0.14% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="715.3" y="156.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="719.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::hir_perl_unicode_class | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="716.9" y="156.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="720.9" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::translate::TranslatorI&gt;::bytes_fold_and_negate | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="718.1" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="722.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassBytesRange&gt;&gt;::canonicalize | Base: 0.35% | Cand: 0.34% | Δ: -0.00%">
+            <rect x="743.0" y="174.0" width="4.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="747.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::stable::driftsort_main::&lt;regex_syntax::hir::ClassBytesRange, &lt;regex_syntax::hir::ClassBytesRange as core::cmp::PartialOrd&gt;::lt, alloc::vec::Vec&lt;regex_syntax::hir::ClassBytesRange&gt;&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="743.0" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="747.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassUnicodeRange&gt;&gt;::canonicalize | Base: 0.34% | Cand: 0.33% | Δ: -0.00%">
+            <rect x="747.1" y="174.0" width="3.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="751.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::stable::driftsort_main::&lt;regex_syntax::hir::ClassUnicodeRange, &lt;regex_syntax::hir::ClassUnicodeRange as core::cmp::PartialOrd&gt;::lt, alloc::vec::Vec&lt;regex_syntax::hir::ClassUnicodeRange&gt;&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="747.1" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="751.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassBytesRange&gt;&gt;::difference | Base: 0.29% | Cand: 0.29% | Δ: -0.00%">
+            <rect x="751.0" y="174.0" width="3.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="755.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassUnicodeRange&gt;&gt;::difference | Base: 0.28% | Cand: 0.28% | Δ: -0.00%">
+            <rect x="754.4" y="174.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="758.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassUnicodeRange as regex_syntax::hir::interval::Interval&gt;::case_fold_simple | Base: 0.28% | Cand: 0.28% | Δ: -0.00%">
+            <rect x="757.7" y="174.0" width="3.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="761.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassBytesRange&gt;&gt;::intersect | Base: 0.15% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="761.0" y="174.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="765.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::interval::IntervalSet&lt;regex_syntax::hir::ClassUnicodeRange&gt;&gt;::intersect | Base: 0.15% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="762.7" y="174.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="766.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir&gt;::literal::&lt;alloc::vec::Vec&lt;u8&gt;&gt; | Base: 0.12% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="764.4" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="768.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::ClassBytes&gt;::case_fold_simple | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="765.8" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="769.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::Ast&gt; | Base: 1.23% | Cand: 1.21% | Δ: -0.02%">
+            <rect x="790.3" y="192.0" width="14.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="794.3" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSet&gt; | Base: 0.37% | Cand: 0.37% | Δ: -0.01%">
+            <rect x="790.3" y="174.0" width="4.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="794.3" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSetItem&gt; | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="790.3" y="156.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="794.3" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::ast::Ast as core::ops::drop::Drop&gt;::drop | Base: 0.34% | Cand: 0.33% | Δ: -0.00%">
+            <rect x="794.6" y="174.0" width="3.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="798.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::hir::Hir as core::ops::drop::Drop&gt;::drop | Base: 0.88% | Cand: 0.86% | Δ: -0.01%">
+            <rect x="804.5" y="192.0" width="10.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="808.5" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::hir::Hir&gt;&gt;::extend_trusted::&lt;alloc::vec::drain::Drain&lt;regex_syntax::hir::Hir&gt;&gt; | Base: 0.22% | Cand: 0.21% | Δ: -0.00%">
+            <rect x="804.5" y="174.0" width="2.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="808.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::drain::Drain&lt;regex_syntax::hir::Hir&gt; as core::ops::drop::Drop&gt;::drop | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="804.5" y="156.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="808.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::hir::HirKind&gt; | Base: 0.22% | Cand: 0.21% | Δ: -0.00%">
+            <rect x="807.0" y="174.0" width="2.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="811.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;alloc::vec::Vec&lt;regex_syntax::hir::Hir&gt;&gt; | Base: 0.13% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="809.6" y="174.0" width="1.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="813.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::RegexInfo&gt;::new | Base: 0.51% | Cand: 0.51% | Δ: -0.01%">
+            <rect x="814.7" y="192.0" width="6.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="818.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::parse::Parser&gt; | Base: 0.51% | Cand: 0.51% | Δ: -0.01%">
+            <rect x="820.7" y="192.0" width="6.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="824.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;core::cell::RefCell&lt;alloc::vec::Vec&lt;regex_syntax::ast::parse::ClassState&gt;&gt;&gt; | Base: 0.15% | Cand: 0.15% | Δ: -0.00%">
+            <rect x="820.7" y="174.0" width="1.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="824.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::parse::GroupState&gt; | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="822.5" y="174.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="826.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::hir::HirKind&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="826.7" y="192.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="830.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::string::RegexBuilder&gt;::build | Base: 9.72% | Cand: 9.58% | Δ: -0.14%">
+            <rect x="851.1" y="210.0" width="113.1" height="16" rx="2" fill="rgb(50, 80, 162)" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="855.1" y="222.0" fill="#ffffff" font-size="10" font-family="monospace">&lt;regex_lite::stri</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::parse_inner | Base: 6.73% | Cand: 6.64% | Δ: -0.09%">
+            <rect x="851.1" y="192.0" width="78.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="855.1" y="204.0" fill="#334155" font-size="10" font-family="monospace">&lt;regex_lite</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::parse_escape | Base: 1.26% | Cand: 1.24% | Δ: -0.02%">
+            <rect x="851.1" y="174.0" width="14.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="855.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::maybe_parse_special_word_boundary | Base: 0.22% | Cand: 0.22% | Δ: -0.00%">
+            <rect x="851.1" y="156.0" width="2.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="855.1" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::parse_decimal | Base: 0.37% | Cand: 0.36% | Δ: -0.01%">
+            <rect x="865.7" y="174.0" width="4.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="869.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::peek_space | Base: 0.26% | Cand: 0.25% | Δ: -0.00%">
+            <rect x="870.0" y="174.0" width="3.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="874.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::Class&gt;::canonicalize | Base: 0.24% | Cand: 0.24% | Δ: -0.00%">
+            <rect x="873.0" y="174.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="877.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::slice::sort::stable::driftsort_main::&lt;regex_lite::hir::ClassRange, &lt;regex_lite::hir::ClassRange as core::cmp::PartialOrd&gt;::lt, alloc::vec::Vec&lt;regex_lite::hir::ClassRange&gt;&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="873.0" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="877.0" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::Class&gt;::negate | Base: 0.20% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="875.8" y="174.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="879.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="regex_lite::hir::parse::posix_class | Base: 0.17% | Cand: 0.16% | Δ: -0.00%">
+            <rect x="878.1" y="174.0" width="1.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="882.1" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::Class&gt;::new::&lt;core::iter::adapters::map::Map&lt;core::slice::iter::Iter&lt;(u8, u8)&gt;, regex_lite::hir::parse::posix_class::{closure#0}&gt;&gt; | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="880.0" y="174.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="884.0" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_lite::hir::HirKind&gt; | Base: 0.13% | Cand: 0.13% | Δ: -0.00%">
+            <rect x="881.6" y="174.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="885.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::hir_char | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="883.2" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="887.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::bump_space | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="884.5" y="174.0" width="1.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="888.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::hir::parse::Parser&gt;::bump | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="885.7" y="174.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="889.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::c_capture | Base: 1.39% | Cand: 1.37% | Δ: -0.02%">
+            <rect x="929.4" y="192.0" width="16.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="933.4" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::c | Base: 0.95% | Cand: 0.94% | Δ: -0.01%">
+            <rect x="929.4" y="174.0" width="11.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="933.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::c_bounded | Base: 0.16% | Cand: 0.16% | Δ: -0.00%">
+            <rect x="929.4" y="156.0" width="1.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="933.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::c_concat::&lt;core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, &lt;regex_lite::nfa::Compiler&gt;::c_exactly::{closure#0}&gt;&gt; | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="931.2" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="935.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_lite::hir::Hir&gt; | Base: 0.49% | Cand: 0.49% | Δ: -0.01%">
+            <rect x="945.5" y="192.0" width="5.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="949.5" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_lite::hir::Hir&gt;&gt;::extend_trusted::&lt;alloc::vec::drain::Drain&lt;regex_lite::hir::Hir&gt;&gt; | Base: 0.17% | Cand: 0.17% | Δ: -0.00%">
+            <rect x="945.5" y="174.0" width="2.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="949.5" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::add | Base: 0.20% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="951.3" y="192.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="955.3" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_lite::nfa::NFA&gt; | Base: 0.16% | Cand: 0.16% | Δ: -0.00%">
+            <rect x="953.6" y="192.0" width="1.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="957.6" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::nfa::Compiler&gt;::patch | Base: 0.11% | Cand: 0.11% | Δ: -0.00%">
+            <rect x="955.4" y="192.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="959.4" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::bench_rustsec_bytes | Base: 6.52% | Cand: 6.43% | Δ: -0.09%">
+            <rect x="964.2" y="210.0" width="75.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="968.2" y="222.0" fill="#334155" font-size="10" font-family="monospace">noise_bench</text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::Builder&gt;::build | Base: 2.77% | Cand: 2.73% | Δ: -0.04%">
+            <rect x="964.2" y="192.0" width="32.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="968.2" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::Ast&gt; | Base: 0.61% | Cand: 0.60% | Δ: -0.01%">
+            <rect x="964.2" y="174.0" width="7.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="968.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::ClassSet&gt; | Base: 0.17% | Cand: 0.17% | Δ: -0.00%">
+            <rect x="964.2" y="156.0" width="1.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="968.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::parse::Parser&gt; | Base: 0.38% | Cand: 0.37% | Δ: -0.01%">
+            <rect x="971.2" y="174.0" width="4.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="975.2" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::ast::parse::GroupState&gt; | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="971.2" y="156.0" width="1.7" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="975.2" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::util::pool::inner::Pool&lt;regex_automata::meta::regex::Cache, alloc::boxed::Box&lt;dyn core::ops::function::Fn&lt;(), Output = regex_automata::meta::regex::Cache&gt; + core::marker::Sync + core::marker::Send + core::panic::unwind_safe::RefUnwindSafe + core::panic::unwind_safe::UnwindSafe&gt;&gt;&gt; | Base: 0.36% | Cand: 0.36% | Δ: -0.01%">
+            <rect x="975.6" y="174.0" width="4.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="979.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;alloc::vec::Vec&lt;regex_automata::util::pool::inner::CacheLine&lt;std::sync::poison::mutex::Mutex&lt;alloc::vec::Vec&lt;alloc::boxed::Box&lt;regex_automata::meta::regex::Cache&gt;&gt;&gt;&gt;&gt;&gt; | Base: 0.21% | Cand: 0.21% | Δ: -0.00%">
+            <rect x="975.6" y="156.0" width="2.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="979.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::hir::HirKind&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="979.8" y="174.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="983.8" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex::error::Error&gt;::from_meta_build_error | Base: 2.43% | Cand: 2.39% | Δ: -0.03%">
+            <rect x="996.4" y="192.0" width="28.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1000.4" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::error::Spans&gt;::notate | Base: 0.61% | Cand: 0.60% | Δ: -0.01%">
+            <rect x="996.4" y="174.0" width="7.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1000.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::error::Spans&gt;::from_formatter::&lt;regex_syntax::ast::ErrorKind&gt; | Base: 0.43% | Cand: 0.42% | Δ: -0.01%">
+            <rect x="1003.4" y="174.0" width="5.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1007.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;regex_syntax::ast::Span&gt; as alloc::vec::spec_from_elem::SpecFromElem&gt;::from_elem::&lt;alloc::alloc::Global&gt; | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="1003.4" y="156.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1007.4" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_syntax::error::Spans&gt;::add | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="1005.5" y="156.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1009.5" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_syntax::error::Spans&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="1008.4" y="174.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1012.4" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::Builder&gt;::configure | Base: 0.27% | Cand: 0.27% | Δ: -0.00%">
+            <rect x="1024.6" y="192.0" width="3.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1028.6" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;noise_bench::Measurement&gt; as alloc::vec::spec_from_iter::SpecFromIter&lt;noise_bench::Measurement, core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, noise_bench::measure_iterations&lt;usize, noise_bench::rebar::grep_captures_batched::{closure#0}&gt;::{closure#0}&gt;&gt;&gt;::from_iter | Base: 0.80% | Cand: 0.79% | Δ: -0.01%">
+            <rect x="1040.1" y="210.0" width="9.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1044.1" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::Regex&gt;::search_slots | Base: 0.20% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="1040.1" y="192.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1044.1" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_lite::pikevm::PikeVM&gt;::epsilon_closure | Base: 0.80% | Cand: 0.79% | Δ: -0.01%">
+            <rect x="1049.4" y="210.0" width="9.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1053.4" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;noise_bench::Measurement&gt; as alloc::vec::spec_from_iter::SpecFromIter&lt;noise_bench::Measurement, core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, noise_bench::measure_iterations&lt;usize, noise_bench::rebar::count_matches_batched::{closure#0}&gt;::{closure#0}&gt;&gt;&gt;::from_iter | Base: 0.78% | Cand: 0.77% | Δ: -0.01%">
+            <rect x="1058.7" y="210.0" width="9.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1062.7" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::FindMatches as core::iter::traits::iterator::Iterator&gt;::count | Base: 0.34% | Cand: 0.33% | Δ: -0.00%">
+            <rect x="1058.7" y="192.0" width="3.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1062.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::iter::Searcher&gt;::handle_overlapping_empty_half_match::&lt;&amp;mut &lt;regex_automata::meta::regex::FindMatches as core::iter::traits::iterator::Iterator&gt;::count::{closure#0}&gt; | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="1058.7" y="174.0" width="1.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1062.7" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::pool::inner::Pool&lt;regex_automata::meta::regex::Cache, alloc::boxed::Box&lt;dyn core::ops::function::Fn&lt;(), Output = regex_automata::meta::regex::Cache&gt; + core::marker::Sync + core::marker::Send + core::panic::unwind_safe::RefUnwindSafe + core::panic::unwind_safe::UnwindSafe&gt;&gt;&gt;::put_value | Base: 0.76% | Cand: 0.75% | Δ: -0.01%">
+            <rect x="1067.8" y="210.0" width="8.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1071.8" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::build_regex | Base: 0.72% | Cand: 0.71% | Δ: -0.01%">
+            <rect x="1076.6" y="210.0" width="8.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1080.6" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex::builders::string::RegexBuilder&gt;::build | Base: 0.31% | Cand: 0.30% | Δ: -0.00%">
+            <rect x="1076.6" y="192.0" width="3.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1080.6" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex::builders::Builder&gt;::new::&lt;[&amp;str:: 1], &amp;str&gt; | Base: 0.14% | Cand: 0.14% | Δ: -0.00%">
+            <rect x="1080.2" y="192.0" width="1.6" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1084.2" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::bench_compile_pattern | Base: 0.67% | Cand: 0.66% | Δ: -0.01%">
+            <rect x="1085.0" y="210.0" width="7.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1089.0" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::vec::Vec&lt;noise_bench::Measurement&gt; as alloc::vec::spec_from_iter::SpecFromIter&lt;noise_bench::Measurement, core::iter::adapters::map::Map&lt;core::ops::range::Range&lt;u32&gt;, noise_bench::measure_iterations&lt;usize, noise_bench::rebar::count_spans_batched::{closure#0}&gt;::{closure#0}&gt;&gt;&gt;::from_iter | Base: 0.64% | Cand: 0.63% | Δ: -0.01%">
+            <rect x="1092.8" y="210.0" width="7.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1096.8" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::iter::Searcher&gt;::handle_overlapping_empty_match::&lt;&lt;regex_automata::meta::regex::FindMatches as core::iter::traits::iterator::Iterator&gt;::next::{closure#0}&gt; | Base: 0.12% | Cand: 0.12% | Δ: -0.00%">
+            <rect x="1092.8" y="192.0" width="1.4" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1096.8" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::build_veryl_patterns | Base: 0.50% | Cand: 0.50% | Δ: -0.01%">
+            <rect x="1100.3" y="210.0" width="5.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1104.3" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="noise_bench::rebar::build_dictionary_pattern | Base: 0.47% | Cand: 0.46% | Δ: -0.01%">
+            <rect x="1106.2" y="210.0" width="5.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1110.2" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex::regex::bytes::Regex&gt; | Base: 0.35% | Cand: 0.35% | Δ: -0.00%">
+            <rect x="1111.6" y="210.0" width="4.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1115.6" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::util::pool::Pool&lt;regex_automata::meta::regex::Cache, alloc::boxed::Box&lt;dyn core::ops::function::Fn&lt;(), Output = regex_automata::meta::regex::Cache&gt; + core::marker::Sync + core::marker::Send + core::panic::unwind_safe::RefUnwindSafe + core::panic::unwind_safe::UnwindSafe&gt;&gt;&gt; | Base: 0.24% | Cand: 0.23% | Δ: -0.00%">
+            <rect x="1111.6" y="192.0" width="2.8" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1115.6" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;alloc::vec::Vec&lt;regex_automata::util::pool::inner::CacheLine&lt;std::sync::poison::mutex::Mutex&lt;alloc::vec::Vec&lt;alloc::boxed::Box&lt;regex_automata::meta::regex::Cache&gt;&gt;&gt;&gt;&gt;&gt; | Base: 0.16% | Cand: 0.16% | Δ: -0.00%">
+            <rect x="1111.6" y="174.0" width="1.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1115.6" y="186.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::util::pool::inner::CacheLine&lt;std::sync::poison::mutex::Mutex&lt;alloc::vec::Vec&lt;alloc::boxed::Box&lt;regex_automata::meta::regex::Cache&gt;&gt;&gt;&gt;&gt; | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="1111.6" y="156.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1115.6" y="168.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::meta::regex::Cache&gt; | Base: 0.34% | Cand: 0.33% | Δ: -0.00%">
+            <rect x="1115.7" y="210.0" width="3.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1119.7" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::hybrid::dfa::Cache&gt; | Base: 0.20% | Cand: 0.20% | Δ: -0.00%">
+            <rect x="1115.7" y="192.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1119.7" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::pool::inner::Pool&lt;regex_automata::meta::regex::Cache, alloc::boxed::Box&lt;dyn core::ops::function::Fn&lt;(), Output = regex_automata::meta::regex::Cache&gt; + core::marker::Sync + core::marker::Send + core::panic::unwind_safe::RefUnwindSafe + core::panic::unwind_safe::UnwindSafe&gt;&gt;&gt;::get_slow | Base: 0.25% | Cand: 0.24% | Δ: -0.00%">
+            <rect x="1119.7" y="210.0" width="2.9" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1123.7" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::sync::Arc&lt;regex_automata::util::captures::GroupInfoInner&gt;&gt;::drop_slow | Base: 0.21% | Cand: 0.21% | Δ: -0.00%">
+            <rect x="1122.5" y="210.0" width="2.5" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1126.5" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_automata::util::captures::GroupInfoInner&gt; | Base: 0.19% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="1122.5" y="192.0" width="2.2" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1126.5" y="204.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="core::ptr::drop_glue::&lt;regex_lite::pool::PoolGuard&lt;regex_lite::pikevm::Cache, alloc::boxed::Box&lt;dyn core::ops::function::Fn&lt;(), Output = regex_lite::pikevm::Cache&gt; + core::marker::Sync + core::marker::Send + core::panic::unwind_safe::RefUnwindSafe + core::panic::unwind_safe::UnwindSafe&gt;&gt;&gt; | Base: 0.20% | Cand: 0.20% | Δ: -0.00%">
+            <rect x="1125.0" y="210.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1129.0" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::Regex&gt;::search_half | Base: 0.20% | Cand: 0.19% | Δ: -0.00%">
+            <rect x="1127.3" y="210.0" width="2.3" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1131.3" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex::builders::Builder&gt;::size_limit | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="1129.6" y="210.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1133.6" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::util::iter::Searcher&gt;::handle_overlapping_empty_match::&lt;&lt;regex_automata::meta::regex::CapturesMatches as core::iter::traits::iterator::Iterator&gt;::next::{closure#0}&gt; | Base: 0.18% | Cand: 0.18% | Δ: -0.00%">
+            <rect x="1131.7" y="210.0" width="2.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1135.7" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;alloc::sync::Arc&lt;dyn regex_automata::util::prefilter::PrefilterI&gt;&gt;::drop_slow | Base: 0.10% | Cand: 0.10% | Δ: -0.00%">
+            <rect x="1133.8" y="210.0" width="1.1" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1137.8" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+        <g class="func" data-info="&lt;regex_automata::meta::regex::Regex&gt;::create_captures | Base: 0.09% | Cand: 0.09% | Δ: -0.00%">
+            <rect x="1134.9" y="210.0" width="1.0" height="16" rx="2" fill="#e2e8f0" stroke="#ffffff" stroke-width="0.5"/>
+            <text x="1138.9" y="222.0" fill="#334155" font-size="10" font-family="monospace"></text>
+        </g>
+        
+    </g>
+
+    <!-- Dynamic Status Bar -->
+    <rect x="0" y="271" width="1200" height="25" fill="#0f172a"/>
+    <text id="status" x="10" y="288" font-family="monospace" font-size="11" fill="#f8fafc">Hover over any frame to inspect stack percentage and delta</text>
+
+    <script><![CDATA[
+        "use strict";
+        function get_params() {
+            var params = Object.create(null);
+            var paramsarr = window.location.search.substr(1).split('&');
+            for (var i = 0; i < paramsarr.length; ++i) {
+                var tmp = paramsarr[i].split("=");
+                if (!tmp[0] || !tmp[1]) continue;
+                if (tmp[0] === "__proto__" || tmp[0] === "prototype" || tmp[0] === "constructor") continue;
+                params[tmp[0]] = decodeURIComponent(tmp[1]);
+            }
+            return params;
+        }
+        var params = get_params();
+        if (params.x && /^[0-9.]+$/.test(params.x)) {
+            var match = document.querySelector('rect[x="' + params.x + '"]');
+            if (match && match.parentElement) {
+                document.getElementById('status').textContent = match.parentElement.getAttribute('data-info');
+            }
+        }
+        document.querySelectorAll('.func').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.getElementById('status').textContent = el.getAttribute('data-info');
+            });
+        });
+    ]]></script>
+</svg>
