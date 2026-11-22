@@ -14,20 +14,44 @@ inputs:
   head:
     description: "Head commit"
     required: true
+  benchmark:
+    description: "Optional comma-separated benchmark names to run (default: all configured benchmarks)"
+    default: ""
   pairs:
-    description: "Interleaved pairs per benchmark (>= 8)"
+    description: "Interleaved pairs per benchmark (>= 8 for alpha=0.01)"
     default: "20"
+  iters:
+    description: "Timed iterations per benchmark process"
+    default: "2000"
+  warmup:
+    description: "Untimed warmup iterations per process"
+    default: "200"
   min-effect:
     description: "Practical threshold in percent"
     default: "1.0"
+  canary-reps:
+    description: "Invariant canary samples before and after measurement (0 disables)"
+    default: "10"
+  require-ci-bound:
+    description: "Require the 95% bootstrap CI bound (not just point estimate) to clear min-effect"
+    default: "false"
+  no-fail-on-env-suspect:
+    description: "With fail-on-regression: still report flags but exit 0 if canary flagged host drift"
+    default: "false"
   fail-on-regression:
     description: "Fail the job on a flagged slowdown"
     default: "false"
+  workdir:
+    description: "Directory for isolated commit worktrees and builds"
+    default: ".regressor-builds"
 
 outputs:
   report:
     description: "Path to the markdown report"
     value: ${{ steps.run.outputs.report }}
+  json-report:
+    description: "Path to the structured JSON report"
+    value: ${{ steps.run.outputs.json-report }}
 
 runs:
   using: composite
@@ -35,7 +59,7 @@ runs:
     - shell: bash
       env:
         ACTION_PATH: ${{ github.action_path }}
-      run: pip install -e "$ACTION_PATH"
+      run: python -m pip install --quiet -e "$ACTION_PATH"
     - id: run
       shell: bash
       env:
@@ -45,17 +69,53 @@ runs:
         IN_REPO: ${{ inputs.repo-path }}
         IN_BASE: ${{ inputs.base }}
         IN_HEAD: ${{ inputs.head }}
+        IN_BENCHMARK: ${{ inputs.benchmark }}
         IN_PAIRS: ${{ inputs.pairs }}
+        IN_ITERS: ${{ inputs.iters }}
+        IN_WARMUP: ${{ inputs.warmup }}
         IN_MIN_EFFECT: ${{ inputs.min-effect }}
+        IN_CANARY_REPS: ${{ inputs.canary-reps }}
+        IN_REQ_CI: ${{ inputs.require-ci-bound }}
+        IN_NO_FAIL_ENV: ${{ inputs.no-fail-on-env-suspect }}
         IN_FAIL: ${{ inputs.fail-on-regression }}
+        IN_WORKDIR: ${{ inputs.workdir }}
         ACTION_PATH: ${{ github.action_path }}
       run: |
-        FAIL=()
-        if [ "$IN_FAIL" = "true" ]; then FAIL=(--fail-on-regression); fi
+        EXTRA_FLAGS=()
+        if [ "$IN_FAIL" = "true" ]; then
+          EXTRA_FLAGS+=(--fail-on-regression)
+        fi
+        if [ "$IN_REQ_CI" = "true" ]; then
+          EXTRA_FLAGS+=(--require-ci-bound)
+        fi
+        if [ "$IN_NO_FAIL_ENV" = "true" ]; then
+          EXTRA_FLAGS+=(--no-fail-on-env-suspect)
+        fi
+        if [ -n "$IN_BENCHMARK" ]; then
+          IFS=',' read -ra _benches <<< "$IN_BENCHMARK"
+          for _b in "${_benches[@]}"; do
+            _b="${_b#"${_b%%[![:space:]]*}"}"
+            _b="${_b%"${_b##*[![:space:]]}"}"
+            if [ -n "$_b" ]; then
+              EXTRA_FLAGS+=(--benchmark "$_b")
+            fi
+          done
+        fi
+
+        rc=0
         python "$ACTION_PATH/regressor.py" compare-interleaved \
           --adapter "$IN_ADAPTER" --repo "$IN_REPO" \
+          --workdir "$IN_WORKDIR" \
           --base "$IN_BASE" --cand "$IN_HEAD" \
-          --pairs "$IN_PAIRS" --min-effect "$IN_MIN_EFFECT" \
-          --json regressor.json --markdown regressor.md "${FAIL[@]}"
-        echo "report=regressor.md" >> "$GITHUB_OUTPUT"
-        cat regressor.md >> "$GITHUB_STEP_SUMMARY"
+          --pairs "$IN_PAIRS" --iters "$IN_ITERS" --warmup "$IN_WARMUP" \
+          --min-effect "$IN_MIN_EFFECT" --canary-reps "$IN_CANARY_REPS" \
+          --json regressor.json --markdown regressor.md "${EXTRA_FLAGS[@]}" || rc=$?
+
+        if [ -f regressor.md ]; then
+          echo "report=regressor.md" >> "$GITHUB_OUTPUT"
+          cat regressor.md >> "$GITHUB_STEP_SUMMARY"
+        fi
+        if [ -f regressor.json ]; then
+          echo "json-report=regressor.json" >> "$GITHUB_OUTPUT"
+        fi
+        exit "$rc"

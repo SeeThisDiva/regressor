@@ -6,7 +6,13 @@ regex/
 .regressor-builds/
 noise-bench/target/
 noise-bench/results/study2_commits/
+noise-bench/results/study3*/
+noise-bench/logs/
+noise-bench/profiles/
 regressor.db*
+pr-comment.md
+regressor.json
+regressor.md
 **/__pycache__
 *.py[cod]
 .pytest_cache
@@ -18,5 +24,11 @@ dist/
 build/
 _archive/
 files/
+.env
+.env.*
+*.pem
+*.key
+.netrc
+.git-credentials
 .DS_Store
 Thumbs.db

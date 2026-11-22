@@ -1,8 +1,15 @@
 # Local state and build artifacts
 regressor.db*
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
 .regressor-builds/
 noise-bench/target/
 noise-bench/results/study2_commits/
+noise-bench/results/study3/
+noise-bench/results/study3_baseline/
+noise-bench/results/study3_commits/
 regex/
 
 # Generated report outputs from local CLI smoke runs

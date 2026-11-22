@@ -1,0 +1,47 @@
+# Local Docker Compose definitions for regressor.
+# Results land in ./results (bind-mounted into the non-root container UID 10001).
+# On Linux hosts where ./results is owned by your host user, run:
+#   mkdir -p results && chmod 0777 results
+# (or match ownership to UID 10001) before running container benchmarks.
+services:
+  regressor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: regressor:latest
+    user: "10001:10001"
+    init: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      CARGO_NET_OFFLINE: "${CARGO_NET_OFFLINE:-false}"
+    volumes:
+      - ./results:/work/regressor/noise-bench/results
+    stdin_open: true
+    tty: true
+    # Optional CPU pinning on multi-core Linux hosts (do not enable on 2-vCPU CI runners):
+    # cpuset: "2,3"
+
+  regressor-offline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: regressor:latest
+    profiles:
+      - offline
+    user: "10001:10001"
+    init: true
+    network_mode: none
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      CARGO_NET_OFFLINE: "true"
+      REGRESSOR_OFFLINE: "1"
+    volumes:
+      - ./results:/work/regressor/noise-bench/results
+    stdin_open: true
+    tty: true

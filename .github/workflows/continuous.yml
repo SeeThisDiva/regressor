@@ -1,0 +1,168 @@
+# Opt-in continuous upstream collection for rust-lang/regex.
+#
+# Scheduled runs are disabled by default so forks and unmodified clones do not
+# execute periodic builds unexpectedly. To enable the daily schedule, set the
+# repository variable REGRESSOR_CONTINUOUS_ENABLED='true' (Settings -> Secrets
+# and variables -> Actions -> Variables). To also commit updated datasets back
+# to the default branch after collection, set REGRESSOR_CONTINUOUS_COMMIT='true'
+# (or pass commit_dataset=true on manual workflow_dispatch).
+name: continuous
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      dataset_path:
+        description: "Baseline .json.gz archive path or 'auto'"
+        type: string
+        default: "auto"
+      max_commits:
+        description: "Max new upstream commits per run (0 = profile every new commit)"
+        type: string
+        default: "0"
+      reps:
+        description: "Benchmark repetitions per commit"
+        type: string
+        default: "15"
+      iters:
+        description: "Timed iterations per repetition"
+        type: string
+        default: "1500"
+      warmup:
+        description: "Warmup iterations per repetition"
+        type: string
+        default: "150"
+      fdr:
+        description: "FDR control method (by or bh)"
+        type: choice
+        options:
+          - by
+          - bh
+        default: "by"
+      commit_dataset:
+        description: "Commit the updated .json.gz dataset back to the repository"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    if: github.event_name == 'workflow_dispatch' || vars.REGRESSOR_CONTINUOUS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    outputs:
+      dataset_relpath: ${{ steps.meta.outputs.dataset_relpath }}
+      commits_profiled: ${{ steps.meta.outputs.commits_profiled }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build regressor container image
+        run: docker build -t regressor:continuous -f Dockerfile .
+
+      - name: Fetch upstream regex commits, benchmark in container, and run detection
+        env:
+          IN_DATASET: ${{ inputs.dataset_path || 'auto' }}
+          IN_MAX_COMMITS: ${{ inputs.max_commits || '0' }}
+          IN_REPS: ${{ inputs.reps || '15' }}
+          IN_ITERS: ${{ inputs.iters || '1500' }}
+          IN_WARMUP: ${{ inputs.warmup || '150' }}
+          IN_FDR: ${{ inputs.fdr || 'by' }}
+        run: |
+          mkdir -p continuous-results
+          chmod 0777 continuous-results
+
+          ./scripts/run_in_container.sh \
+            --image regressor:continuous \
+            --no-tty \
+            --results-dir "$PWD/continuous-results" \
+            -- python3 scripts/continuous_collect.py \
+              --dataset "$IN_DATASET" \
+              --out-dataset /work/regressor/noise-bench/results/regex_continuous_history.json.gz \
+              --db /work/regressor/noise-bench/results/continuous.db \
+              --repo /work/regressor/regex \
+              --remote origin \
+              --branch master \
+              --max-commits "$IN_MAX_COMMITS" \
+              --reps "$IN_REPS" \
+              --iters "$IN_ITERS" \
+              --warmup "$IN_WARMUP" \
+              --fdr "$IN_FDR" \
+              --summary-json /work/regressor/noise-bench/results/continuous_summary.json \
+              --summary-md /work/regressor/noise-bench/results/continuous_summary.md
+
+          test -s continuous-results/continuous_summary.md
+          cat continuous-results/continuous_summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - id: meta
+        name: Record collection outputs
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          summary = json.loads(pathlib.Path("continuous-results/continuous_summary.json").read_text(encoding="utf-8"))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write("dataset_relpath=data/regex_continuous_history.json.gz\n")
+              out.write(f"commits_profiled={int(summary.get('commits_profiled', 0))}\n")
+          PY
+
+      - name: Upload continuous collection dataset and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: continuous-dataset
+          path: continuous-results/
+          if-no-files-found: error
+
+  commit-dataset:
+    needs: collect
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.commit_dataset == true) ||
+      (github.event_name == 'schedule' && vars.REGRESSOR_CONTINUOUS_ENABLED == 'true' && vars.REGRESSOR_CONTINUOUS_COMMIT == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: continuous-dataset
+          path: continuous-results
+
+      - name: Commit updated dataset archive if new commits were profiled
+        env:
+          TARGET_RELPATH: ${{ needs.collect.outputs.dataset_relpath }}
+          COMMITS_PROFILED: ${{ needs.collect.outputs.commits_profiled }}
+        run: |
+          if [ "${COMMITS_PROFILED:-0}" -eq 0 ] 2>/dev/null; then
+            echo "No new upstream commits profiled; skipping dataset commit."
+            exit 0
+          fi
+          if [ ! -f continuous-results/regex_continuous_history.json.gz ]; then
+            echo "No updated archive produced; skipping commit."
+            exit 0
+          fi
+          case "$TARGET_RELPATH" in
+            *..*)
+              echo "Refusing path traversal in dataset target path: $TARGET_RELPATH" >&2
+              exit 1
+              ;;
+            data/*.json.gz) ;;
+            *)
+              echo "Refusing unexpected dataset target path: $TARGET_RELPATH" >&2
+              exit 1
+              ;;
+          esac
+          cp continuous-results/regex_continuous_history.json.gz "$TARGET_RELPATH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$TARGET_RELPATH"
+          if git diff --cached --quiet; then
+            echo "Dataset archive unchanged."
+            exit 0
+          fi
+          git commit -m "data: update continuous regex dataset (+${COMMITS_PROFILED} commits) [skip ci]"
+          git push

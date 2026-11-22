@@ -1,0 +1,87 @@
+name: container
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  container-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build regressor container image
+        run: docker build -t regressor:smoke -f Dockerfile .
+
+      - name: Verify non-root user and vendored binary
+        run: |
+          uid="$(docker run --rm --entrypoint id regressor:smoke -u)"
+          echo "Container UID=$uid"
+          [ "$uid" = "10001" ]
+          docker run --rm regressor:smoke /work/regressor/noise-bench/target/release/noise-bench --help
+
+      - name: Run 2-commit smoke benchmarks inside offline container
+        run: |
+          mkdir -p smoke-results
+          chmod 0777 smoke-results
+
+          # 1) Offline interleaved A/B smoke check across 2 Nov 2025-Nov 2026 regex commits
+          ./scripts/run_in_container.sh \
+            --image regressor:smoke \
+            --offline \
+            --no-tty \
+            --results-dir "$PWD/smoke-results" \
+            -- python3 regressor.py compare-interleaved \
+              --adapter RegexAdapter \
+              --repo /work/regressor/regex \
+              --base 4733e28ba4f281f643ce93e4089eccbb9a9d5a5a \
+              --cand 3d79fe92666a9f191d7677ebc123ac165eac200c \
+              --benchmark compile_moderate \
+              --pairs 8 \
+              --iters 50 \
+              --warmup 10 \
+              --canary-reps 3 \
+              --json /work/regressor/noise-bench/results/smoke_interleaved.json \
+              --markdown /work/regressor/noise-bench/results/smoke_interleaved.md
+
+          # 2) Offline 2-commit incremental collection + batch detection + export smoke check
+          ./scripts/run_in_container.sh \
+            --image regressor:smoke \
+            --offline \
+            --no-tty \
+            --results-dir "$PWD/smoke-results" \
+            -- python3 scripts/continuous_collect.py \
+              --dataset data/regex_history.json.gz \
+              --out-dataset /work/regressor/noise-bench/results/smoke_history.json.gz \
+              --db /work/regressor/noise-bench/results/smoke.db \
+              --repo /work/regressor/regex \
+              --no-fetch \
+              --max-commits 2 \
+              --benchmark compile_moderate \
+              --reps 5 \
+              --iters 50 \
+              --warmup 10 \
+              --canary-reps 2 \
+              --fdr by \
+              --summary-json /work/regressor/noise-bench/results/smoke_collect.json \
+              --summary-md /work/regressor/noise-bench/results/smoke_collect.md
+
+          test -s smoke-results/smoke_interleaved.json
+          test -s smoke-results/smoke_interleaved.md
+          test -s smoke-results/smoke_history.json.gz
+          test -s smoke-results/smoke_collect.json
+          cat smoke-results/smoke_interleaved.md >> "$GITHUB_STEP_SUMMARY"
+          cat smoke-results/smoke_collect.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload container smoke results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-smoke-results
+          path: smoke-results/
+          if-no-files-found: error
