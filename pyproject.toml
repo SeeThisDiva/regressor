@@ -7,7 +7,7 @@ name = "regressor"
 version = "0.2.0"
 description = "Generalized Continuous Performance Regression Framework"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
     { name = "SeeThisDiva" }
@@ -18,13 +18,14 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Testing",
 ]
 dependencies = [
     "numpy>=1.24.0",
-    "scipy>=1.18.0",
+    "scipy>=1.10.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.22.0",
     "pydantic>=2.0.0",
