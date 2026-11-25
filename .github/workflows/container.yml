@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build regressor container image
         run: docker build -t regressor:smoke -f Dockerfile .
@@ -81,7 +81,7 @@ jobs:
 
       - name: Upload container smoke results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: container-smoke-results
           path: smoke-results/

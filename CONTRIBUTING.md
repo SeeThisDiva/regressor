@@ -4,7 +4,7 @@ Thank you for your interest in contributing! This guide covers local development
 
 ## Development Setup
 
-Python 3.11+ is required (see [`pyproject.toml`](pyproject.toml)). You do not need Rust or Docker to run the statistical engine, API/UI, `PyMicroAdapter`, or the test suite.
+Python 3.12+ is recommended for full test parity (`scipy>=1.18.0`; see [`pyproject.toml`](pyproject.toml), while Python 3.11 with `scipy<1.18` remains supported for the Debian Bookworm container runtime). You do not need Rust or Docker to run the statistical engine, API/UI, `PyMicroAdapter`, or the test suite.
 
 ```bash
 python -m venv .venv

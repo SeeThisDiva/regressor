@@ -59,7 +59,7 @@ jobs:
       dataset_relpath: ${{ steps.meta.outputs.dataset_relpath }}
       commits_profiled: ${{ steps.meta.outputs.commits_profiled }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build regressor container image
         run: docker build -t regressor:continuous -f Dockerfile .
@@ -110,7 +110,7 @@ jobs:
           PY
 
       - name: Upload continuous collection dataset and report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: continuous-dataset
           path: continuous-results/
@@ -125,9 +125,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: continuous-dataset
           path: continuous-results
